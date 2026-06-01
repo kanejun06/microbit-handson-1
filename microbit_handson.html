@@ -166,6 +166,24 @@
   .keypt .txt{font-size:14.5px;line-height:1.6}
   .keypt .txt b{color:#d6c9ff}
 
+  /* pre-upload settings check */
+  .settings-check{background:rgba(255,138,91,.08);border:1px solid var(--warn);border-radius:12px;padding:16px 20px;margin:14px 0}
+  .settings-check .h{font-weight:800;color:var(--warn);font-size:15px;display:flex;align-items:center;gap:8px;margin-bottom:10px}
+  .setrow{display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid var(--line)}
+  .setrow:last-child{border-bottom:none}
+  .setrow .menu{font-family:var(--mono);font-size:12.5px;color:var(--ink-dim);flex-shrink:0;min-width:130px}
+  .setrow .arrow{color:var(--warn);flex-shrink:0}
+  .setrow .val{font-family:var(--mono);font-size:13.5px;font-weight:700;color:var(--bg);background:var(--accent);
+    padding:3px 11px;border-radius:7px;letter-spacing:.02em}
+  @media(max-width:560px){.setrow{flex-wrap:wrap;gap:6px}.setrow .menu{min-width:0}}
+
+  /* OS path rows */
+  .ospath{display:grid;grid-template-columns:1fr;gap:10px;margin:10px 0}
+  .ospath .row{background:var(--code-bg);border:1px solid var(--line);border-radius:9px;padding:11px 14px}
+  .ospath .os{font-weight:700;font-size:13.5px;color:var(--accent-2);margin-bottom:4px;display:flex;align-items:center;gap:7px}
+  .ospath .p{font-family:var(--mono);font-size:12.5px;color:var(--ink);word-break:break-all;line-height:1.6}
+  .ospath .hint{font-size:11.5px;color:var(--ink-dim);margin-top:3px}
+
   /* trouble accordion */
   details.trouble{background:rgba(255,138,91,.07);border:1px solid rgba(255,138,91,.35);
     border-radius:11px;margin-top:12px;overflow:hidden}
@@ -315,7 +333,7 @@
   </section>
 
   <!-- ============ BLOCK 3 ============ -->
-  <section class="block" id="b3" style="--c:var(--r-blu)" data-text="esp32 esp32s3 画像認識 classification edgeimpulse arduino ide ボードマネージャ espressif zip library inferencing カメラ メッセージ受信 機械学習 重い プロジェクト名 CL コピペ コピー 編集しない インストール ダウンロード 2.0.4 preferences boards manager url 事前準備 setup">
+  <section class="block" id="b3" style="--c:var(--r-blu)" data-text="esp32 esp32s3 画像認識 classification edgeimpulse arduino ide ボードマネージャ espressif zip library inferencing カメラ メッセージ受信 機械学習 重い プロジェクト名 CL コピペ コピー 編集しない インストール ダウンロード 2.0.4 preferences boards manager url 事前準備 setup XIAO_ESP32S3 PSRAM OPI psram board libraries 削除 windows mac パス documents">
     <div class="block-head">
       <span class="block-num">BLOCK 3</span>
       <span class="block-title">画像認識（ESP32S3）</span>
@@ -346,7 +364,7 @@
         <li>バージョン <span class="ver-pill">2.0.4</span> を選んで Install
           <span class="sub">※ このサンプルは ESP32 Arduino Core 2.0.4 で動作確認済み。最新版だとカメラ周りの挙動が変わることがあるため、まずは 2.0.4 を選ぶのが安全です。</span>
         </li>
-        <li>インストール後、<span class="path">Tools &gt; Board</span> から ESP32S3 のボードを選択</li>
+        <li>インストール後、<span class="path">Tools &gt; Board</span> から <code class="inline">XIAO_ESP32S3</code> を選択<br><span style="color:var(--ink-dim);font-size:13px">※ 書き込み前に <span class="path">Tools &gt; PSRAM</span> を <code class="inline">OPI PSRAM</code> にするのも忘れずに（詳細は下のCODEステップ参照）</span></li>
       </ol>
       <div class="note-inline">
         <b>参考リンク：</b>
@@ -764,16 +782,45 @@ static int ei_camera_get_data(size_t offset, size_t length, float *out_ptr)
 #endif
 </code></pre>
       </div>
+      <div class="settings-check">
+        <div class="h">⚠ 書き込みの前に必ず確認！ボードの設定 2項目</div>
+        <p style="font-size:13.5px;color:var(--ink-dim);margin:0 0 10px">この2つが合っていないと、コンパイルや書き込みに失敗したり、カメラが動きません。<code class="inline">Tools</code> メニューから設定します。</p>
+        <div class="setrow">
+          <span class="menu">Tools &gt; Board</span>
+          <span class="arrow">→</span>
+          <span class="val">XIAO_ESP32S3</span>
+        </div>
+        <div class="setrow">
+          <span class="menu">Tools &gt; PSRAM</span>
+          <span class="arrow">→</span>
+          <span class="val">OPI PSRAM</span>
+        </div>
+        <p style="font-size:12.5px;color:var(--ink-dim);margin:10px 0 0">※ PSRAM を <b>OPI PSRAM</b> にしないと、カメラ画像用のメモリが確保できずエラーになります。忘れやすいので要チェック。</p>
+      </div>
       <ol class="steps" style="margin-top:12px">
         <li>上の「コードをコピー」を押す → Arduino IDEに貼り付け</li>
-        <li>ボードに ESP32S3 を選択してコンパイル</li>
-        <li>ESP32S3 に書き込み</li>
+        <li>上の2項目（Board = XIAO_ESP32S3 / PSRAM = OPI PSRAM）を確認</li>
+        <li>コンパイルして ESP32S3 に書き込み</li>
       </ol>
       <p style="font-size:13px;color:var(--ink-dim);margin-top:8px">※ カメラのピン設定やUART設定（<code class="inline">Serial1.begin(...D7, D6)</code>）も全員共通なので触りません。使うボードが同じなら、このままで動きます。</p>
       <details class="trouble">
         <summary>⚠ うまくいかなかった時 ＝ ライブラリの削除が必要なケース<span class="chev">›</span></summary>
         <div class="body">
-          <p>過去に別名でライブラリを入れていた等で競合し、コンパイルに失敗する場合、<code class="inline">Arduino / libraries</code> フォルダにアクセスして該当ライブラリ（古い <code class="inline">*_inferencing</code> など）を削除する必要があります。</p>
+          <p>過去に別名でライブラリを入れていた等で競合し、コンパイルに失敗する場合、<code class="inline">Arduino/libraries</code> フォルダにアクセスして該当ライブラリ（古い <code class="inline">*_inferencing</code> など）を削除する必要があります。</p>
+          <p style="margin-top:10px">この <code class="inline">libraries</code> フォルダの場所は OS で違います。<b>初期設定（デフォルト）の場合</b>、だいたい次の場所にあります：</p>
+          <div class="ospath">
+            <div class="row">
+              <div class="os">🪟 Windows</div>
+              <div class="p">C:\Users\&lt;ユーザー名&gt;\Documents\Arduino\libraries\</div>
+              <div class="hint">「ドキュメント」フォルダの中の <b>Arduino &gt; libraries</b>。エクスプローラーのアドレス欄に <code class="inline">%USERPROFILE%\Documents\Arduino\libraries</code> と入れても開けます。</div>
+            </div>
+            <div class="row">
+              <div class="os">🍎 macOS</div>
+              <div class="p">~/Documents/Arduino/libraries/</div>
+              <div class="hint">「書類」フォルダの中の <b>Arduino &gt; libraries</b>。Finderで <code class="inline">Cmd+Shift+G</code> →上のパスを貼り付けで開けます（<code class="inline">~</code> は自分のホーム）。</div>
+            </div>
+          </div>
+          <p style="font-size:13px">※ 正確な場所は <code class="inline">File &gt; Preferences</code> の「スケッチブックの保存場所」の下にある <code class="inline">libraries</code> フォルダです。場所を変更している人はそちらを見てください。</p>
           <p>プロジェクト名を <code class="inline">CL</code> に統一していれば基本は起きませんが、もし削除が必要になったら手を挙げてください。フォルダの場所と消すべきものを一緒に確認します。</p>
         </div>
       </details>
