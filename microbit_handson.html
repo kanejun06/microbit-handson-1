@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>micro:bit ハンズオン｜センサー・アクチュエータ実習</title>
+<style>
+  :root{
+    --bg:#0e1116;
+    --panel:#161b22;
+    --panel-2:#1c232d;
+    --ink:#e8e3d3;
+    --ink-dim:#a9a596;
+    --line:#2a323d;
+    --accent:#ffd34d;
+    --accent-2:#5ad1c4;
+    --warn:#ff8a5b;
+    --link:#7fd1ff;
+    --r-red:#ff5e57; --r-org:#ff9f43; --r-yel:#ffd34d;
+    --r-grn:#5ad17a; --r-cyn:#5ad1c4; --r-blu:#7fa9ff; --r-pur:#b18cff;
+    --code-bg:#0a0d12;
+    --mono:"SF Mono","Consolas","Roboto Mono",ui-monospace,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic",sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--sans);
+    line-height:1.75;
+    font-size:16px;
+    -webkit-font-smoothing:antialiased;
+    background-image:
+      radial-gradient(circle at 12% -5%, rgba(255,211,77,.07), transparent 40%),
+      radial-gradient(circle at 90% 8%, rgba(90,209,196,.06), transparent 38%);
+  }
+  .wrap{max-width:920px;margin:0 auto;padding:0 22px 120px}
+
+  /* ---- header ---- */
+  header.hero{padding:54px 0 30px;position:relative}
+  .rainbow{display:flex;height:6px;border-radius:99px;overflow:hidden;margin-bottom:30px;box-shadow:0 2px 20px rgba(0,0,0,.4)}
+  .rainbow span{flex:1}
+  .rainbow span:nth-child(1){background:var(--r-red)}
+  .rainbow span:nth-child(2){background:var(--r-org)}
+  .rainbow span:nth-child(3){background:var(--r-yel)}
+  .rainbow span:nth-child(4){background:var(--r-grn)}
+  .rainbow span:nth-child(5){background:var(--r-cyn)}
+  .rainbow span:nth-child(6){background:var(--r-blu)}
+  .rainbow span:nth-child(7){background:var(--r-pur)}
+  .kicker{font-family:var(--mono);font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent-2);margin-bottom:14px}
+  h1{font-size:clamp(30px,5.4vw,46px);line-height:1.15;letter-spacing:-.01em;font-weight:800}
+  h1 .em{color:var(--accent)}
+  .lede{color:var(--ink-dim);margin-top:18px;max-width:640px;font-size:17px}
+
+  /* ---- toolbar ---- */
+  .toolbar{position:sticky;top:0;z-index:30;background:rgba(14,17,22,.86);backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);margin:24px -22px 0;padding:12px 22px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .search{flex:1;min-width:200px;position:relative}
+  .search input{width:100%;background:var(--panel);border:1px solid var(--line);color:var(--ink);
+    padding:10px 14px 10px 38px;border-radius:10px;font-family:var(--sans);font-size:14px}
+  .search input:focus{outline:none;border-color:var(--accent-2)}
+  .search svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);opacity:.5}
+  .toolbtn{background:var(--panel);border:1px solid var(--line);color:var(--ink-dim);
+    padding:9px 14px;border-radius:10px;font-size:13px;cursor:pointer;font-family:var(--sans);transition:.15s}
+  .toolbtn:hover{border-color:var(--accent-2);color:var(--ink)}
+
+  /* ---- block nav ---- */
+  nav.blocks{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:30px 0 10px}
+  @media(max-width:680px){nav.blocks{grid-template-columns:repeat(2,1fr)}}
+  nav.blocks a{display:block;text-decoration:none;background:var(--panel);border:1px solid var(--line);
+    border-radius:12px;padding:14px;transition:.15s}
+  nav.blocks a:hover{transform:translateY(-3px);border-color:var(--c)}
+  nav.blocks .n{font-family:var(--mono);font-size:11px;color:var(--c);font-weight:700}
+  nav.blocks .t{color:var(--ink);font-size:14px;font-weight:700;margin-top:5px}
+  nav.blocks .d{color:var(--ink-dim);font-size:11.5px;margin-top:3px}
+
+  /* ---- section / block ---- */
+  section.block{margin-top:56px;scroll-margin-top:78px}
+  .block-head{display:flex;align-items:baseline;gap:14px;padding-bottom:14px;border-bottom:2px solid var(--c);margin-bottom:26px}
+  .block-num{font-family:var(--mono);font-size:13px;font-weight:800;color:var(--bg);background:var(--c);
+    padding:4px 11px;border-radius:8px;flex-shrink:0}
+  .block-title{font-size:24px;font-weight:800;letter-spacing:-.01em}
+  .block-meta{margin-left:auto;font-family:var(--mono);font-size:11.5px;color:var(--ink-dim);flex-shrink:0}
+
+  /* ---- step card ---- */
+  .step{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 24px;margin-bottom:16px;position:relative;overflow:hidden}
+  .step::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--c)}
+  .step h3{font-size:17px;font-weight:700;display:flex;align-items:center;gap:10px;margin-bottom:6px}
+  .step .tag{font-family:var(--mono);font-size:10.5px;font-weight:700;padding:3px 8px;border-radius:6px;
+    background:var(--panel-2);color:var(--c);border:1px solid var(--line);letter-spacing:.05em}
+  .step p{color:var(--ink-dim);font-size:14.5px;margin:4px 0}
+  .step .build{margin-top:10px;padding:10px 14px;background:rgba(90,209,196,.08);border-radius:9px;
+    border:1px dashed var(--accent-2);font-size:14px}
+  .step .build b{color:var(--accent-2)}
+
+  /* link button */
+  .lnk{display:inline-flex;align-items:center;gap:8px;text-decoration:none;background:var(--panel-2);
+    border:1px solid var(--line);color:var(--link);padding:8px 13px;border-radius:9px;font-size:13.5px;
+    font-family:var(--mono);margin:6px 8px 2px 0;transition:.15s;word-break:break-all}
+  .lnk:hover{border-color:var(--link);background:#1f2935}
+  .lnk .ic{flex-shrink:0;opacity:.8}
+  .lnk.gh{color:#d6c9ff}
+  .lnk.ai{color:var(--accent)}
+
+  /* code */
+  code.inline{font-family:var(--mono);background:var(--code-bg);padding:2px 7px;border-radius:5px;font-size:13px;color:var(--accent-2);border:1px solid var(--line)}
+  pre{background:var(--code-bg);border:1px solid var(--line);border-radius:10px;padding:14px 16px;
+    overflow-x:auto;font-family:var(--mono);font-size:13px;color:var(--ink);margin:10px 0;line-height:1.6}
+  ol.steps{margin:8px 0 4px;padding-left:22px}
+  ol.steps li{margin:5px 0;font-size:14.5px}
+  ul.plain{list-style:none;padding:0;margin:6px 0}
+  ul.plain li{padding-left:20px;position:relative;font-size:14.5px;margin:4px 0}
+  ul.plain li::before{content:"▸";position:absolute;left:0;color:var(--c)}
+
+  /* copy-paste code block */
+  .codewrap{margin-top:12px;border:1px solid var(--line);border-radius:11px;overflow:hidden;background:var(--code-bg)}
+  .codebar{display:flex;align-items:center;gap:10px;padding:9px 14px;background:var(--panel-2);border-bottom:1px solid var(--line)}
+  .codebar .fname{font-family:var(--mono);font-size:12.5px;color:var(--accent-2)}
+  .codebar .meta{font-family:var(--mono);font-size:11px;color:var(--ink-dim);margin-left:2px}
+  .copybtn{margin-left:auto;background:var(--accent);color:#1a1205;border:none;padding:7px 15px;
+    border-radius:8px;font-family:var(--sans);font-weight:700;font-size:13px;cursor:pointer;transition:.15s;flex-shrink:0}
+  .copybtn:hover{filter:brightness(1.08)}
+  .copybtn.done{background:var(--accent-2);color:#06201c}
+  .codewrap pre{margin:0;border:none;border-radius:0;max-height:340px;overflow:auto;font-size:12px;line-height:1.55}
+  .codewrap pre::-webkit-scrollbar{width:10px;height:10px}
+  .codewrap pre::-webkit-scrollbar-thumb{background:var(--line);border-radius:6px}
+
+  /* copyable URL field (board manager) */
+  .copyfield{display:flex;align-items:stretch;gap:0;margin:8px 0;border:1px solid var(--line);border-radius:9px;overflow:hidden;background:var(--code-bg)}
+  .copyfield code{flex:1;font-family:var(--mono);font-size:12.5px;color:var(--accent-2);padding:10px 13px;
+    overflow-x:auto;white-space:nowrap;display:flex;align-items:center}
+  .copyfield button{background:var(--panel-2);border:none;border-left:1px solid var(--line);color:var(--ink);
+    padding:0 15px;font-family:var(--sans);font-size:12.5px;font-weight:700;cursor:pointer;flex-shrink:0;transition:.15s}
+  .copyfield button:hover{background:#26303c;color:var(--accent-2)}
+  .copyfield button.done{color:var(--accent-2)}
+
+  /* detailed numbered substeps with sub-detail */
+  ol.steps li .sub{display:block;color:var(--ink-dim);font-size:13px;margin-top:3px}
+  ol.steps li .path{font-family:var(--mono);font-size:12.5px;background:var(--code-bg);padding:2px 7px;border-radius:5px;border:1px solid var(--line);color:var(--ink)}
+  .note-inline{font-size:12.5px;color:var(--ink-dim);background:rgba(127,209,255,.06);border:1px solid rgba(127,209,255,.25);
+    border-radius:8px;padding:9px 13px;margin-top:8px}
+  .note-inline b{color:var(--link)}
+  .ver-pill{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--bg);background:var(--accent-2);padding:2px 9px;border-radius:6px}
+
+  /* emphasised rule callout */
+  .rule{margin-top:12px;padding:14px 18px;background:rgba(255,211,77,.10);border:1px solid var(--accent);border-radius:11px}
+  .rule .h{font-weight:800;color:var(--accent);font-size:14.5px;display:flex;align-items:center;gap:8px;margin-bottom:4px}
+  .rule p{font-size:14px;color:var(--ink);margin:3px 0}
+  .rule .big{font-family:var(--mono);font-size:20px;font-weight:800;color:var(--bg);background:var(--accent);
+    padding:2px 14px;border-radius:7px;display:inline-block;letter-spacing:.08em;margin:2px 0}
+
+  /* chat-style prompt example */
+  .chat{margin-top:12px;background:var(--panel-2);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+  .chat .who{font-family:var(--mono);font-size:11px;color:var(--ink-dim);letter-spacing:.1em;margin-bottom:7px}
+  .bubble{background:var(--code-bg);border:1px solid var(--line);border-left:3px solid var(--c);
+    border-radius:9px;padding:12px 15px;font-size:14.5px;line-height:1.7;color:var(--ink)}
+  .bubble a{color:var(--link);word-break:break-all}
+
+  /* key points (mindset) */
+  .keypts{margin-top:14px;display:grid;gap:10px}
+  .keypt{display:flex;gap:13px;align-items:flex-start;background:rgba(177,140,255,.08);
+    border:1px solid rgba(177,140,255,.35);border-radius:11px;padding:13px 16px}
+  .keypt .num{font-family:var(--mono);font-weight:800;font-size:15px;color:#c9b3ff;flex-shrink:0;
+    background:var(--code-bg);width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;border:1px solid var(--line)}
+  .keypt .txt{font-size:14.5px;line-height:1.6}
+  .keypt .txt b{color:#d6c9ff}
+
+  /* trouble accordion */
+  details.trouble{background:rgba(255,138,91,.07);border:1px solid rgba(255,138,91,.35);
+    border-radius:11px;margin-top:12px;overflow:hidden}
+  details.trouble summary{cursor:pointer;padding:13px 18px;font-weight:700;font-size:14.5px;
+    color:var(--warn);list-style:none;display:flex;align-items:center;gap:9px;user-select:none}
+  details.trouble summary::-webkit-details-marker{display:none}
+  details.trouble summary .chev{margin-left:auto;transition:.2s}
+  details.trouble[open] summary .chev{transform:rotate(90deg)}
+  details.trouble .body{padding:0 18px 16px;font-size:14px;color:var(--ink-dim)}
+  details.trouble .body p{margin:6px 0}
+
+  /* prep banner */
+  .prep{background:linear-gradient(135deg,rgba(255,211,77,.13),rgba(255,138,91,.10));
+    border:1px solid var(--accent);border-radius:14px;padding:20px 24px;margin:28px 0}
+  .prep h3{color:var(--accent);font-size:16px;display:flex;align-items:center;gap:9px;margin-bottom:8px}
+  .prep p{font-size:14.5px;color:var(--ink)}
+  .prep ul{margin:8px 0 0;padding-left:20px}
+  .prep li{font-size:14px;margin:4px 0}
+
+  /* footer */
+  footer{margin-top:70px;padding-top:24px;border-top:1px solid var(--line);color:var(--ink-dim);font-size:13px;text-align:center}
+  .hidden{display:none !important}
+  mark{background:var(--accent);color:var(--bg);border-radius:3px;padding:0 2px}
+
+  @media print{
+    body{background:#fff;color:#000}
+    .toolbar,nav.blocks{display:none}
+    details.trouble{open:true}
+    .lnk{color:#0050b3}
+  }
+
+  /* language bar (Google Translate) - non-sticky to avoid clashing with toolbar */
+  .langbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+    background:var(--panel);border:1px solid var(--line);border-radius:12px;
+    margin:18px 0 -10px;padding:10px 16px}
+  .langbar .lbl{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-dim);margin-right:2px}
+  .langbar button{background:var(--panel-2);border:1px solid var(--line);color:var(--ink);
+    padding:7px 13px;border-radius:9px;font-family:var(--sans);font-size:13px;font-weight:600;cursor:pointer;transition:.15s}
+  .langbar button:hover{border-color:var(--accent-2);color:var(--accent-2);transform:translateY(-1px)}
+  .langbar button.ja{border-color:var(--accent);color:var(--accent)}
+  .langbar .note{font-size:11.5px;color:var(--ink-dim);margin-left:auto}
+  @media(max-width:560px){.langbar .note{display:none}}
+  @media print{.langbar{display:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="langbar">
+    <span class="lbl">Language</span>
+    <button class="ja" onclick="setLang('ja')">日本語</button>
+    <button onclick="setLang('zh-CN')">简体中文</button>
+    <button onclick="setLang('zh-TW')">繁體中文</button>
+    <button onclick="setLang('en')">English</button>
+    <button onclick="setLang('ko')">한국어</button>
+    <button onclick="setLang('vi')">Tiếng Việt</button>
+    <span class="note">↑ Google翻訳で表示 / Translated by Google</span>
+  </div>
+  <header class="hero">
+    <div class="rainbow"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <div class="kicker">Product Design ／ Hands-on Workshop</div>
+    <h1>micro:bit でつくる<br><span class="em">センサー・アクチュエータ</span>実習</h1>
+    <p class="lede">音を作る・画面に出す・画像で認識する・対話でコードを書く。4つのブロックを自分のペースで進めていきましょう。各リンクはクリックで開きます。</p>
+  </header>
+
+  <div class="toolbar">
+    <div class="search">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg>
+      <input id="q" type="search" placeholder="キーワードで絞り込み（例: OLED, ESP32, 効果音）">
+    </div>
+    <button class="toolbtn" id="openAll">トラブル対応を全部開く</button>
+    <button class="toolbtn" onclick="window.print()">印刷 / PDF</button>
+  </div>
+
+  <nav class="blocks">
+    <a href="#b1" style="--c:var(--r-red)"><div class="n">BLOCK 1</div><div class="t">音を作る・鳴らす</div><div class="d">mp3 / AI効果音 / モーション分類</div></a>
+    <a href="#b2" style="--c:var(--r-cyn)"><div class="n">BLOCK 2</div><div class="t">画面に出す</div><div class="d">OLED / ドット絵 / アニメ</div></a>
+    <a href="#b3" style="--c:var(--r-blu)"><div class="n">BLOCK 3</div><div class="t">画像認識</div><div class="d">ESP32S3 / EdgeImpulse ★重</div></a>
+    <a href="#b4" style="--c:var(--r-pur)"><div class="n">BLOCK 4</div><div class="t">vibe coding</div><div class="d">Copilot × LED / 話しかけ方</div></a>
+  </nav>
+
+  <div class="prep">
+    <h3>⚡ 当日までにやってくること（重要）</h3>
+    <p>BLOCK 3 の画像認識は環境構築に時間がかかります。授業内で全員のインストールを待つと1コマ消えるので、<b>下記だけは事前に各自のPCで済ませてきてください。</b></p>
+    <ul>
+      <li>Arduino IDE をインストール</li>
+      <li>ボードマネージャで <code class="inline">esp32 by Espressif Systems</code>（バージョン <b>2.0.4</b>）をインストール</li>
+      <li>うまくいかなくても大丈夫。当日サポートします（詰まった箇所をメモしてくると◎）</li>
+    </ul>
+    <p style="margin-top:10px"><a href="#b3" style="color:var(--accent);font-weight:700;text-decoration:none">→ 詳しい手順とダウンロードリンクは BLOCK 3 へ</a></p>
+  </div>
+
+  <!-- ============ BLOCK 1 ============ -->
+  <section class="block" id="b1" style="--c:var(--r-red)" data-text="音 サウンド mp3 mp3player ver4 効果音 elevenlabs ai createai 加速度 機械学習 振った モーション 音が変わる">
+    <div class="block-head">
+      <span class="block-num">BLOCK 1</span>
+      <span class="block-title">音を作る・鳴らす</span>
+      <span class="block-meta">mp3 / AI効果音 / モーション分類</span>
+    </div>
+
+    <div class="step">
+      <h3><span class="tag">SAMPLE</span>mp3playerVer4 の使い方</h3>
+      <p>まずはサウンド再生の基本モジュールを動かします。共有プロジェクトを開いて中身を確認しましょう。</p>
+      <a class="lnk" href="https://makecode.microbit.org/S71275-52762-09018-54777" target="_blank" rel="noopener"><span class="ic">▶</span>MakeCode: mp3playerVer4</a>
+    </div>
+
+    <div class="step">
+      <h3><span class="tag">AI</span>AIサービスで効果音を生成</h3>
+      <p>鳴らす「音そのもの」を生成AIで作ります。テキストから効果音を生成して書き出してみましょう。</p>
+      <a class="lnk ai" href="https://elevenlabs.io/app/sound-effects" target="_blank" rel="noopener"><span class="ic">✦</span>ElevenLabs: Sound Effects</a>
+    </div>
+
+    <div class="step">
+      <h3><span class="tag">ML</span>micro:bit CreateAI で加速度を機械学習</h3>
+      <p>加速度センサーのデータを集めて、振り方のモーションを分類するモデルを学習させます。</p>
+      <a class="lnk ai" href="https://createai.microbit.org/" target="_blank" rel="noopener"><span class="ic">✦</span>micro:bit CreateAI</a>
+      <div class="build"><b>つくるもの →</b> 「振ったモーションの種類で音が変わる」サンプルを実装。学習したモーション分類の結果で、BLOCK1で用意した効果音を出し分けます。</div>
+    </div>
+  </section>
+
+  <!-- ============ BLOCK 2 ============ -->
+  <section class="block" id="b2" style="--c:var(--r-cyn)" data-text="oled ディスプレイ 画面 ドット ドット絵 ドットエディタ 16x16 4コマ アニメーション 拡張機能 ライブラリ oleddisplay fast">
+    <div class="block-head">
+      <span class="block-num">BLOCK 2</span>
+      <span class="block-title">画面に出す</span>
+      <span class="block-meta">OLED / ドット絵 / アニメ</span>
+    </div>
+
+    <div class="step">
+      <h3><span class="tag">SAMPLE</span>OLED の使い方</h3>
+      <p>OLEDディスプレイへの表示の基本を確認します。</p>
+      <a class="lnk" href="https://makecode.microbit.org/S92960-40057-64208-44514" target="_blank" rel="noopener"><span class="ic">▶</span>MakeCode: OLED 基本</a>
+    </div>
+
+    <div class="step">
+      <h3><span class="tag">TOOL</span>OLED ドットエディタ</h3>
+      <p>アニメ用のコマ絵を描くツール。<b>4コマ・16×16まで</b>対応しています。ここで描いたデータをコードに取り込みます。</p>
+      <a class="lnk" href="https://oleddoteditor.netlify.app/" target="_blank" rel="noopener"><span class="ic">◆</span>OLED ドットエディタ</a>
+    </div>
+
+    <div class="step">
+      <h3><span class="tag">LIB</span>拡張機能で読み込むライブラリ</h3>
+      <p>アニメ再生にはこのライブラリを拡張機能として追加します。MakeCodeの「拡張機能」に下記URLを貼り付けて読み込んでください。</p>
+      <a class="lnk gh" href="https://github.com/kanejun06/pxt-OledDisplay-fast#v0.0.19" target="_blank" rel="noopener"><span class="ic">⎇</span>kanejun06/pxt-OledDisplay-fast #v0.0.19</a>
+      <div class="build"><b>つくるもの →</b> 「OLEDでアニメーションの再生」を実装。ドットエディタで描いた4コマを順に表示してパラパラアニメにします。</div>
+    </div>
+  </section>
+
+  <!-- ============ BLOCK 3 ============ -->
+  <section class="block" id="b3" style="--c:var(--r-blu)" data-text="esp32 esp32s3 画像認識 classification edgeimpulse arduino ide ボードマネージャ espressif zip library inferencing カメラ メッセージ受信 機械学習 重い プロジェクト名 CL コピペ コピー 編集しない インストール ダウンロード 2.0.4 preferences boards manager url 事前準備 setup">
+    <div class="block-head">
+      <span class="block-num">BLOCK 3</span>
+      <span class="block-title">画像認識（ESP32S3）</span>
+      <span class="block-meta">★ 環境構築あり・所要時間長め</span>
+    </div>
+
+    <div class="step">
+      <h3><span class="tag">SETUP</span>Arduino IDE の準備</h3>
+      <p>ESP32S3で機械学習・画像認識を動かすための環境を作ります。（<mark>当日までに各自で済ませてくる</mark>）下のリンクと手順に沿って進めてください。</p>
+
+      <p style="margin-top:14px;font-weight:700;color:var(--accent-2);font-size:14.5px">① Arduino IDE をインストール</p>
+      <p style="font-size:14px">公式サイトからお使いのOS（Windows / macOS）に合うものをダウンロードしてインストールします。</p>
+      <a class="lnk" href="https://www.arduino.cc/en/software/" target="_blank" rel="noopener"><span class="ic">⬇</span>Arduino IDE 公式ダウンロード (arduino.cc)</a>
+      <a class="lnk" href="https://support.arduino.cc/hc/en-us/articles/360019833020-Download-and-install-Arduino-IDE" target="_blank" rel="noopener"><span class="ic">?</span>インストール手順（公式ヘルプ）</a>
+
+      <p style="margin-top:16px;font-weight:700;color:var(--accent-2);font-size:14.5px">② ESP32 ボードを追加（ボードマネージャ）</p>
+      <p style="font-size:14px">ESP32S3 を扱えるように、ボード定義を追加します。</p>
+      <ol class="steps">
+        <li>Arduino IDE を開き、<span class="path">File &gt; Preferences</span>（macOSは <span class="path">Arduino IDE &gt; Settings…</span>）を開く</li>
+        <li><b>「追加のボードマネージャのURL」</b>（Additional Boards Manager URLs）に下記を貼り付けて OK
+          <div class="copyfield">
+            <code id="bmUrl">https://espressif.github.io/arduino-esp32/package_esp32_index.json</code>
+            <button id="copyBmUrl">コピー</button>
+          </div>
+        </li>
+        <li>左側のボードアイコン、または <span class="path">Tools &gt; Board &gt; Boards Manager</span> を開く</li>
+        <li>検索欄に <code class="inline">esp32</code> と入力し、<b>esp32 by Espressif Systems</b> を見つける</li>
+        <li>バージョン <span class="ver-pill">2.0.4</span> を選んで Install
+          <span class="sub">※ このサンプルは ESP32 Arduino Core 2.0.4 で動作確認済み。最新版だとカメラ周りの挙動が変わることがあるため、まずは 2.0.4 を選ぶのが安全です。</span>
+        </li>
+        <li>インストール後、<span class="path">Tools &gt; Board</span> から ESP32S3 のボードを選択</li>
+      </ol>
+      <div class="note-inline">
+        <b>参考リンク：</b>
+        <a href="https://docs.espressif.com/projects/arduino-esp32/en/latest/installing.html" target="_blank" rel="noopener" style="color:var(--link)">Espressif 公式インストール手順</a>
+        ／
+        <a href="https://docs.arduino.cc/software/ide-v2/tutorials/getting-started/ide-v2-downloading-and-installing" target="_blank" rel="noopener" style="color:var(--link)">Arduino IDE 2 入門ガイド（公式・ボード追加の解説あり）</a>
+        <br>うまくいかなくても大丈夫。詰まった箇所（どのステップで・どんなエラーか）をメモして当日持ってきてください。
+      </div>
+    </div>
+
+    <div class="step">
+      <h3><span class="tag">ML</span>Edge Impulse で Classification</h3>
+      <p>Edge Impulseで画像分類モデルを作り、Arduino用ライブラリ（zip）として書き出します。</p>
+      <div class="rule">
+        <div class="h">★ 最重要ルール：プロジェクト名は全員これに統一</div>
+        <p>Edge Impulseのプロジェクト名を、半角の大文字で正確に：</p>
+        <div class="big">CL</div>
+        <p>とします。プロジェクト名から書き出すライブラリ名が自動で決まるため、これを揃えると全員のライブラリが <code class="inline">CL_inferencing</code> で同一になり、<b>下のスケッチを1文字も編集せずコピペするだけ</b>で動きます。<br><span style="color:var(--ink-dim);font-size:13px">※ <code class="inline">cl</code>（小文字）や <code class="inline">C L</code>（スペース入り）は別名になります。必ず半角大文字2字 <code class="inline">CL</code> で。</span></p>
+      </div>
+      <ol class="steps">
+        <li>プロジェクト名を <code class="inline">CL</code> にして Classification モデルを作成・書き出し（zip）</li>
+        <li>zip形式のLibraryをインクルード：<code class="inline">Sketch &gt; Include Library &gt; Add .ZIP Library...</code></li>
+        <li>サンプルを開く：<code class="inline">File &gt; Examples &gt; CL_inferencing</code></li>
+      </ol>
+    </div>
+
+    <div class="step">
+      <h3><span class="tag">CODE</span>スケッチを貼り付け → コンパイル → 書き込み</h3>
+      <p><b>コードは編集しません。</b>下のスケッチをまるごとコピーして、Arduino IDEのエディタに貼り付けるだけです（プロジェクト名を <code class="inline">CL</code> に統一しているので、そのまま通ります）。</p>
+      <div class="codewrap">
+        <div class="codebar">
+          <span class="fname">CL_inferencing.ino</span>
+          <span class="meta">編集不要・全文コピペ</span>
+          <button class="copybtn" id="copySketch">コードをコピー</button>
+        </div>
+        <pre><code id="sketchCode">/* Edge Impulse Arduino examples
+ * Copyright (c) 2022 EdgeImpulse Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the &quot;Software&quot;), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+// These sketches are tested with 2.0.4 ESP32 Arduino Core
+// https://github.com/espressif/arduino-esp32/releases/tag/2.0.4
+
+/* Includes ---------------------------------------------------------------- */
+#define EI_CLASSIFIER_TFLITE_ENABLE_ESP_NN 0
+#include &lt;CL_inferencing.h&gt;
+#include &quot;edge-impulse-sdk/dsp/image/image.hpp&quot;
+
+#include &quot;esp_camera.h&quot;
+
+// Select camera model - find more camera models in camera_pins.h file here
+// https://github.com/espressif/arduino-esp32/blob/master/libraries/ESP32/examples/Camera/CameraWebServer/camera_pins.h
+
+#define PWDN_GPIO_NUM  -1
+#define RESET_GPIO_NUM -1
+#define XCLK_GPIO_NUM  10
+#define SIOD_GPIO_NUM  40
+#define SIOC_GPIO_NUM  39
+
+#define Y9_GPIO_NUM    48
+#define Y8_GPIO_NUM    11
+#define Y7_GPIO_NUM    12
+#define Y6_GPIO_NUM    14
+#define Y5_GPIO_NUM    16
+#define Y4_GPIO_NUM    18
+#define Y3_GPIO_NUM    17
+#define Y2_GPIO_NUM    15
+#define VSYNC_GPIO_NUM 38
+#define HREF_GPIO_NUM  47
+#define PCLK_GPIO_NUM  13
+
+/* Constant defines -------------------------------------------------------- */
+#define EI_CAMERA_RAW_FRAME_BUFFER_COLS           320
+#define EI_CAMERA_RAW_FRAME_BUFFER_ROWS           240
+#define EI_CAMERA_FRAME_BYTE_SIZE                 3
+
+/* Private variables ------------------------------------------------------- */
+static bool debug_nn = false; // Set this to true to see e.g. features generated from the raw signal
+static bool is_initialised = false;
+uint8_t *snapshot_buf; //points to the output of the capture
+
+static camera_config_t camera_config = {
+    .pin_pwdn = PWDN_GPIO_NUM,
+    .pin_reset = RESET_GPIO_NUM,
+    .pin_xclk = XCLK_GPIO_NUM,
+    .pin_sscb_sda = SIOD_GPIO_NUM,
+    .pin_sscb_scl = SIOC_GPIO_NUM,
+
+    .pin_d7 = Y9_GPIO_NUM,
+    .pin_d6 = Y8_GPIO_NUM,
+    .pin_d5 = Y7_GPIO_NUM,
+    .pin_d4 = Y6_GPIO_NUM,
+    .pin_d3 = Y5_GPIO_NUM,
+    .pin_d2 = Y4_GPIO_NUM,
+    .pin_d1 = Y3_GPIO_NUM,
+    .pin_d0 = Y2_GPIO_NUM,
+    .pin_vsync = VSYNC_GPIO_NUM,
+    .pin_href = HREF_GPIO_NUM,
+    .pin_pclk = PCLK_GPIO_NUM,
+
+    //XCLK 20MHz or 10MHz for OV2640 double FPS (Experimental)
+    .xclk_freq_hz = 20000000,
+    .ledc_timer = LEDC_TIMER_0,
+    .ledc_channel = LEDC_CHANNEL_0,
+
+    .pixel_format = PIXFORMAT_JPEG, //YUV422,GRAYSCALE,RGB565,JPEG
+    .frame_size = FRAMESIZE_QVGA,    //QQVGA-UXGA Do not use sizes above QVGA when not JPEG
+
+    .jpeg_quality = 12, //0-63 lower number means higher quality
+    .fb_count = 1,       //if more than one, i2s runs in continuous mode. Use only with JPEG
+    .fb_location = CAMERA_FB_IN_PSRAM,
+    .grab_mode = CAMERA_GRAB_WHEN_EMPTY,
+};
+
+/* Function definitions ------------------------------------------------------- */
+bool ei_camera_init(void);
+void ei_camera_deinit(void);
+bool ei_camera_capture(uint32_t img_width, uint32_t img_height, uint8_t *out_buf) ;
+
+/**
+* @brief      Arduino setup function
+*/
+void setup()
+{
+    // put your setup code here, to run once:
+    Serial.begin(115200);
+    Serial1.begin(115200, SERIAL_8N1, D7, D6);
+
+    //Serial1.println(&quot;UART OK&quot;);  // ← ここに入れる
+
+    //comment out the below line to start inference immediately after upload
+    //while (!Serial);
+
+    Serial.println(&quot;Edge Impulse Inferencing Demo&quot;);
+    if (ei_camera_init() == false) {
+        ei_printf(&quot;Failed to initialize Camera!\r\n&quot;);
+    }
+    else {
+        ei_printf(&quot;Camera initialized\r\n&quot;);
+    }
+
+    ei_printf(&quot;\nStarting continious inference in 2 seconds...\n&quot;);
+    ei_sleep(2000);
+}
+
+/**
+* @brief      Get data and run inferencing
+*
+* @param[in]  debug  Get debug info if true
+*/
+void loop()
+{
+
+    // instead of wait_ms, we&#x27;ll wait on the signal, this allows threads to cancel us...
+    if (ei_sleep(5) != EI_IMPULSE_OK) {
+        return;
+    }
+
+    //snapshot_buf = (uint8_t*)malloc(EI_CAMERA_RAW_FRAME_BUFFER_COLS * EI_CAMERA_RAW_FRAME_BUFFER_ROWS * EI_CAMERA_FRAME_BYTE_SIZE);
+    snapshot_buf = (uint8_t*)ps_malloc(EI_CAMERA_RAW_FRAME_BUFFER_COLS * EI_CAMERA_RAW_FRAME_BUFFER_ROWS * EI_CAMERA_FRAME_BYTE_SIZE);
+
+    // check if allocation was successful
+    if(snapshot_buf == nullptr) {
+        ei_printf(&quot;ERR: Failed to allocate snapshot buffer!\n&quot;);
+        return;
+    }
+
+    ei::signal_t signal;
+    signal.total_length = EI_CLASSIFIER_INPUT_WIDTH * EI_CLASSIFIER_INPUT_HEIGHT;
+    signal.get_data = &amp;ei_camera_get_data;
+
+    if (ei_camera_capture((size_t)EI_CLASSIFIER_INPUT_WIDTH, (size_t)EI_CLASSIFIER_INPUT_HEIGHT, snapshot_buf) == false) {
+        ei_printf(&quot;Failed to capture image\r\n&quot;);
+        free(snapshot_buf);
+        return;
+    }
+
+    // Run the classifier
+    ei_impulse_result_t result = { 0 };
+
+    //Serial.printf(&quot;Free heap: %u\n&quot;, ESP.getFreeHeap());
+    //Serial.printf(&quot;Free PSRAM: %u\n&quot;, ESP.getFreePsram());
+
+    EI_IMPULSE_ERROR err = run_classifier(&amp;signal, &amp;result, debug_nn);
+    if (err != EI_IMPULSE_OK) {
+        ei_printf(&quot;ERR: Failed to run classifier (%d)\n&quot;, err);
+        free(snapshot_buf);   // ***追加0528
+
+        return;
+    }
+
+    // print the predictions
+    ei_printf(&quot;Predictions (DSP: %d ms., Classification: %d ms., Anomaly: %d ms.): \n&quot;,
+                result.timing.dsp, result.timing.classification, result.timing.anomaly);
+
+#if EI_CLASSIFIER_OBJECT_DETECTION == 1
+    ei_printf(&quot;Object detection bounding boxes:\r\n&quot;);
+    for (uint32_t i = 0; i &lt; result.bounding_boxes_count; i++) {
+        ei_impulse_result_bounding_box_t bb = result.bounding_boxes[i];
+        if (bb.value == 0) {
+            continue;
+        }
+        ei_printf(&quot;  %s (%f) [ x: %u, y: %u, width: %u, height: %u ]\r\n&quot;,
+                bb.label,
+                bb.value,
+                bb.x,
+                bb.y,
+                bb.width,
+                bb.height);
+    }
+
+    // Print the prediction results (classification)
+#else
+    ei_printf(&quot;Predictions:\r\n&quot;);
+    for (uint16_t i = 0; i &lt; EI_CLASSIFIER_LABEL_COUNT; i++) {
+        ei_printf(&quot;  %s: &quot;, ei_classifier_inferencing_categories[i]);
+        ei_printf(&quot;%.5f\r\n&quot;, result.classification[i].value);
+    }
+
+    ssize_t maximum_score_index = -1;
+    for (size_t i = 0; i &lt; EI_CLASSIFIER_LABEL_COUNT; i++) {
+        if (maximum_score_index &lt; 0) {
+            maximum_score_index = i;
+        }
+        else if (result.classification[i].value &gt; result.classification[maximum_score_index].value) {
+            maximum_score_index = i;
+        }
+    }
+    Serial1.printf(&quot;%s\n&quot;, maximum_score_index &lt; 0 ? &quot;&quot; : ei_classifier_inferencing_categories[maximum_score_index]);
+    
+#endif
+
+    // Print anomaly result (if it exists)
+#if EI_CLASSIFIER_HAS_ANOMALY
+    ei_printf(&quot;Anomaly prediction: %.3f\r\n&quot;, result.anomaly);
+#endif
+
+#if EI_CLASSIFIER_HAS_VISUAL_ANOMALY
+    ei_printf(&quot;Visual anomalies:\r\n&quot;);
+    for (uint32_t i = 0; i &lt; result.visual_ad_count; i++) {
+        ei_impulse_result_bounding_box_t bb = result.visual_ad_grid_cells[i];
+        if (bb.value == 0) {
+            continue;
+        }
+        ei_printf(&quot;  %s (%f) [ x: %u, y: %u, width: %u, height: %u ]\r\n&quot;,
+                bb.label,
+                bb.value,
+                bb.x,
+                bb.y,
+                bb.width,
+                bb.height);
+    }
+#endif
+
+
+    free(snapshot_buf);
+
+}
+
+/**
+ * @brief   Setup image sensor &amp; start streaming
+ *
+ * @retval  false if initialisation failed
+ */
+bool ei_camera_init(void) {
+
+    if (is_initialised) return true;
+
+#if defined(CAMERA_MODEL_ESP_EYE)
+  pinMode(13, INPUT_PULLUP);
+  pinMode(14, INPUT_PULLUP);
+#endif
+
+    //initialize the camera
+    esp_err_t err = esp_camera_init(&amp;camera_config);
+    if (err != ESP_OK) {
+      Serial.printf(&quot;Camera init failed with error 0x%x\n&quot;, err);
+      return false;
+    }
+
+    sensor_t * s = esp_camera_sensor_get();
+    // initial sensors are flipped vertically and colors are a bit saturated
+    if (s-&gt;id.PID == OV3660_PID) {
+      s-&gt;set_vflip(s, 1); // flip it back
+      s-&gt;set_brightness(s, 1); // up the brightness just a bit
+      s-&gt;set_saturation(s, 0); // lower the saturation
+    }
+
+#if defined(CAMERA_MODEL_M5STACK_WIDE)
+    s-&gt;set_vflip(s, 1);
+    s-&gt;set_hmirror(s, 1);
+#elif defined(CAMERA_MODEL_ESP_EYE)
+    s-&gt;set_vflip(s, 1);
+    s-&gt;set_hmirror(s, 1);
+    s-&gt;set_awb_gain(s, 1);
+#endif
+
+    is_initialised = true;
+    return true;
+}
+
+/**
+ * @brief      Stop streaming of sensor data
+ */
+void ei_camera_deinit(void) {
+
+    //deinitialize the camera
+    esp_err_t err = esp_camera_deinit();
+
+    if (err != ESP_OK)
+    {
+        ei_printf(&quot;Camera deinit failed\n&quot;);
+        return;
+    }
+
+    is_initialised = false;
+    return;
+}
+
+
+/**
+ * @brief      Capture, rescale and crop image
+ *
+ * @param[in]  img_width     width of output image
+ * @param[in]  img_height    height of output image
+ * @param[in]  out_buf       pointer to store output image, NULL may be used
+ *                           if ei_camera_frame_buffer is to be used for capture and resize/cropping.
+ *
+ * @retval     false if not initialised, image captured, rescaled or cropped failed
+ *
+ */
+bool ei_camera_capture(uint32_t img_width, uint32_t img_height, uint8_t *out_buf) {
+    bool do_resize = false;
+
+    if (!is_initialised) {
+        ei_printf(&quot;ERR: Camera is not initialized\r\n&quot;);
+        return false;
+    }
+
+    camera_fb_t *fb = esp_camera_fb_get();
+
+    if (!fb) {
+        ei_printf(&quot;Camera capture failed\n&quot;);
+        return false;
+    }
+
+   bool converted = fmt2rgb888(fb-&gt;buf, fb-&gt;len, PIXFORMAT_JPEG, snapshot_buf);
+
+   esp_camera_fb_return(fb);
+
+   if(!converted){
+       ei_printf(&quot;Conversion failed\n&quot;);
+       return false;
+   }
+
+    if ((img_width != EI_CAMERA_RAW_FRAME_BUFFER_COLS)
+        || (img_height != EI_CAMERA_RAW_FRAME_BUFFER_ROWS)) {
+        do_resize = true;
+    }
+
+    if (do_resize) {
+        ei::image::processing::crop_and_interpolate_rgb888(
+        out_buf,
+        EI_CAMERA_RAW_FRAME_BUFFER_COLS,
+        EI_CAMERA_RAW_FRAME_BUFFER_ROWS,
+        out_buf,
+        img_width,
+        img_height);
+    }
+
+
+    return true;
+}
+
+static int ei_camera_get_data(size_t offset, size_t length, float *out_ptr)
+{
+    // we already have a RGB888 buffer, so recalculate offset into pixel index
+    size_t pixel_ix = offset * 3;
+    size_t pixels_left = length;
+    size_t out_ptr_ix = 0;
+
+    while (pixels_left != 0) {
+        // Swap BGR to RGB here
+        // due to https://github.com/espressif/esp32-camera/issues/379
+        out_ptr[out_ptr_ix] = (snapshot_buf[pixel_ix + 2] &lt;&lt; 16) + (snapshot_buf[pixel_ix + 1] &lt;&lt; 8) + snapshot_buf[pixel_ix];
+
+        // go to the next pixel
+        out_ptr_ix++;
+        pixel_ix+=3;
+        pixels_left--;
+    }
+    // and done!
+    return 0;
+}
+
+#if !defined(EI_CLASSIFIER_SENSOR) || EI_CLASSIFIER_SENSOR != EI_CLASSIFIER_SENSOR_CAMERA
+#error &quot;Invalid model for current sensor&quot;
+#endif
+</code></pre>
+      </div>
+      <ol class="steps" style="margin-top:12px">
+        <li>上の「コードをコピー」を押す → Arduino IDEに貼り付け</li>
+        <li>ボードに ESP32S3 を選択してコンパイル</li>
+        <li>ESP32S3 に書き込み</li>
+      </ol>
+      <p style="font-size:13px;color:var(--ink-dim);margin-top:8px">※ カメラのピン設定やUART設定（<code class="inline">Serial1.begin(...D7, D6)</code>）も全員共通なので触りません。使うボードが同じなら、このままで動きます。</p>
+      <details class="trouble">
+        <summary>⚠ うまくいかなかった時 ＝ ライブラリの削除が必要なケース<span class="chev">›</span></summary>
+        <div class="body">
+          <p>過去に別名でライブラリを入れていた等で競合し、コンパイルに失敗する場合、<code class="inline">Arduino / libraries</code> フォルダにアクセスして該当ライブラリ（古い <code class="inline">*_inferencing</code> など）を削除する必要があります。</p>
+          <p>プロジェクト名を <code class="inline">CL</code> に統一していれば基本は起きませんが、もし削除が必要になったら手を挙げてください。フォルダの場所と消すべきものを一緒に確認します。</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="step">
+      <h3><span class="tag">SAMPLE</span>micro:bit でメッセージ受信 → OLED表示</h3>
+      <p>ESP32S3側の認識結果を micro:bit が受け取り、OLEDにテキスト表示します。受信側の共有プロジェクトはこちら。</p>
+      <a class="lnk" href="https://makecode.microbit.org/S96257-38705-69402-78233" target="_blank" rel="noopener"><span class="ic">▶</span>MakeCode: メッセージ受信 + OLEDテキスト表示</a>
+      <div class="build"><b>つくるもの →</b> ESP32S3で取得した画像から「カメラの前に何があるか」を判定し、その結果をディスプレイに出すサンプルを実装します。</div>
+    </div>
+  </section>
+
+  <!-- ============ BLOCK 4 ============ -->
+  <section class="block" id="b4" style="--c:var(--r-pur)" data-text="copilot vibe coding microsoft 対話 led 生成ai プロンプト 実践 話しかけ方 仕様 言語化 要求 ws2813 grove seeed">
+    <div class="block-head">
+      <span class="block-num">BLOCK 4</span>
+      <span class="block-title">vibe coding の実践</span>
+      <span class="block-meta">Microsoft Copilot × LED</span>
+    </div>
+
+    <div class="step">
+      <h3><span class="tag">PRACTICE</span>Copilotと対話してコードを書く</h3>
+      <p>LEDの制御も、Copilotと対話するだけでここまでできる、という例を見てから、自分でも試してみましょう。</p>
+      <a class="lnk" href="https://makecode.microbit.org/S70814-28161-69079-24570" target="_blank" rel="noopener"><span class="ic">▶</span>MakeCode: Copilot × LED の例</a>
+      <div class="build"><b>やってみる →</b> 例を起点に、Copilotへの指示を変えて自分なりのLED表現をつくってみます。</div>
+    </div>
+
+    <div class="step">
+      <h3><span class="tag">EXAMPLE</span>話しかけ方の例</h3>
+      <p>最初のひとことは、こんな感じで始めます。</p>
+      <div class="chat">
+        <div class="who">あなた → Copilot</div>
+        <div class="bubble">
+          <a href="https://www.seeedstudio.com/Grove-WS2813-RGB-LED-Strip-Waterproof-30-LED-m-1m.html" target="_blank" rel="noopener">https://www.seeedstudio.com/Grove-WS2813-RGB-LED-Strip-Waterproof-30-LED-m-1m.html</a><br>
+          このLEDを micro:bit の P1 に接続して、制御したいのでプログラムを手伝って欲しい！
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <h3><span class="tag">POINT</span>うまく対話するコツ（ここが本題）</h3>
+      <p>AIに任せきりにするのではなく、「何を作りたいか」を自分の側がはっきりさせるのが鍵です。次の2つを意識しましょう。</p>
+      <div class="keypts">
+        <div class="keypt">
+          <div class="num">1</div>
+          <div class="txt"><b>制御したいものの仕様を、AIに押さえさせる。</b><br>使う部品（型番・製品ページ）、つなぐピン（P1 など）、台数や本数といった前提を最初に伝え、AIに正しく認識させる。曖昧なまま進めると見当違いのコードが返ってきます。</div>
+        </div>
+        <div class="keypt">
+          <div class="num">2</div>
+          <div class="txt"><b>自分の要求を、なるべく的確に言語化する。</b><br>「カッコよく光らせて」ではなく「赤→青へ1秒かけてグラデーション」のように、動きを具体的な言葉にする。要求が明確なほど、出てくるコードも狙いに近づきます。</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <p id="noresult" class="hidden" style="text-align:center;color:var(--ink-dim);margin-top:40px">該当する項目が見つかりませんでした。</p>
+
+  <footer>
+    プロダクトデザイン ハンズオン教材 ／ micro:bit + sensors & actuators<br>
+    リンクが開かない場合はブラウザに直接URLを貼り付けてください。
+  </footer>
+
+</div>
+
+<script>
+
+  // language switch via Google Translate (works on public URLs e.g. GitHub Pages)
+  function setLang(lang){
+    if(lang==='ja'){
+      const u=location.href.split('#')[0];
+      window.location.href=u;
+      return;
+    }
+    const pageUrl=location.href.split('#')[0];
+    const t='https://translate.google.com/translate?sl=ja&tl='+lang+'&u='+encodeURIComponent(pageUrl);
+    window.open(t,'_blank','noopener');
+  }
+  // search filter
+  const q=document.getElementById('q');
+  const blocks=[...document.querySelectorAll('section.block')];
+  const noResult=document.getElementById('noresult');
+  q.addEventListener('input',()=>{
+    const v=q.value.trim().toLowerCase();
+    let shown=0;
+    blocks.forEach(b=>{
+      const hay=(b.dataset.text+' '+b.textContent).toLowerCase();
+      const hit=!v||hay.includes(v);
+      b.classList.toggle('hidden',!hit);
+      if(hit)shown++;
+    });
+    noResult.classList.toggle('hidden',shown>0);
+  });
+  // copy board manager URL
+  const bmBtn=document.getElementById('copyBmUrl');
+  if(bmBtn){
+    bmBtn.addEventListener('click',async()=>{
+      const url=document.getElementById('bmUrl').textContent;
+      try{await navigator.clipboard.writeText(url);}
+      catch(e){
+        const ta=document.createElement('textarea');
+        ta.value=url;ta.style.position='fixed';ta.style.opacity='0';
+        document.body.appendChild(ta);ta.select();
+        try{document.execCommand('copy');}catch(_){}
+        document.body.removeChild(ta);
+      }
+      bmBtn.textContent='✓ コピー';bmBtn.classList.add('done');
+      setTimeout(()=>{bmBtn.textContent='コピー';bmBtn.classList.remove('done');},1800);
+    });
+  }
+
+  // copy sketch
+  const copyBtn=document.getElementById('copySketch');
+  if(copyBtn){
+    copyBtn.addEventListener('click',async()=>{
+      const code=document.getElementById('sketchCode').textContent;
+      try{
+        await navigator.clipboard.writeText(code);
+      }catch(e){
+        // fallback for non-secure contexts
+        const ta=document.createElement('textarea');
+        ta.value=code;ta.style.position='fixed';ta.style.opacity='0';
+        document.body.appendChild(ta);ta.select();
+        try{document.execCommand('copy');}catch(_){}
+        document.body.removeChild(ta);
+      }
+      const orig=copyBtn.textContent;
+      copyBtn.textContent='✓ コピーしました';
+      copyBtn.classList.add('done');
+      setTimeout(()=>{copyBtn.textContent=orig;copyBtn.classList.remove('done');},2000);
+    });
+  }
+
+  const openBtn=document.getElementById('openAll');
+  openBtn.addEventListener('click',()=>{
+    const ds=[...document.querySelectorAll('details.trouble')];
+    const anyClosed=ds.some(d=>!d.open);
+    ds.forEach(d=>d.open=anyClosed);
+    openBtn.textContent=anyClosed?'トラブル対応を全部閉じる':'トラブル対応を全部開く';
+  });
+</script>
+</body>
+</html>
