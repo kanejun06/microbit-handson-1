@@ -500,11 +500,38 @@
   </section>
 
   <!-- ============ BLOCK 3 ============ -->
-  <section class="block" id="b3" style="--c:var(--r-blu)" data-text="esp32 esp32s3 画像認識 classification edgeimpulse arduino ide ボードマネージャ espressif zip library inferencing カメラ メッセージ受信 機械学習 重い プロジェクト名 CL コピペ コピー 編集しない インストール ダウンロード 2.0.4 preferences boards manager url 事前準備 setup XIAO_ESP32S3 PSRAM OPI psram board libraries 削除 windows mac パス documents">
+  <section class="block" id="b3" style="--c:var(--r-blu)" data-text="esp32 esp32s3 画像認識 classification edgeimpulse arduino ide ボードマネージャ espressif zip library inferencing カメラ メッセージ受信 機械学習 重い プロジェクト名 CL コピペ コピー 編集しない インストール ダウンロード 2.0.4 preferences boards manager url 事前準備 setup XIAO_ESP32S3 PSRAM OPI psram board libraries 削除 windows mac パス documents 学習 トレーニング モデル model 分類 物体検出 object detection エッジAI edge ai リンゴ バナナ">
     <div class="block-head">
       <span class="block-num">BLOCK 3</span>
       <span class="block-title">画像認識（ESP32S3）</span>
       <span class="block-meta">★ 環境構築あり・所要時間長め</span>
+    </div>
+
+    <div class="step">
+      <h3><span class="tag">LEARN</span>その前に：機械学習ってなに？</h3>
+      <p>このブロックで作るのは <b>「カメラの前にあるものを、機械が自分で見分ける」</b> 仕組みです。その裏側にあるのが <b>機械学習（Machine Learning）</b> という考え方。インストール作業に入る前に、自分が何を作るのかをイメージしておきましょう。</p>
+      <p>ふつうのプログラムは、人間が <b>「もし〜ならこうしろ」というルールを全部書いて</b>動かします。でも「リンゴとバナナを見分けるルール」を言葉で完璧に書くのは、ほぼ不可能ですよね（色？ 形？ 例外だらけ）。そこで機械学習では、ルールを書く代わりに <b>「これがリンゴ」「これがバナナ」というお手本（データ）をたくさん見せて、機械自身に共通点を見つけさせます。</b> この「見せて覚えさせる」作業が <b>学習（トレーニング）</b>、できあがった「見分ける能力のかたまり」が <b>モデル</b> です。今回は写真を見せて学習する作業を <code class="inline">Edge Impulse</code> というウェブサービスで行います（難しい数式は不要・画像を集めてボタンを押すだけ）。</p>
+
+      <p style="margin-top:14px;font-weight:700;color:var(--accent-2);font-size:14.5px">画像の機械学習には、大きく2つのタイプがある</p>
+      <div class="keypts">
+        <div class="keypt">
+          <div class="num">🏷</div>
+          <div class="txt"><b>Classification（分類）</b><br>画像ぜんぶを見て「これは何か」を<b>1つ答える</b>。画像全体に1枚のラベルを貼るイメージ。「どこにあるか」は分からず、「何が写っているか」だけを答えます。<br><span style="color:var(--accent-2)">← 今回のハンズオンで使うのはこちら</span></div>
+        </div>
+        <div class="keypt">
+          <div class="num">🎯</div>
+          <div class="txt"><b>Object Detection（物体検出）</b><br>画像の中の<b>「どこに・何が」あるかを枠で囲って</b>答える。複数のものの位置をそれぞれ示せるぶん、学習も処理も重くなりがちです。</div>
+        </div>
+      </div>
+      <div class="build"><b>今回つくるもの →</b> Classification（分類）で「カメラの前に何があるか」を1つ判定し、その結果を micro:bit に送って OLED に表示します。</div>
+
+      <p style="margin-top:12px">ESP32S3 に書き込むのは、ただのプログラムだけではありません。<b>① カメラを動かすプログラム</b>＋<b>② 学習済みモデル本体</b>（Edge Impulse で作った“見分ける能力”をライブラリとして組み込む）＋<b>③ 判定して結果を micro:bit へ送る処理</b> を、まとめて基板に焼き込みます。ネットにつながっていなくても ESP32S3 単体で判定できる——これが <b>エッジAI（端末側で完結するAI）</b> の面白さです。</p>
+
+      <div class="note-inline">
+        <b>もっと詳しく：</b>機械学習の仕組み・分類と物体検出の違い・ESP32S3に書き込まれる中身は、
+        <a href="prep_arduino_ide.html" style="color:var(--link)">事前準備ページの「機械学習ってなに？」</a>
+        でさらにかみ砕いて解説しています。
+      </div>
     </div>
 
     <div class="step">
