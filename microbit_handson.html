@@ -347,7 +347,7 @@
 
   <nav class="blocks">
     <a href="#b1" style="--c:var(--r-red)"><div class="n">BLOCK 1</div><div class="t">音を作る・鳴らす</div><div class="d">mp3 / AI効果音 / モーション分類</div></a>
-    <a href="#b2" style="--c:var(--r-cyn)"><div class="n">BLOCK 2</div><div class="t">画面に出す</div><div class="d">OLED / ドット絵 / アニメ</div></a>
+    <a href="#b2" style="--c:var(--r-cyn)"><div class="n">BLOCK 2</div><div class="t">OLEDに表示しよう</div><div class="d">OLED / ドット絵 / アニメ</div></a>
     <a href="#b3" style="--c:var(--r-blu)"><div class="n">BLOCK 3</div><div class="t">画像認識</div><div class="d">ESP32S3 / EdgeImpulse ★重</div></a>
     <a href="#b4" style="--c:var(--r-pur)"><div class="n">BLOCK 4</div><div class="t">vibe coding</div><div class="d">Copilot × LED / 話しかけ方</div></a>
   </nav>
@@ -530,7 +530,7 @@
         <p style="margin:0 0 8px"><b>③ ボタンで表示を切り替え：</b></p>
         <ul class="plain" style="margin:4px 0 8px">
           <li><b>Aボタン</b> → 1番の絵を表示（<code class="inline">showRegisteredAnimation16Frame(1, 0)</code>）</li>
-          <li><b>Bボタン</b> → 2番の絵を表示（<code class="inline">showRegisteredAnimation16Frame(2, 0)</code>）</li>
+          <li><b>Bボタン</b> → 2番の絵を表示</li>
         </ul>
         <p style="margin:0 0 8px"><b>④ A+B同時押しでアニメ：</b><code class="inline">ずっと</code> の中で、A＋Bが同時に押されている間 <code class="inline">showRegisteredAnimation16(0, 2)</code> を呼び、登録した <b>1番と2番の絵を切り替えて</b>パラパラアニメのように見せています。</p>
         <p style="margin:0"><b>⑤ ロゴをタッチすると表示が消える：</b>micro:bit 上部の <b>ロゴ（金色の端子）に触れる</b>と <code class="inline">clearDisplayFast</code> が働き、画面の表示が消えます。</p>
@@ -560,7 +560,7 @@
   </section>
 
   <!-- ============ BLOCK 3 ============ -->
-  <section class="block" id="b3" style="--c:var(--r-blu)" data-text="esp32 esp32s3 画像認識 classification edgeimpulse arduino ide ボードマネージャ espressif zip library inferencing カメラ メッセージ受信 機械学習 重い プロジェクト名 CL コピペ コピー 編集しない インストール ダウンロード 2.0.4 preferences boards manager url 事前準備 setup XIAO_ESP32S3 PSRAM OPI psram board libraries 削除 windows mac パス documents USB ケーブル 外す P0 接続 電源 故障 注意 シリアルモニタ 出力 確認 ESP-EYE labeling impulse transfer learning grayscale mobilenetv2 deployment arduino library tensorflow quantized build 特徴量 学習 データセット 全体の流れ 集める 整える 書き出す パイプライン モデル構築 段階 写真 撮影 コツ 角度 手に持つ none 背景 明るさ 枚数 4種類">
+  <section class="block" id="b3" style="--c:var(--r-blu)" data-text="esp32 esp32s3 画像認識 classification edgeimpulse arduino ide ボードマネージャ espressif zip library inferencing カメラ メッセージ受信 機械学習 重い プロジェクト名 CL コピペ コピー 編集しない インストール ダウンロード 2.0.4 preferences boards manager url 事前準備 setup select other board port usbmodem com ポート ドロップダウン XIAO_ESP32S3 PSRAM OPI psram board libraries 削除 windows mac パス documents USB ケーブル 外す P0 接続 電源 故障 注意 シリアルモニタ 出力 確認 ESP-EYE labeling impulse transfer learning grayscale mobilenetv2 deployment arduino library tensorflow quantized build 特徴量 学習 データセット 全体の流れ 集める 整える 書き出す パイプライン モデル構築 段階 写真 撮影 コツ 角度 手に持つ none 背景 明るさ 枚数 4種類 get started アカウント 公式サイト sign up login google github developer plan email username password 登録フォーム create new project target cortex esp-eye 対象デバイス connect a device scan qr スマホ カメラ collect data 撮影 collecting images connected mobile give access camera 権限 許可 label capture 撮影 ラベル split automatically">
     <div class="block-head">
       <span class="block-num">BLOCK 3</span>
       <span class="block-title">画像認識（ESP32S3）</span>
@@ -597,8 +597,32 @@
         <li>バージョン <span class="ver-pill">2.0.4</span> を選んで Install
           <span class="sub">※ このサンプルは ESP32 Arduino Core 2.0.4 で動作確認済み。最新版だとカメラ周りの挙動が変わることがあるため、まずは 2.0.4 を選ぶのが安全です。</span>
         </li>
-        <li>インストール後、<span class="path">Tools &gt; Board</span> から <code class="inline">XIAO_ESP32S3</code> を選択<br><span style="color:var(--ink-dim);font-size:13px">※ 書き込み前に <span class="path">Tools &gt; PSRAM</span> を <code class="inline">OPI PSRAM</code> にするのも忘れずに（詳細は下のCODEステップ参照）</span></li>
       </ol>
+
+      <p style="margin-top:16px;font-weight:700;color:var(--accent-2);font-size:14.5px">③ 使うボードを選ぶ（こちらが簡単）</p>
+      <p style="font-size:14px;margin:4px 0">ESP32S3 を PC に USB でつないだら、画面上部の <b>ボード選択ドロップダウン</b> から設定します。Tools メニューをたどるより、こちらが確実です。</p>
+      <ol class="steps" style="margin-top:8px">
+        <li>上部のドロップダウンを開き、<b>「Select other board and port…」</b> を選ぶ</li>
+      </ol>
+      <figure class="figure">
+        <img src="images/ei-board-dropdown.jpg" alt="Arduino IDE上部のボード選択ドロップダウン。Select other board and port…（赤枠）" loading="lazy">
+        <figcaption>上部ドロップダウンから「Select other board and port…」を選びます（赤枠）。</figcaption>
+      </figure>
+      <ol class="steps" style="margin-top:8px">
+        <li>BOARDS の検索窓に <code class="inline">xiao</code> と入力（赤枠）</li>
+        <li><b>XIAO_ESP32S3</b> を選ぶ（赤枠）</li>
+        <li>PORTS から <b><code class="inline">/dev/cu.usbmodem…</code></b> を選ぶ（赤枠）→ OK
+          <span class="sub">※ Windows の場合は <code class="inline">COM3</code> のように <b>「COM＋数字」</b> で表示されます。それを選んでください。</span>
+        </li>
+      </ol>
+      <figure class="figure">
+        <img src="images/ei-board-select.jpg" alt="Select Other Board and Portダイアログ。検索窓xiao、XIAO_ESP32S3、/dev/cu.usbmodemをそれぞれ赤枠" loading="lazy">
+        <figcaption>検索窓に「xiao」→「XIAO_ESP32S3」を選び、右でポート（/dev/cu.usbmodem…）を選んで OK（いずれも赤枠）。</figcaption>
+      </figure>
+      <div class="note-inline" style="margin-top:8px">
+        <b>PSRAM の設定も忘れずに：</b>書き込み前に <span class="path">Tools &gt; PSRAM</span> を <code class="inline">OPI PSRAM</code> にします（詳細は下のCODEステップ参照）。
+      </div>
+
       <div class="note-inline">
         <b>参考リンク：</b>
         <a href="https://docs.espressif.com/projects/arduino-esp32/en/latest/installing.html" target="_blank" rel="noopener" style="color:var(--link)">Espressif 公式インストール手順</a>
@@ -611,6 +635,12 @@
     <div class="step">
       <h3><span class="tag">ML</span>Edge Impulse で Classification</h3>
       <p>Edge Impulseで画像分類モデルを作り、Arduino用ライブラリ（zip）として書き出します。</p>
+      <div class="rule">
+        <div class="h">★ 最重要ルール：プロジェクト名は全員これに統一</div>
+        <p>Edge Impulseのプロジェクト名を、半角の大文字で正確に：</p>
+        <div class="big">CL</div>
+        <p>とします。プロジェクト名から書き出すライブラリ名が自動で決まるため、これを揃えると全員のライブラリが <code class="inline">CL_inferencing</code> で同一になり、<b>下のスケッチを1文字も編集せずコピペするだけ</b>で動きます。<br><span style="color:var(--ink-dim);font-size:13px">※ <code class="inline">cl</code>（小文字）や <code class="inline">C L</code>（スペース入り）は別名になります。必ず半角大文字2字 <code class="inline">CL</code> で。</span></p>
+      </div>
       <div class="pipeline">
         <div class="ph">🧭 まず全体の流れをつかもう</div>
         <p class="intro">これから設定する項目はたくさんありますが、やっていることは大きく <b>4つの段階</b> に分けられます。「今どの段階にいるのか」を意識すると、ひとつひとつの設定の意味が見えてきます。</p>
@@ -627,32 +657,152 @@
       </div>
 
       <p style="margin-top:14px;font-weight:700;color:var(--accent-2);font-size:14.5px">作成フロー（設定が多いので順番どおりに）</p>
-      <p style="font-size:13.5px;color:var(--ink-dim);margin:2px 0 0">所要 30分目安。ログインは <code class="inline">studio.edgeimpulse.com</code> から。</p>
-      <a class="lnk ai" href="https://studio.edgeimpulse.com/login" target="_blank" rel="noopener" style="margin-top:8px"><span class="ic">✦</span>Edge Impulse Studio にログイン</a>
+      <p style="font-size:13.5px;color:var(--ink-dim);margin:2px 0 0">所要 30分目安。Edge Impulse は画面が少し分かりにくいので、スクショに沿って進めましょう。</p>
 
-      <div class="rule">
-        <div class="h">★ 最重要ルール：プロジェクト名は全員これに統一</div>
-        <p>Edge Impulseのプロジェクト名を、半角の大文字で正確に：</p>
-        <div class="big">CL</div>
-        <p>とします。プロジェクト名から書き出すライブラリ名が自動で決まるため、これを揃えると全員のライブラリが <code class="inline">CL_inferencing</code> で同一になり、<b>下のスケッチを1文字も編集せずコピペするだけ</b>で動きます。<br><span style="color:var(--ink-dim);font-size:13px">※ <code class="inline">cl</code>（小文字）や <code class="inline">C L</code>（スペース入り）は別名になります。必ず半角大文字2字 <code class="inline">CL</code> で。</span></p>
-      </div>
+      <p style="margin-top:14px;font-weight:700;color:var(--accent-2);font-size:14px">① アカウントを作る（初回のみ）</p>
+      <p style="font-size:14px;margin:2px 0">Edge Impulse の公式サイトを開き、右上の <b>「Get started」</b> を押してアカウントを作成します。</p>
+      <a class="lnk ai" href="https://edgeimpulse.com/" target="_blank" rel="noopener" style="margin-top:6px"><span class="ic">✦</span>Edge Impulse 公式サイト</a>
+      <figure class="figure">
+        <img src="images/ei-getstarted.jpg" alt="Edge Impulse公式トップ。右上にGet startedボタン" loading="lazy">
+        <figcaption>右上の「Get started」からアカウント作成に進みます。</figcaption>
+      </figure>
+      <p style="font-size:14px;margin:10px 0 2px">すると下のログイン画面が出ます。<b>初めての人は一番下の「Sign Up」</b> からアカウントを作りましょう。Google や GitHub のアカウントでそのまま始めることもできます。</p>
+      <figure class="figure">
+        <img src="images/ei-login.jpg" alt="Edge Impulseのログイン画面。Continue with Google / GitHub、メール入力、下にSign Upリンク" loading="lazy">
+        <figcaption>初回は下の「Sign Up」でアカウント作成。Google / GitHub アカウントを使ってもOK。作成済みならここでログイン。</figcaption>
+      </figure>
+      <p style="font-size:14px;margin:10px 0 2px">登録フォームが開くので、<b>必要事項を入力して「Sign up」</b> を押します（無料の Developer Plan・クレジットカード不要）。</p>
+      <ul class="plain" style="margin:4px 0 0">
+        <li><b>Email</b>（大学のメールアドレス）／ <b>Username</b> ／ <b>Password</b> を入力</li>
+        <li>role（役割）は <b>任意</b> なので空のままでもOK</li>
+        <li>「Let us know you're human」の認証にチェック → 規約に同意して <b>Sign up</b></li>
+      </ul>
+      <figure class="figure">
+        <img src="images/ei-signup-form.jpg" alt="Edge Impulseのサインアップフォーム。Email・Username・Password・role・human認証・規約同意" loading="lazy">
+        <figcaption>無料のDeveloper Planでクレジットカード不要。必要事項を入れて Sign up を押します。</figcaption>
+      </figure>
+      <p style="font-size:14px;margin:10px 0 2px">登録できると「Sign up successful!」と出ます。<b>「Click here to build your first ML model!」</b> を押すと、最初のプロジェクト作成に進みます。</p>
+      <figure class="figure">
+        <img src="images/ei-signup-success.jpg" alt="Sign up successful! の画面。Click here to build your first ML model! ボタン" loading="lazy">
+        <figcaption>「Click here to build your first ML model!」を押して、いよいよモデル作りを始めます。</figcaption>
+      </figure>
+      <p style="font-size:14px;margin:10px 0 2px">続いて <b>ユーザーIDを選びます</b>（このスクショでは <code class="inline">kanejun06</code>）。選ぶとプロジェクトのダッシュボードに入り、最初のプロジェクトが用意された状態になります。ここが操作の拠点です。</p>
+      <figure class="figure">
+        <img src="images/ei-dashboard.jpg" alt="Edge Impulseのプロジェクトダッシュボード。左にDashboard/Devices/Data acquisition/Impulse designなどのメニュー" loading="lazy">
+        <figcaption>プロジェクトのダッシュボード。左メニュー（Data acquisition、Impulse design など）を使ってモデルを作っていきます。</figcaption>
+      </figure>
+
+      <p style="margin-top:16px;font-weight:700;color:var(--accent-2);font-size:14px">② プロジェクトを作って設定していく</p>
+      <p style="font-size:14px;margin:4px 0 2px">プロジェクト一覧で <b>「＋ Create new project」</b> を押して、新しいプロジェクトを作ります。あとは下のフローの順に設定していきましょう。</p>
+      <figure class="figure">
+        <img src="images/ei-create-project.jpg" alt="Edge Impulseのプロジェクト一覧。右上に＋Create new projectボタン" loading="lazy">
+        <figcaption>右上の「＋ Create new project」から新規プロジェクトを作成します。</figcaption>
+      </figure>
 
       <div class="ei-flow">
         <div class="ei-step">
           <div class="t">プロジェクトを新規作成</div>
           <div class="setpair"><span class="k">プロジェクト名</span><span class="arrow">→</span><span class="v">CL</span></div>
-          <div class="setpair"><span class="k">Target</span><span class="arrow">→</span><span class="v">Espressif ESP-EYE</span></div>
-          <div class="setpair"><span class="k">Labeling method</span><span class="arrow">→</span><span class="v">One label per data item</span></div>
+          <ul class="mini">
+            <li>名前の欄に必ず <b><code class="inline">CL</code></b> と入れる（半角大文字2字）。これがコピペ一発の鍵です。</li>
+            <li>入力できたら <b>「Create new project」</b> を押す</li>
+          </ul>
+          <figure class="figure">
+            <img src="images/ei-new-project.jpg" alt="Create a new projectダイアログ。プロジェクト名にCLと入力、Personal/Private、Create new projectボタン" loading="lazy">
+            <figcaption>名前は <b>CL</b>。種別やPublic/Privateはそのままで大丈夫です。入力後「Create new project」を押します。</figcaption>
+          </figure>
+        </div>
+
+        <div class="ei-step">
+          <div class="t">Target（対象デバイス）を設定する</div>
+          <div class="setpair"><span class="k">Target device</span><span class="arrow">→</span><span class="v">Espressif ESP-EYE</span></div>
+          <div class="callout warn" style="margin:8px 0">
+            <div class="h">⚠ 見逃しやすい！</div>
+            Target は <b>画面右上の「Target: …」ボタン</b>から設定します。作成直後は <code class="inline">Cortex-M4F 80MHz</code> などになっているので、ここを押して変更します。
+          </div>
+          <figure class="figure">
+            <img src="images/ei-target-button.jpg" alt="プロジェクトCLのダッシュボード。右上にTarget設定ボタン" loading="lazy">
+            <figcaption>まず右上の「Target: …」ボタンを押します（赤枠）。</figcaption>
+          </figure>
+          <ul class="mini">
+            <li>開いた一覧から <b>Espressif ESP-EYE (ESP32 240MHz)</b> を選ぶ</li>
+          </ul>
+          <figure class="figure">
+            <img src="images/ei-target-select.jpg" alt="Target device選択リスト。Espressif ESP-EYE (ESP32 240MHz) を選択" loading="lazy">
+            <figcaption>リストから「Espressif ESP-EYE (ESP32 240MHz)」を選択します。</figcaption>
+          </figure>
         </div>
 
         <div class="ei-step">
           <div class="t">Dataset を用意する</div>
           <div class="sub2">Data acquisition</div>
           <ul class="mini">
-            <li>識別する物体の <b>ラベルを先に設定</b> する（例：apple / banana など）<br><span style="font-size:12px">※ あとからラベルを直すのは大変なので、先に決めておくのがおすすめ。</span></li>
-            <li><b>「どれにも当てはまらない」ラベル</b>も作っておく（例：none / nothing）。何も無い状態を撮っておくと、判定がぐっと安定します。</li>
-            <li>Collect data で、そのラベルごとにカメラから画像を集める</li>
+            <li>左メニューの <b>「Data acquisition」</b> を開く（下の画像の赤枠）</li>
           </ul>
+          <figure class="figure tall">
+            <img src="images/ei-data-acquisition-menu.jpg" alt="Edge Impulse左メニュー。Data acquisitionが赤枠で示されている" loading="lazy">
+            <figcaption>左メニューの「Data acquisition」からデータ収集に進みます。</figcaption>
+          </figure>
+          <div class="setpair"><span class="k">Labeling method</span><span class="arrow">→</span><span class="v">One label per data item</span></div>
+          <ul class="mini">
+            <li>Labeling method は、ダッシュボードを <b>下にスクロールした右側の「Project info」</b> にあります。ここを <code class="inline">One label per data item</code> にする<br><span style="font-size:12px">※ 1枚の画像に1つのラベル、という意味。今回の分類ではこれを選びます。</span></li>
+          </ul>
+          <figure class="figure">
+            <img src="images/ei-labeling-method.jpg" alt="ダッシュボード下部の右側Project info。Labeling methodの設定欄" loading="lazy">
+            <figcaption>「Labeling method」はダッシュボード下部・右側の Project info にあります（赤枠）。</figcaption>
+          </figure>
+
+          <div class="sub2" style="margin-top:12px">データを集める（スマホのカメラを使う）</div>
+          <ul class="mini">
+            <li>Data acquisition 画面の右「Collect data」で <b>「Connect a device」</b> をクリック</li>
+          </ul>
+          <figure class="figure">
+            <img src="images/ei-connect-device.jpg" alt="Collect dataカード内のConnect a deviceリンク（赤枠）" loading="lazy">
+            <figcaption>「Connect a device」をクリックします（赤枠）。</figcaption>
+          </figure>
+          <ul class="mini">
+            <li>出てきた画面で <b>「Scan QR code to connect to your phone」</b> の QRコードを、スマホのカメラで読み取る</li>
+          </ul>
+          <figure class="figure">
+            <img src="images/ei-scan-qr.jpg" alt="Collect new data画面。Scan QR code to connect to your phoneのQRコード（赤枠）" loading="lazy">
+            <figcaption>左の「Scan QR code」をスマホのカメラで読み取ります。</figcaption>
+          </figure>
+          <ul class="mini">
+            <li>スマホがつながると「Connected as …」と表示される。<b>「Collecting images?」</b> を選ぶ（赤枠）</li>
+          </ul>
+          <figure class="figure tall">
+            <img src="images/ei-collecting-images.jpg" alt="スマホのData collection画面。Connected表示と、Collecting images?ボタン（赤枠）" loading="lazy">
+            <figcaption>スマホ側でつながったら「Collecting images?」を選びます（赤枠）。</figcaption>
+          </figure>
+          <ul class="mini">
+            <li>カメラの許可を求められたら <b>「Give access to the camera」</b> を押す（赤枠）</li>
+          </ul>
+          <figure class="figure tall">
+            <img src="images/ei-camera-permission.jpg" alt="スマホのカメラ権限画面。Give access to the cameraボタン（赤枠）" loading="lazy">
+            <figcaption>「Give access to the camera」でカメラを許可すると、撮影できるようになります（赤枠）。</figcaption>
+          </figure>
+          <ul class="mini">
+            <li>撮影画面の上の <b>「Label: …」をタップ</b> して、いま撮るものの <b>ラベル</b> を選ぶ（赤枠）<br><span style="font-size:12px">※ ラベル（例：apple / banana など）は <b>先に決めておく</b>のがおすすめ。あとから直すのは大変です。</span></li>
+            <li><b>「どれにも当てはまらない」ラベル</b>（例：none / nothing）も用意し、何も無い状態を撮っておくと判定がぐっと安定します。</li>
+            <li><b>「Capture」</b> ボタンで撮影 → そのラベルの画像が1枚ずつ集まる。角度や距離を変えて各ラベルぶん撮る<br><span style="font-size:12px">※ Category は「Split automatically (80/20)」のままでOK（学習用とテスト用に自動で振り分けてくれます）。</span></li>
+          </ul>
+          <figure class="figure tall">
+            <img src="images/ei-capture-label.jpg" alt="スマホの撮影画面。上部のLabel: Nothingをタップしてラベル選択（赤枠）" loading="lazy">
+            <figcaption>上の「Label」をタップしてラベルを選んでから「Capture」で撮影します（赤枠）。</figcaption>
+          </figure>
+
+          <div class="tips-shot">
+            <div class="th">📸 学習データ（写真）を撮るときのコツ</div>
+            <p class="ti">認識がうまくいくかどうかは、設定よりも<b>写真の撮り方</b>で決まります。下を意識して集めると精度が安定します。</p>
+            <ul class="shot-list">
+              <li><b>いろんな角度・距離で撮る</b><br>正面だけでなく、回したり近づけたり離したり。1パターンだけだと、その見え方しか認識できません。</li>
+              <li><b>手に持った状態でも撮る</b><br>実際の判定では手で持ってかざすことが多いはず。手に持った写真も混ぜておくと、本番で強くなります。</li>
+              <li><b>「どれにも当てはまらない」も撮る</b><br>何も無い状態（背景だけ）を <code class="inline">none</code> などのラベルで集めておくと、対象が無いときに誤判定しにくくなります。</li>
+              <li><b>背景や明るさを変える</b><br>いつも同じ机・同じ照明だと、背景ごと覚えてしまいます。場所や光を少し変えて撮りましょう。</li>
+              <li><b>ラベルごとの枚数を揃える</b><br>1つのラベルだけ大量に撮ると偏ります。各ラベルで同じくらいの枚数に。</li>
+            </ul>
+            <div class="shot-goal">🎯 目安：<b>4種類くらい</b>を見分けられればOK。各ラベルとも、いろんな見え方で数十枚ずつ集めるのがおすすめです。</div>
+          </div>
         </div>
 
         <div class="ei-step">
@@ -688,19 +838,6 @@
           <div class="setpair"><span class="k">Model optimizations</span><span class="arrow">→</span><span class="v">Quantized (int8)</span></div>
           <ul class="mini"><li><b>Build</b> を押すと zip ライブラリがダウンロードされる</li></ul>
         </div>
-      </div>
-
-      <div class="tips-shot">
-        <div class="th">📸 学習データ（写真）を撮るときのコツ</div>
-        <p class="ti">認識がうまくいくかどうかは、設定よりも<b>写真の撮り方</b>で決まります。下を意識して集めると精度が安定します。</p>
-        <ul class="shot-list">
-          <li><b>いろんな角度・距離で撮る</b><br>正面だけでなく、回したり近づけたり離したり。1パターンだけだと、その見え方しか認識できません。</li>
-          <li><b>手に持った状態でも撮る</b><br>実際の判定では手で持ってかざすことが多いはず。手に持った写真も混ぜておくと、本番で強くなります。</li>
-          <li><b>「どれにも当てはまらない」も撮る</b><br>何も無い状態（背景だけ）を <code class="inline">none</code> などのラベルで集めておくと、対象が無いときに誤判定しにくくなります。</li>
-          <li><b>背景や明るさを変える</b><br>いつも同じ机・同じ照明だと、背景ごと覚えてしまいます。場所や光を少し変えて撮りましょう。</li>
-          <li><b>ラベルごとの枚数を揃える</b><br>1つのラベルだけ大量に撮ると偏ります。各ラベルで同じくらいの枚数に。</li>
-        </ul>
-        <div class="shot-goal">🎯 目安：<b>4種類くらい</b>を見分けられればOK。各ラベルとも、いろんな見え方で数十枚ずつ集めるのがおすすめです。</div>
       </div>
 
       <p style="margin-top:14px;font-weight:700;color:var(--accent-2);font-size:14.5px">生成した zip を Arduino IDE に取り込む</p>
@@ -1120,7 +1257,7 @@ static int ei_camera_get_data(size_t offset, size_t length, float *out_ptr)
         <li>上の「コードをコピー」を押す → Arduino IDEに貼り付け</li>
         <li>上の2項目（Board = XIAO_ESP32S3 / PSRAM = OPI PSRAM）を確認</li>
         <li>コンパイルして ESP32S3 に書き込み</li>
-        <li><b>シリアルモニタ</b>を開いて、出力結果（認識されたラベルなど）が出ているか確認する<br><span class="sub">※ 現状のコードでは、約6秒に1回のペースで結果が出力されます。すぐに表示されなくても、少し待てば出てきます。<br>※ 今後、プログラムのアップデートにより出力の速度が早くなる可能性があります。</span></li>
+        <li><b>シリアルモニタ</b>を開いて、出力結果（認識されたラベルなど）が出ているか確認する</li>
         <li>書き込みが終わったら <b>USBケーブルを必ず外してから</b>、ESP32S3 を micro:bit の <b>P0</b> に接続する</li>
       </ol>
       <div class="settings-check" style="background:rgba(255,138,91,.12)">
@@ -1213,7 +1350,7 @@ static int ei_camera_get_data(size_t offset, size_t length, float *out_ptr)
     </div>
   </section>
 
-  <section class="block" id="outro" style="--c:var(--r-grn)" data-text="紹介 copilot 活用 javascript コード コピー 対話 簡潔 言葉 制作 これから 今後">
+  <section class="block" id="outro" style="--c:var(--r-grn)" data-text="紹介 copilot 活用 javascript コード コピー 対話 簡潔 言葉 制作 これから 今後 ai コーディング codex claude code cursor 設計意図 アルゴリズム 説明 理解 能力向上">
     <div class="block-head">
       <span class="block-num">LAST</span>
       <span class="block-title">vibe codingの活用</span>
