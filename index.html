@@ -173,6 +173,26 @@
   .tryit .desc{font-size:14.5px;line-height:1.65}
   .tryit .desc b{color:var(--accent)}
 
+  /* Edge Impulse numbered flow */
+  .ei-flow{counter-reset:ei;margin:14px 0}
+  .ei-step{position:relative;background:var(--panel-2);border:1px solid var(--line);border-radius:12px;
+    padding:14px 16px 14px 52px;margin-bottom:10px}
+  .ei-step::before{counter-increment:ei;content:counter(ei);position:absolute;left:14px;top:14px;
+    width:26px;height:26px;background:var(--accent-2);color:var(--bg);border-radius:8px;
+    display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-weight:800;font-size:14px}
+  .ei-step .t{font-weight:700;font-size:15px;margin-bottom:6px}
+  .ei-step .sub2{font-family:var(--mono);font-size:12px;color:var(--ink-dim);margin:2px 0 6px}
+  .setpair{display:flex;gap:10px;align-items:baseline;padding:5px 0;border-top:1px dashed var(--line);font-size:13.5px}
+  .setpair:first-of-type{border-top:none}
+  .setpair .k{color:var(--ink-dim);flex-shrink:0;min-width:130px}
+  .setpair .v{font-family:var(--mono);font-weight:700;color:var(--accent);background:var(--code-bg);
+    padding:2px 9px;border-radius:6px;border:1px solid var(--line)}
+  .setpair .arrow{color:var(--ink-dim);flex-shrink:0}
+  .ei-step ul.mini{list-style:none;padding:0;margin:4px 0 0}
+  .ei-step ul.mini li{padding-left:16px;position:relative;font-size:13.5px;margin:3px 0;color:var(--ink-dim)}
+  .ei-step ul.mini li::before{content:"・";position:absolute;left:2px;color:var(--accent-2)}
+  @media(max-width:560px){.setpair{flex-wrap:wrap;gap:5px}.setpair .k{min-width:0}}
+
   /* emphasised rule callout */
   .rule{margin-top:12px;padding:14px 18px;background:rgba(255,211,77,.10);border:1px solid var(--accent);border-radius:11px}
   .rule .h{font-weight:800;color:var(--accent);font-size:14.5px;display:flex;align-items:center;gap:8px;margin-bottom:4px}
@@ -501,7 +521,7 @@
   </section>
 
   <!-- ============ BLOCK 3 ============ -->
-  <section class="block" id="b3" style="--c:var(--r-blu)" data-text="esp32 esp32s3 画像認識 classification edgeimpulse arduino ide ボードマネージャ espressif zip library inferencing カメラ メッセージ受信 機械学習 重い プロジェクト名 CL コピペ コピー 編集しない インストール ダウンロード 2.0.4 preferences boards manager url 事前準備 setup XIAO_ESP32S3 PSRAM OPI psram board libraries 削除 windows mac パス documents USB ケーブル 外す P0 接続 電源 故障 注意 シリアルモニタ 出力 確認">
+  <section class="block" id="b3" style="--c:var(--r-blu)" data-text="esp32 esp32s3 画像認識 classification edgeimpulse arduino ide ボードマネージャ espressif zip library inferencing カメラ メッセージ受信 機械学習 重い プロジェクト名 CL コピペ コピー 編集しない インストール ダウンロード 2.0.4 preferences boards manager url 事前準備 setup XIAO_ESP32S3 PSRAM OPI psram board libraries 削除 windows mac パス documents USB ケーブル 外す P0 接続 電源 故障 注意 シリアルモニタ 出力 確認 ESP-EYE labeling impulse transfer learning grayscale mobilenetv2 deployment arduino library tensorflow quantized build 特徴量 学習 データセット">
     <div class="block-head">
       <span class="block-num">BLOCK 3</span>
       <span class="block-title">画像認識（ESP32S3）</span>
@@ -558,8 +578,64 @@
         <div class="big">CL</div>
         <p>とします。プロジェクト名から書き出すライブラリ名が自動で決まるため、これを揃えると全員のライブラリが <code class="inline">CL_inferencing</code> で同一になり、<b>下のスケッチを1文字も編集せずコピペするだけ</b>で動きます。<br><span style="color:var(--ink-dim);font-size:13px">※ <code class="inline">cl</code>（小文字）や <code class="inline">C L</code>（スペース入り）は別名になります。必ず半角大文字2字 <code class="inline">CL</code> で。</span></p>
       </div>
-      <ol class="steps">
-        <li>プロジェクト名を <code class="inline">CL</code> にして Classification モデルを作成・書き出し（zip）</li>
+      <p style="margin-top:14px;font-weight:700;color:var(--accent-2);font-size:14.5px">作成フロー（設定が多いので順番どおりに）</p>
+      <p style="font-size:13.5px;color:var(--ink-dim);margin:2px 0 0">所要 30分目安。ログインは <code class="inline">studio.edgeimpulse.com</code> から。</p>
+      <a class="lnk ai" href="https://studio.edgeimpulse.com/login" target="_blank" rel="noopener" style="margin-top:8px"><span class="ic">✦</span>Edge Impulse Studio にログイン</a>
+
+      <div class="ei-flow">
+        <div class="ei-step">
+          <div class="t">プロジェクトを新規作成</div>
+          <div class="setpair"><span class="k">プロジェクト名</span><span class="arrow">→</span><span class="v">CL</span></div>
+          <div class="setpair"><span class="k">Target</span><span class="arrow">→</span><span class="v">Espressif ESP-EYE</span></div>
+          <div class="setpair"><span class="k">Labeling method</span><span class="arrow">→</span><span class="v">One label per data item</span></div>
+        </div>
+
+        <div class="ei-step">
+          <div class="t">Dataset を用意する</div>
+          <div class="sub2">Data acquisition</div>
+          <ul class="mini">
+            <li>識別する物体の <b>ラベルを先に設定</b> する（例：apple / banana など）<br><span style="font-size:12px">※ あとからラベルを直すのは大変なので、先に決めておくのがおすすめ。</span></li>
+            <li>Collect data で、そのラベルごとにカメラから画像を集める</li>
+          </ul>
+        </div>
+
+        <div class="ei-step">
+          <div class="t">Impulse を作成する</div>
+          <div class="sub2">Create impulse</div>
+          <div class="setpair"><span class="k">Add a processing block</span><span class="arrow">→</span><span class="v">Image</span></div>
+          <div class="setpair"><span class="k">Add a learning block</span><span class="arrow">→</span><span class="v">Transfer Learning (images)</span></div>
+          <ul class="mini"><li>最後に <b>Save impulse</b> を押す</li></ul>
+        </div>
+
+        <div class="ei-step">
+          <div class="t">特徴量を生成する</div>
+          <div class="sub2">Image</div>
+          <div class="setpair"><span class="k">Color depth</span><span class="arrow">→</span><span class="v">Grayscale</span></div>
+          <ul class="mini">
+            <li><b>Save parameters</b> を押す</li>
+            <li>続いて <b>Generate features</b> を押す</li>
+          </ul>
+        </div>
+
+        <div class="ei-step">
+          <div class="t">学習する</div>
+          <div class="sub2">Transfer learning</div>
+          <div class="setpair"><span class="k">モデル</span><span class="arrow">→</span><span class="v">MobileNetV2 96x96 0.35</span></div>
+          <ul class="mini"><li><b>Save & Train</b> を押して学習開始</li></ul>
+        </div>
+
+        <div class="ei-step">
+          <div class="t">コード（ライブラリ）を生成する</div>
+          <div class="sub2">Deployment</div>
+          <div class="setpair"><span class="k">Deployment target</span><span class="arrow">→</span><span class="v">Arduino library</span></div>
+          <div class="setpair"><span class="k">Inference engine</span><span class="arrow">→</span><span class="v">TensorFlow Lite</span></div>
+          <div class="setpair"><span class="k">Model optimizations</span><span class="arrow">→</span><span class="v">Quantized (int8)</span></div>
+          <ul class="mini"><li><b>Build</b> を押すと zip ライブラリがダウンロードされる</li></ul>
+        </div>
+      </div>
+
+      <p style="margin-top:14px;font-weight:700;color:var(--accent-2);font-size:14.5px">生成した zip を Arduino IDE に取り込む</p>
+      <ol class="steps" style="margin-top:8px">
         <li>zip形式のLibraryをインクルード：<code class="inline">Sketch &gt; Include Library &gt; Add .ZIP Library...</code></li>
         <li>サンプルを開く：<code class="inline">File &gt; Examples &gt; CL_inferencing</code></li>
       </ol>
