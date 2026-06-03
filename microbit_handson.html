@@ -152,6 +152,14 @@
   .callout .h{font-weight:800;margin-bottom:4px;display:flex;align-items:center;gap:8px}
   .callout code.inline{font-size:12px}
 
+  /* screenshots / figures */
+  .figure{margin:12px 0;border:1px solid var(--line);border-radius:11px;overflow:hidden;background:var(--code-bg)}
+  .figure img{display:block;width:100%;height:auto}
+  .figure figcaption{font-size:12.5px;color:var(--ink-dim);padding:8px 14px;border-top:1px solid var(--line);background:var(--panel-2)}
+  .figure.tall img{max-height:520px;width:auto;max-width:100%;margin:0 auto}
+  .figure.tall{display:flex;flex-direction:column;align-items:center}
+  .figure.tall figcaption{width:100%}
+
   /* program explanation note */
   .explain{background:var(--panel-2);border:1px solid var(--line);border-radius:11px;padding:14px 18px;margin:12px 0;font-size:14.5px;line-height:1.75}
   .explain b{color:var(--ink)}
@@ -334,6 +342,14 @@
         <li>効果音が生成されるので、<b>▶️ ボタン</b> でプレビューして聴く</li>
         <li>気に入った音があったら <b>ダウンロードボタン</b> を押す。形式は <b>「MP3」</b> でOK</li>
       </ol>
+      <figure class="figure">
+        <img src="images/elevenlabs-tts.jpg" alt="ElevenLabsのテキスト読み上げ画面。左メニューにサウンドエフェクトがある" loading="lazy">
+        <figcaption>ログイン後の画面。左メニューの「サウンドエフェクト」から効果音生成に進みます。</figcaption>
+      </figure>
+      <figure class="figure">
+        <img src="images/elevenlabs-sfx.jpg" alt="効果音生成の入力バー。日本語を入れると英語キーワード候補が表示される" loading="lazy">
+        <figcaption>欲しい音を入力すると、上に英語のキーワード候補が出ます。選んで⇧ボタンで生成。</figcaption>
+      </figure>
 
       <p style="margin-top:16px;font-weight:700;color:var(--accent-2);font-size:14.5px">③ microSDカードに書き込む</p>
       <p>ダウンロードした効果音を、mp3プレーヤーで鳴らせるように microSD に入れます。</p>
@@ -354,6 +370,10 @@
         <p style="margin:0 0 8px">まず mp3player を <b>P0</b> に接続します。このマイコンは <b>「ATコマンド」</b> という命令文を受け付けるので、ATコマンドを送って <b>曲の再生・音量変更・停止</b> などを行う関数（<code class="inline">play</code> / <code class="inline">volume</code> / <code class="inline">stop</code>）をあらかじめ用意しておきます。</p>
         <p style="margin:0">サンプルでは、配列に <code class="inline">0001.mp3</code> 〜 <code class="inline">0008.mp3</code> の8つのファイル名を保持しておき、<b>Aボタンを押すとその中からランダムに1つ選んで再生</b>します。先ほど microSD に入れた連番ファイルが、ここで呼び出されるわけです。</p>
       </div>
+      <figure class="figure tall">
+        <img src="images/mp3player-blocks.jpg" alt="mp3playerVer4のMakeCodeブロック全体。最初だけ、ボタンA、各関数の定義" loading="lazy">
+        <figcaption>サンプルプログラムのブロック全体。配列・ATコマンドの関数・Aボタンでのランダム再生が見えます。</figcaption>
+      </figure>
 
       <p style="margin-top:16px;font-weight:700;color:var(--accent);font-size:14.5px">やってみよう</p>
       <div class="tryit">
@@ -380,6 +400,10 @@
         <b>最初にやっておくと楽：言語を母国語に</b><br>
         CreateAI を開いたら、まず画面 <b>右上の歯車ボタン（⚙）</b> を押して、<b>「言語」</b> を自分の母国語に切り替えると操作しやすくなります。
       </div>
+      <figure class="figure">
+        <img src="images/createai-gear.jpg" alt="micro:bit CreateAIのトップ画面。右上に歯車ボタンがある" loading="lazy">
+        <figcaption>画面右上の歯車ボタン（赤枠）から言語を変更できます。</figcaption>
+      </figure>
 
       <p style="margin-top:16px;font-weight:700;color:var(--accent-2);font-size:14.5px">学習できたら → MakeCode でプログラムにする</p>
       <p style="font-size:14.5px">データサンプルが取れて、モデルのテストである程度モーションが認識できるようになったら、<b>「MakeCodeで編集」ボタン</b>を押すとコーディング画面に移ります。</p>
@@ -401,29 +425,76 @@
   </section>
 
   <!-- ============ BLOCK 2 ============ -->
-  <section class="block" id="b2" style="--c:var(--r-cyn)" data-text="oled ディスプレイ 画面 ドット ドット絵 ドットエディタ 16x16 4コマ アニメーション 拡張機能 ライブラリ oleddisplay fast">
+  <section class="block" id="b2" style="--c:var(--r-cyn)" data-text="oled ディスプレイ 画面 ドット ドット絵 ドットエディタ 16x16 4コマ アニメーション 拡張機能 ライブラリ oleddisplay fast 歯車 検索 URL 貼り付け バージョン v0.0.19 コピー setAnimation16Frame ドットエディタ アニメーション 複製 再生 間隔 コードをコピー sh1107 16x16 4コマ 消しゴム">
     <div class="block-head">
       <span class="block-num">BLOCK 2</span>
       <span class="block-title">画面に出す</span>
       <span class="block-meta">OLED / ドット絵 / アニメ</span>
     </div>
 
+    <p style="font-size:15.5px;color:var(--ink);margin:0 0 22px">ここでは、<b>OLEDドットエディタで編集した静止画やアニメを、micro:bit につないだ OLED ディスプレイに表示させてみましょう！</b></p>
+
+    <div class="step">
+      <h3><span class="tag">TOOL</span>OLED ドットエディタ</h3>
+      <p>まずはアニメ用のコマ絵を描くツールを触ってみます。ここで描いた絵が、さきほどのコードの <code class="inline">bitmap16_0</code> のようなデータになります。</p>
+      <a class="lnk" href="https://oleddoteditor.netlify.app/" target="_blank" rel="noopener"><span class="ic">◆</span>OLED ドットエディタ（SH1107 Dot Editor）</a>
+      <figure class="figure">
+        <img src="images/dot-editor.jpg" alt="SH1107 Dot Editorの画面。左に設定、中央にドット描画グリッド、右にプレビューと生成コード" loading="lazy">
+        <figcaption>左で設定、中央のグリッドで描画、右にプレビューと生成されたコードが出ます。右上「コードをコピー」でMakeCodeへ。</figcaption>
+      </figure>
+
+      <p style="margin-top:16px;font-weight:700;color:var(--accent-2);font-size:14.5px">使い方</p>
+      <ol class="steps" style="margin-top:10px">
+        <li>モードで <b>「アニメーション」</b> を選ぶ。サイズは <b>16</b> のままでOK</li>
+        <li>グリッドを <b>クリック＆ドラッグ</b> すると絵が描ける<br><span class="sub">※ すでに描けているマスを再度クリック＆ドラッグすると、消しゴムモードになって消せます。</span></li>
+        <li>1コマ目が描けたら <b>「複製」ボタン</b> を押して、2コマ目を描く</li>
+        <li>2枚描けたら <b>再生間隔（間隔ms、例：200）</b> を決めて <b>「再生」ボタン</b> を押す → 右上のサムネイルがアニメーションで表示される</li>
+        <li>これでよければ右上の <b>「コードをコピー」ボタン</b> を押す → MakeCode用のJavaScriptコードがコピーされる</li>
+      </ol>
+
+      <div class="callout warn" style="margin-top:12px">
+        <div class="h">⚠ 対応サイズの注意</div>
+        現状のライブラリで対応しているのは <b>16×16マス・最大4コマ</b> のアニメーションです。サイズは 16、コマ数は4枚までで作りましょう。
+      </div>
+    </div>
+
     <div class="step">
       <h3><span class="tag">SAMPLE</span>OLED の使い方</h3>
       <p>OLEDディスプレイへの表示の基本を確認します。</p>
       <a class="lnk" href="https://makecode.microbit.org/S92960-40057-64208-44514" target="_blank" rel="noopener"><span class="ic">▶</span>MakeCode: OLED 基本</a>
-    </div>
 
-    <div class="step">
-      <h3><span class="tag">TOOL</span>OLED ドットエディタ</h3>
-      <p>アニメ用のコマ絵を描くツール。<b>4コマ・16×16まで</b>対応しています。ここで描いたデータをコードに取り込みます。</p>
-      <a class="lnk" href="https://oleddoteditor.netlify.app/" target="_blank" rel="noopener"><span class="ic">◆</span>OLED ドットエディタ</a>
+      <p style="margin-top:16px;font-weight:700;color:var(--accent-2);font-size:14.5px">プログラムをざっと解説</p>
+      <div class="explain">
+        <p style="margin:0 0 8px"><b>① OLEDの準備：</b>最初に <code class="inline">createOled()</code> で OLEDディスプレイを使えるようにします（<code class="inline">oled</code> という名前で扱います）。</p>
+        <p style="margin:0 0 8px"><b>② 絵のデータを登録：</b><code class="inline">bitmap16_0</code> と <code class="inline">bitmap16_1</code> という2つの配列が、ドットエディタで描いた <b>16×16のドット絵データ</b>です。これを <code class="inline">setAnimation16Frame</code> で <b>1番・2番</b>として登録しておきます。<br><span style="color:var(--ink-dim);font-size:13px">※ 配列の中の数字が、点を打つ/打たないのパターンを表しています。ドットエディタが自動で書き出してくれます。</span></p>
+        <p style="margin:0 0 8px"><b>③ ボタンで表示を切り替え：</b></p>
+        <ul class="plain" style="margin:4px 0 8px">
+          <li><b>Aボタン</b> → 1番の絵を表示（<code class="inline">showRegisteredAnimation16Frame(1, 0)</code>）</li>
+          <li><b>Bボタン</b> → 2番の絵を表示</li>
+        </ul>
+        <p style="margin:0 0 8px"><b>④ A+B同時押しでアニメ：</b><code class="inline">ずっと</code> の中で、A＋Bが同時に押されている間 <code class="inline">showRegisteredAnimation16(0, 2)</code> を呼び、登録した <b>1番と2番の絵を切り替えて</b>パラパラアニメのように見せています。</p>
+        <p style="margin:0"><b>⑤ ロゴをタッチすると表示が消える：</b>micro:bit 上部の <b>ロゴ（金色の端子）に触れる</b>と <code class="inline">clearDisplayFast</code> が働き、画面の表示が消えます。</p>
+      </div>
     </div>
 
     <div class="step">
       <h3><span class="tag">LIB</span>拡張機能で読み込むライブラリ</h3>
-      <p>アニメ再生にはこのライブラリを拡張機能として追加します。MakeCodeの「拡張機能」に下記URLを貼り付けて読み込んでください。</p>
-      <a class="lnk gh" href="https://github.com/kanejun06/pxt-OledDisplay-fast#v0.0.19" target="_blank" rel="noopener"><span class="ic">⎇</span>kanejun06/pxt-OledDisplay-fast #v0.0.19</a>
+      <p>アニメ再生に使う <code class="inline">oled</code> や <code class="inline">setAnimation16Frame</code> などのブロックは、最初から入っているわけではありません。下のライブラリを<b>拡張機能として追加</b>すると使えるようになります。</p>
+
+      <p style="margin-top:12px;font-size:14.5px">追加するときは、この URL を <b>バージョン（<code class="inline">#v0.0.19</code>）まで含めて</b>そのまま貼り付けてください。</p>
+      <div class="copyfield">
+        <code id="oledLibUrl">https://github.com/kanejun06/pxt-OledDisplay-fast#v0.0.19</code>
+        <button id="copyOledLib">コピー</button>
+      </div>
+
+      <ol class="steps" style="margin-top:12px">
+        <li>MakeCode の画面で <b>歯車アイコン（⚙）</b> → <b>「拡張機能」</b> を開く<br><span class="sub">※ ブロックの一覧の「高度なブロック」の下に「拡張機能」がある場合もあります。</span></li>
+        <li>上の URL を<b>コピー</b>して、拡張機能の<b>検索欄に貼り付けて</b>検索する</li>
+        <li>表示された <b>pxt-OledDisplay-fast</b> のカードをクリックして読み込む</li>
+        <li>読み込みが終わると、ブロック一覧に <code class="inline">oled</code> 関連のブロックが増えていればOK</li>
+      </ol>
+      <div class="note-inline" style="margin-top:10px"><b>ポイント：</b><code class="inline">#v0.0.19</code> はバージョン指定です。これを付けずに貼ると別のバージョンが入ってしまうことがあるので、<b>URL の末尾まで省略せず</b>に貼り付けましょう。</div>
+
       <div class="build"><b>つくるもの →</b> 「OLEDでアニメーションの再生」を実装。ドットエディタで描いた4コマを順に表示してパラパラアニメにします。</div>
     </div>
   </section>
@@ -1025,6 +1096,24 @@ static int ei_camera_get_data(size_t offset, size_t length, float *out_ptr)
       }
       bmBtn.textContent='✓ コピー';bmBtn.classList.add('done');
       setTimeout(()=>{bmBtn.textContent='コピー';bmBtn.classList.remove('done');},1800);
+    });
+  }
+
+  // copy OLED library URL
+  const oledLibBtn=document.getElementById('copyOledLib');
+  if(oledLibBtn){
+    oledLibBtn.addEventListener('click',async()=>{
+      const url=document.getElementById('oledLibUrl').textContent;
+      try{await navigator.clipboard.writeText(url);}
+      catch(e){
+        const ta=document.createElement('textarea');
+        ta.value=url;ta.style.position='fixed';ta.style.opacity='0';
+        document.body.appendChild(ta);ta.select();
+        try{document.execCommand('copy');}catch(_){}
+        document.body.removeChild(ta);
+      }
+      oledLibBtn.textContent='✓ コピー';oledLibBtn.classList.add('done');
+      setTimeout(()=>{oledLibBtn.textContent='コピー';oledLibBtn.classList.remove('done');},1800);
     });
   }
 
