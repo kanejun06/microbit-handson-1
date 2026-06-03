@@ -173,6 +173,18 @@
   .tryit .desc{font-size:14.5px;line-height:1.65}
   .tryit .desc b{color:var(--accent)}
 
+  /* photo-taking tips */
+  .tips-shot{background:rgba(90,209,196,.07);border:1px solid rgba(90,209,196,.35);border-radius:13px;padding:18px 20px;margin:14px 0}
+  .tips-shot .th{font-weight:800;font-size:15px;color:var(--accent-2);margin-bottom:5px;display:flex;align-items:center;gap:8px}
+  .tips-shot .ti{font-size:14px;color:var(--ink-dim);margin-bottom:12px}
+  .shot-list{list-style:none;padding:0;margin:0}
+  .shot-list li{position:relative;padding:10px 0 10px 24px;border-top:1px solid var(--line);font-size:14px;line-height:1.65}
+  .shot-list li:first-child{border-top:none}
+  .shot-list li::before{content:"▸";position:absolute;left:4px;top:10px;color:var(--accent-2)}
+  .shot-list li b{color:var(--ink)}
+  .shot-goal{margin-top:12px;padding:11px 15px;background:rgba(255,211,77,.1);border:1px solid var(--accent);border-radius:9px;font-size:14px}
+  .shot-goal b{color:var(--accent)}
+
   /* ML pipeline overview */
   .pipeline{background:rgba(127,169,255,.07);border:1px solid rgba(127,169,255,.3);border-radius:13px;padding:18px 20px;margin:14px 0}
   .pipeline .ph{font-weight:800;font-size:15px;color:var(--link);margin-bottom:4px;display:flex;align-items:center;gap:8px}
@@ -542,7 +554,7 @@
   </section>
 
   <!-- ============ BLOCK 3 ============ -->
-  <section class="block" id="b3" style="--c:var(--r-blu)" data-text="esp32 esp32s3 画像認識 classification edgeimpulse arduino ide ボードマネージャ espressif zip library inferencing カメラ メッセージ受信 機械学習 重い プロジェクト名 CL コピペ コピー 編集しない インストール ダウンロード 2.0.4 preferences boards manager url 事前準備 setup XIAO_ESP32S3 PSRAM OPI psram board libraries 削除 windows mac パス documents USB ケーブル 外す P0 接続 電源 故障 注意 シリアルモニタ 出力 確認 ESP-EYE labeling impulse transfer learning grayscale mobilenetv2 deployment arduino library tensorflow quantized build 特徴量 学習 データセット 全体の流れ 集める 整える 書き出す パイプライン モデル構築 段階">
+  <section class="block" id="b3" style="--c:var(--r-blu)" data-text="esp32 esp32s3 画像認識 classification edgeimpulse arduino ide ボードマネージャ espressif zip library inferencing カメラ メッセージ受信 機械学習 重い プロジェクト名 CL コピペ コピー 編集しない インストール ダウンロード 2.0.4 preferences boards manager url 事前準備 setup XIAO_ESP32S3 PSRAM OPI psram board libraries 削除 windows mac パス documents USB ケーブル 外す P0 接続 電源 故障 注意 シリアルモニタ 出力 確認 ESP-EYE labeling impulse transfer learning grayscale mobilenetv2 deployment arduino library tensorflow quantized build 特徴量 学習 データセット 全体の流れ 集める 整える 書き出す パイプライン モデル構築 段階 写真 撮影 コツ 角度 手に持つ none 背景 明るさ 枚数 4種類">
     <div class="block-head">
       <span class="block-num">BLOCK 3</span>
       <span class="block-title">画像認識（ESP32S3）</span>
@@ -596,15 +608,10 @@
       <div class="pipeline">
         <div class="ph">🧭 まず全体の流れをつかもう</div>
         <p class="intro">これから設定する項目はたくさんありますが、やっていることは大きく <b>4つの段階</b> に分けられます。「今どの段階にいるのか」を意識すると、ひとつひとつの設定の意味が見えてきます。</p>
-        <div class="pipe-row">
-          <div class="pipe-node"><div class="pn">STEP 1</div><div class="pt">集める</div></div>
-          <div class="pipe-arr">→</div>
-          <div class="pipe-node"><div class="pn">STEP 2</div><div class="pt">整える</div></div>
-          <div class="pipe-arr">→</div>
-          <div class="pipe-node"><div class="pn">STEP 3</div><div class="pt">学習する</div></div>
-          <div class="pipe-arr">→</div>
-          <div class="pipe-node"><div class="pn">STEP 4</div><div class="pt">書き出す</div></div>
-        </div>
+        <figure class="figure">
+          <img src="images/ei-flow-overview.jpg" alt="Edge ImpulseでClassificationの全体の流れ。集める→整える→学習する→書き出すの4段階を図解" loading="lazy">
+          <figcaption>集める → 整える → 学習する → 書き出す、の4段階。各段階が下のフローのどこに当たるかも示しています。</figcaption>
+        </figure>
         <div class="pipe-detail">
           <div class="pd"><span class="badge">集める</span><span class="pdt"><b>お手本データを用意する。</b>「これはリンゴ」「これはバナナ」とラベルを決め、その例になる画像をカメラでたくさん撮ります。機械はこのお手本から共通点を学ぶので、ここが土台になります。<span style="font-size:12.5px">（フローの 1〜2）</span></span></div>
           <div class="pd"><span class="badge">整える</span><span class="pdt"><b>学習しやすい形に変換する。</b>画像をそのまま学ばせるのではなく、サイズや色を揃えて「特徴量」という数値の形に直します。色を捨ててグレースケールにするのも、形で見分けるために軽く・速くするためです。<span style="font-size:12.5px">（フローの 3〜4）</span></span></div>
@@ -637,6 +644,7 @@
           <div class="sub2">Data acquisition</div>
           <ul class="mini">
             <li>識別する物体の <b>ラベルを先に設定</b> する（例：apple / banana など）<br><span style="font-size:12px">※ あとからラベルを直すのは大変なので、先に決めておくのがおすすめ。</span></li>
+            <li><b>「どれにも当てはまらない」ラベル</b>も作っておく（例：none / nothing）。何も無い状態を撮っておくと、判定がぐっと安定します。</li>
             <li>Collect data で、そのラベルごとにカメラから画像を集める</li>
           </ul>
         </div>
@@ -674,6 +682,19 @@
           <div class="setpair"><span class="k">Model optimizations</span><span class="arrow">→</span><span class="v">Quantized (int8)</span></div>
           <ul class="mini"><li><b>Build</b> を押すと zip ライブラリがダウンロードされる</li></ul>
         </div>
+      </div>
+
+      <div class="tips-shot">
+        <div class="th">📸 学習データ（写真）を撮るときのコツ</div>
+        <p class="ti">認識がうまくいくかどうかは、設定よりも<b>写真の撮り方</b>で決まります。下を意識して集めると精度が安定します。</p>
+        <ul class="shot-list">
+          <li><b>いろんな角度・距離で撮る</b><br>正面だけでなく、回したり近づけたり離したり。1パターンだけだと、その見え方しか認識できません。</li>
+          <li><b>手に持った状態でも撮る</b><br>実際の判定では手で持ってかざすことが多いはず。手に持った写真も混ぜておくと、本番で強くなります。</li>
+          <li><b>「どれにも当てはまらない」も撮る</b><br>何も無い状態（背景だけ）を <code class="inline">none</code> などのラベルで集めておくと、対象が無いときに誤判定しにくくなります。</li>
+          <li><b>背景や明るさを変える</b><br>いつも同じ机・同じ照明だと、背景ごと覚えてしまいます。場所や光を少し変えて撮りましょう。</li>
+          <li><b>ラベルごとの枚数を揃える</b><br>1つのラベルだけ大量に撮ると偏ります。各ラベルで同じくらいの枚数に。</li>
+        </ul>
+        <div class="shot-goal">🎯 目安：<b>4種類くらい</b>を見分けられればOK。各ラベルとも、いろんな見え方で数十枚ずつ集めるのがおすすめです。</div>
       </div>
 
       <p style="margin-top:14px;font-weight:700;color:var(--accent-2);font-size:14.5px">生成した zip を Arduino IDE に取り込む</p>
