@@ -461,6 +461,7 @@
     <div class="step">
       <h3><span class="tag">SAMPLE</span>OLED の使い方</h3>
       <p>OLEDディスプレイへの表示の基本を確認します。</p>
+      <div class="note-inline" style="margin-top:0;margin-bottom:6px"><b>接続：</b>OLEDは <b>「I2C」と書いてあるポート</b> に接続してください。</div>
       <a class="lnk" href="https://makecode.microbit.org/S92960-40057-64208-44514" target="_blank" rel="noopener"><span class="ic">▶</span>MakeCode: OLED 基本</a>
 
       <p style="margin-top:16px;font-weight:700;color:var(--accent-2);font-size:14.5px">プログラムをざっと解説</p>
@@ -500,7 +501,7 @@
   </section>
 
   <!-- ============ BLOCK 3 ============ -->
-  <section class="block" id="b3" style="--c:var(--r-blu)" data-text="esp32 esp32s3 画像認識 classification edgeimpulse arduino ide ボードマネージャ espressif zip library inferencing カメラ メッセージ受信 機械学習 重い プロジェクト名 CL コピペ コピー 編集しない インストール ダウンロード 2.0.4 preferences boards manager url 事前準備 setup XIAO_ESP32S3 PSRAM OPI psram board libraries 削除 windows mac パス documents 学習 トレーニング モデル model 分類 物体検出 object detection エッジAI edge ai リンゴ バナナ">
+  <section class="block" id="b3" style="--c:var(--r-blu)" data-text="esp32 esp32s3 画像認識 classification edgeimpulse arduino ide ボードマネージャ espressif zip library inferencing カメラ メッセージ受信 機械学習 重い プロジェクト名 CL コピペ コピー 編集しない インストール ダウンロード 2.0.4 preferences boards manager url 事前準備 setup XIAO_ESP32S3 PSRAM OPI psram board libraries 削除 windows mac パス documents USB ケーブル 外す P0 接続 電源 故障 注意 シリアルモニタ 出力 確認 学習 トレーニング モデル model 分類 物体検出 object detection エッジAI edge ai リンゴ バナナ">
     <div class="block-head">
       <span class="block-num">BLOCK 3</span>
       <span class="block-title">画像認識（ESP32S3）</span>
@@ -995,7 +996,13 @@ static int ei_camera_get_data(size_t offset, size_t length, float *out_ptr)
         <li>上の「コードをコピー」を押す → Arduino IDEに貼り付け</li>
         <li>上の2項目（Board = XIAO_ESP32S3 / PSRAM = OPI PSRAM）を確認</li>
         <li>コンパイルして ESP32S3 に書き込み</li>
+        <li><b>シリアルモニタ</b>を開いて、出力結果（認識されたラベルなど）が出ているか確認する</li>
+        <li>書き込みが終わったら <b>USBケーブルを必ず外してから</b>、ESP32S3 を micro:bit の <b>P0</b> に接続する</li>
       </ol>
+      <div class="settings-check" style="background:rgba(255,138,91,.12)">
+        <div class="h">🛑 重要：ESP32をmicro:bitに接続する前に必ずUSBケーブルを外す</div>
+        <p style="font-size:14px;color:var(--ink);margin:0">書き込みが終わったら、<b>USBケーブルを外してから</b> micro:bit の P0 に接続してください。<br><b>micro:bit と ESP32S3 の両方に電源が供給されている状態で接続すると、故障の原因になります。</b>必ず片方の電源（USB）を抜いてからつなぎましょう。</p>
+      </div>
       <p style="font-size:13px;color:var(--ink-dim);margin-top:8px">※ カメラのピン設定やUART設定（<code class="inline">Serial1.begin(...D7, D6)</code>）も全員共通なので触りません。使うボードが同じなら、このままで動きます。</p>
       <details class="trouble">
         <summary>⚠ うまくいかなかった時 ＝ ライブラリの削除が必要なケース<span class="chev">›</span></summary>
