@@ -143,6 +143,28 @@
   .note-inline b{color:var(--link)}
   .ver-pill{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--bg);background:var(--accent-2);padding:2px 9px;border-radius:6px}
 
+  /* callouts */
+  .callout{border-radius:11px;padding:14px 18px;margin:12px 0;font-size:14px}
+  .callout.warn{background:rgba(255,138,91,.09);border:1px solid rgba(255,138,91,.4)}
+  .callout.warn b{color:var(--warn)}
+  .callout.info{background:rgba(127,209,255,.07);border:1px solid rgba(127,209,255,.3)}
+  .callout.info b{color:var(--link)}
+  .callout .h{font-weight:800;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+  .callout code.inline{font-size:12px}
+
+  /* program explanation note */
+  .explain{background:var(--panel-2);border:1px solid var(--line);border-radius:11px;padding:14px 18px;margin:12px 0;font-size:14.5px;line-height:1.75}
+  .explain b{color:var(--ink)}
+  .explain code.inline{font-size:12.5px}
+
+  /* try-it challenge cards */
+  .tryit{background:rgba(255,211,77,.08);border:1px solid rgba(255,211,77,.4);border-radius:11px;
+    padding:13px 16px;margin:10px 0;display:flex;gap:13px;align-items:flex-start}
+  .tryit .lab{font-family:var(--mono);font-weight:800;font-size:12px;color:var(--bg);background:var(--accent);
+    padding:4px 10px;border-radius:7px;flex-shrink:0;white-space:nowrap}
+  .tryit .desc{font-size:14.5px;line-height:1.65}
+  .tryit .desc b{color:var(--accent)}
+
   /* emphasised rule callout */
   .rule{margin-top:12px;padding:14px 18px;background:rgba(255,211,77,.10);border:1px solid var(--accent);border-radius:11px}
   .rule .h{font-weight:800;color:var(--accent);font-size:14.5px;display:flex;align-items:center;gap:8px;margin-bottom:4px}
@@ -277,7 +299,7 @@
   </div>
 
   <!-- ============ BLOCK 1 ============ -->
-  <section class="block" id="b1" style="--c:var(--r-red)" data-text="音 サウンド mp3 mp3player ver4 効果音 elevenlabs ai createai 加速度 機械学習 振った モーション 音が変わる">
+  <section class="block" id="b1" style="--c:var(--r-red)" data-text="音 サウンド mp3 mp3player ver4 効果音 elevenlabs ai createai 加速度 機械学習 振った モーション 音が変わる サインアップ signup アカウント 作成 ログイン sound effects サウンドエフェクト ダウンロード mp3 microsd microSD 連番 0001 プレビュー ミュージック スキップ verify ATコマンド P0 配列 ランダム play volume stop タッチセンサ 振る やってみよう ボタンA 歯車 言語 母国語 設定 sanuki データ収集 学習 書き出し MakeCodeで編集 javascript タブ コピー ペースト 移植 createai code ブロックエディタ">
     <div class="block-head">
       <span class="block-num">BLOCK 1</span>
       <span class="block-title">音を作る・鳴らす</span>
@@ -286,20 +308,94 @@
 
     <div class="step">
       <h3><span class="tag">AI</span>AIサービスで効果音を生成</h3>
-      <p>鳴らす「音そのもの」を生成AIで作ります。テキストから効果音を生成して書き出してみましょう。</p>
+      <p>まずは鳴らす「音そのもの」を生成AIで作ります。今回は <b>ElevenLabs</b> というサービスを使います。</p>
+
+      <p style="margin-top:14px;font-weight:700;color:var(--accent-2);font-size:14.5px">① アカウントを作る（初回のみ）</p>
+      <a class="lnk ai" href="https://elevenlabs.io/ja" target="_blank" rel="noopener"><span class="ic">✦</span>ElevenLabs（日本語トップ）</a>
+      <ol class="steps" style="margin-top:10px">
+        <li>上のリンクから ElevenLabs にアクセスする</li>
+        <li>「サインアップ」をクリック</li>
+        <li>アカウントを作成：<b>大学のメールアドレス</b>とパスワードを設定して「サインアップ」を押す</li>
+        <li>登録したアドレスに承認メールが届くので、メール内の <b>「Verify Email」</b> をクリックする</li>
+        <li>メールアドレスとパスワードが自動で入力された状態になるので、<b>「Sign in」</b> ボタンを押す → ログイン完了</li>
+        <li>このあと簡単なアンケートが出るので、情報を入力して登録を進める</li>
+        <li><b>「ElevenLabsで何をしたいですか？」</b>の質問では <b>「ミュージック」</b> と <b>「サウンドエフェクト」</b> を選んで「続行」を押す</li>
+        <li>プラン選択画面が出るが、画面下部の <b>「スキップ」</b> を押せばOK（無料のまま使えます）</li>
+      </ol>
+
+      <p style="margin-top:16px;font-weight:700;color:var(--accent-2);font-size:14.5px">② 効果音を生成する</p>
       <a class="lnk ai" href="https://elevenlabs.io/app/sound-effects" target="_blank" rel="noopener"><span class="ic">✦</span>ElevenLabs: Sound Effects</a>
+      <ol class="steps" style="margin-top:10px">
+        <li>左メニューから <b>「サウンドエフェクト」</b> を選ぶ</li>
+        <li>下の入力欄に、欲しい音を日本語で適当に入れる（例：「猫の鳴き声」）</li>
+        <li>入力すると上に <b>英語のキーワード候補</b> が出るので、それを選んで <b>⇧（上矢印）ボタン</b> を押す
+          <span class="sub">※ 英語で指定したほうが良い結果になります。候補を使えば英語入力は不要です。</span>
+        </li>
+        <li>効果音が生成されるので、<b>▶️ ボタン</b> でプレビューして聴く</li>
+        <li>気に入った音があったら <b>ダウンロードボタン</b> を押す。形式は <b>「MP3」</b> でOK</li>
+      </ol>
+
+      <p style="margin-top:16px;font-weight:700;color:var(--accent-2);font-size:14.5px">③ microSDカードに書き込む</p>
+      <p>ダウンロードした効果音を、mp3プレーヤーで鳴らせるように microSD に入れます。</p>
+      <ol class="steps" style="margin-top:10px">
+        <li>ダウンロードしたファイルの名前を <code class="inline">0001.mp3</code> <code class="inline">0002.mp3</code> <code class="inline">0003.mp3</code> …のように <b>連番</b> にする</li>
+        <li>その mp3 ファイルを microSD カードに書き込む</li>
+      </ol>
+      <div class="note-inline" style="margin-top:10px"><b>ポイント：</b>ファイル名の連番（0001, 0002…）が、あとで mp3playerVer4 から「1番の音」「2番の音」と呼び出すときの番号になります。順番を意識して付けましょう。</div>
     </div>
 
     <div class="step">
       <h3><span class="tag">SAMPLE</span>mp3playerVer4 の使い方</h3>
-      <p>まずはサウンド再生の基本モジュールを動かします。共有プロジェクトを開いて中身を確認しましょう。</p>
+      <p>作った効果音を鳴らすための基本モジュールを動かします。共有プロジェクトを開いて中身を確認しましょう。</p>
       <a class="lnk" href="https://makecode.microbit.org/S71275-52762-09018-54777" target="_blank" rel="noopener"><span class="ic">▶</span>MakeCode: mp3playerVer4</a>
+
+      <p style="margin-top:16px;font-weight:700;color:var(--accent-2);font-size:14.5px">プログラムをざっと解説</p>
+      <div class="explain">
+        <p style="margin:0 0 8px">まず mp3player を <b>P0</b> に接続します。このマイコンは <b>「ATコマンド」</b> という命令文を受け付けるので、ATコマンドを送って <b>曲の再生・音量変更・停止</b> などを行う関数（<code class="inline">play</code> / <code class="inline">volume</code> / <code class="inline">stop</code>）をあらかじめ用意しておきます。</p>
+        <p style="margin:0">サンプルでは、配列に <code class="inline">0001.mp3</code> 〜 <code class="inline">0008.mp3</code> の8つのファイル名を保持しておき、<b>Aボタンを押すとその中からランダムに1つ選んで再生</b>します。先ほど microSD に入れた連番ファイルが、ここで呼び出されるわけです。</p>
+      </div>
+
+      <p style="margin-top:16px;font-weight:700;color:var(--accent);font-size:14.5px">やってみよう</p>
+      <div class="tryit">
+        <span class="lab">やってみよう 1</span>
+        <div class="desc"><b>ボタンやタッチセンサで「特定の音」が鳴る</b>ようにプログラムを組んで試してみよう。（ランダムではなく、決まった番号の音を鳴らす）</div>
+      </div>
+      <div class="tryit">
+        <span class="lab">やってみよう 2</span>
+        <div class="desc"><b>micro:bit を振ると音が鳴る</b>プログラムを組んで試してみよう。</div>
+      </div>
     </div>
 
     <div class="step">
       <h3><span class="tag">ML</span>micro:bit CreateAI で加速度を機械学習</h3>
       <p>加速度センサーのデータを集めて、振り方のモーションを分類するモデルを学習させます。</p>
       <a class="lnk ai" href="https://createai.microbit.org/" target="_blank" rel="noopener"><span class="ic">✦</span>micro:bit CreateAI</a>
+
+      <div class="note-inline" style="margin-top:12px">
+        <b>はじめての人へ：</b>まずは下の解説サイトを読みながら実際に手を動かしてみるのがおすすめです。データ収集から学習・書き出しまでの流れが分かります。
+        <div style="margin-top:8px"><a class="lnk" href="https://sanuki-tech.net/micro-bit/CreateAI/" target="_blank" rel="noopener" style="margin:0"><span class="ic">📖</span>解説サイト: micro:bit CreateAI（sanuki-tech.net）</a></div>
+      </div>
+
+      <div class="explain" style="margin-top:12px">
+        <b>最初にやっておくと楽：言語を母国語に</b><br>
+        CreateAI を開いたら、まず画面 <b>右上の歯車ボタン（⚙）</b> を押して、<b>「言語」</b> を自分の母国語に切り替えると操作しやすくなります。
+      </div>
+
+      <p style="margin-top:16px;font-weight:700;color:var(--accent-2);font-size:14.5px">学習できたら → MakeCode でプログラムにする</p>
+      <p style="font-size:14.5px">データサンプルが取れて、モデルのテストである程度モーションが認識できるようになったら、<b>「MakeCodeで編集」ボタン</b>を押すとコーディング画面に移ります。</p>
+
+      <div class="callout warn" style="margin-top:12px">
+        <div class="h">⚠ 注意：開くのは「いつものMakeCode」とは別のサイト</div>
+        ここで開かれるのは通常の MakeCode 環境ではなく、CreateAI 専用の <code class="inline">https://createai.microbit.org/code</code> です。学習したモデルが組み込まれた特別な環境なので、いつもの <code class="inline">makecode.microbit.org</code> と混同しないように。
+      </div>
+
+      <p style="margin-top:14px;font-weight:700;color:var(--accent-2);font-size:14.5px">先ほどの mp3 再生プログラムを移植する</p>
+      <ol class="steps" style="margin-top:10px">
+        <li>先ほどの <b>mp3ファイルが再生できるプログラム</b>（mp3playerVer4）を開き、<b>「JavaScript」タブ</b>をクリックしてコードを<b>全文コピー</b>する</li>
+        <li><code class="inline">https://createai.microbit.org/code</code> 側の <b>「JavaScript」タブ</b>をクリックして、コピーしたコードを<b>ペースト</b>する</li>
+        <li><b>ブロックエディタモードに戻り</b>、モーション分類の結果で音を出し分けるようにプログラムを組んで完成させよう！</li>
+      </ol>
+
       <div class="build"><b>つくるもの →</b> 「振ったモーションの種類で音が変わる」サンプルを実装。学習したモーション分類の結果で、BLOCK1で用意した効果音を出し分けます。</div>
     </div>
   </section>
