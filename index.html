@@ -797,7 +797,7 @@
           </ul>
           <figure class="figure tall">
             <img src="images/ei-capture-label.jpg" alt="スマホの撮影画面。上部のLabel: Nothingをタップしてラベル選択（赤枠）" loading="lazy">
-            <figcaption>上の「Label」をタップしてラベルを選んでから「Capture」で撮影します（赤枠）。</figcaption>
+            <figcaption>上の「Label」をタップしてラベル名を入力してから「Capture」で撮影します（赤枠）。</figcaption>
           </figure>
 
           <div class="tips-shot">
@@ -847,13 +847,15 @@
           <div class="setpair"><span class="k">Model optimizations</span><span class="arrow">→</span><span class="v">Quantized (int8)</span></div>
           <ul class="mini"><li><b>Build</b> を押すと zip ライブラリがダウンロードされる</li></ul>
         </div>
-      </div>
 
-      <p style="margin-top:14px;font-weight:700;color:var(--accent-2);font-size:14.5px">生成した zip を Arduino IDE に取り込む</p>
-      <ol class="steps" style="margin-top:8px">
-        <li>zip形式のLibraryをインクルード：<code class="inline">Sketch &gt; Include Library &gt; Add .ZIP Library...</code></li>
-        <li>サンプルを開く：<code class="inline">File &gt; Examples &gt; CL_inferencing</code></li>
-      </ol>
+        <div class="ei-step">
+          <div class="t">生成した zip を Arduino IDE に取り込む</div>
+          <ul class="mini">
+            <li>zip形式のLibraryをインクルード：<code class="inline">Sketch &gt; Include Library &gt; Add .ZIP Library...</code></li>
+            <li>サンプルを開く：<code class="inline">File &gt; Examples &gt; CL_inferencing</code></li>
+          </ul>
+        </div>
+      </div>
     </div>
 
     <div class="step">
