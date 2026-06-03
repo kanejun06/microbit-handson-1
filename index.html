@@ -173,6 +173,27 @@
   .tryit .desc{font-size:14.5px;line-height:1.65}
   .tryit .desc b{color:var(--accent)}
 
+  /* ML pipeline overview */
+  .pipeline{background:rgba(127,169,255,.07);border:1px solid rgba(127,169,255,.3);border-radius:13px;padding:18px 20px;margin:14px 0}
+  .pipeline .ph{font-weight:800;font-size:15px;color:var(--link);margin-bottom:4px;display:flex;align-items:center;gap:8px}
+  .pipeline .intro{font-size:14px;color:var(--ink-dim);margin-bottom:14px}
+  .pipe-row{display:flex;align-items:stretch;gap:0;flex-wrap:wrap;margin-bottom:14px}
+  .pipe-node{flex:1;min-width:120px;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:11px 10px;text-align:center}
+  .pipe-node .pn{font-family:var(--mono);font-size:10.5px;color:var(--link);font-weight:700}
+  .pipe-node .pt{font-weight:700;font-size:13.5px;margin-top:3px}
+  .pipe-arr{display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:18px;padding:0 5px;flex-shrink:0}
+  .pipe-detail{margin:0}
+  .pipe-detail .pd{display:flex;gap:11px;align-items:flex-start;padding:7px 0;border-top:1px solid var(--line);font-size:14px}
+  .pipe-detail .pd:first-child{border-top:none}
+  .pipe-detail .pd .badge{font-family:var(--mono);font-size:11px;font-weight:800;color:var(--bg);background:var(--link);
+    border-radius:6px;padding:2px 8px;flex-shrink:0;margin-top:2px}
+  .pipe-detail .pd .pdt b{color:var(--ink)}
+  .pipe-detail .pd .pdt{color:var(--ink-dim)}
+  @media(max-width:560px){
+    .pipe-row{flex-direction:column}
+    .pipe-arr{transform:rotate(90deg);padding:3px 0}
+  }
+
   /* Edge Impulse numbered flow */
   .ei-flow{counter-reset:ei;margin:14px 0}
   .ei-step{position:relative;background:var(--panel-2);border:1px solid var(--line);border-radius:12px;
@@ -521,7 +542,7 @@
   </section>
 
   <!-- ============ BLOCK 3 ============ -->
-  <section class="block" id="b3" style="--c:var(--r-blu)" data-text="esp32 esp32s3 画像認識 classification edgeimpulse arduino ide ボードマネージャ espressif zip library inferencing カメラ メッセージ受信 機械学習 重い プロジェクト名 CL コピペ コピー 編集しない インストール ダウンロード 2.0.4 preferences boards manager url 事前準備 setup XIAO_ESP32S3 PSRAM OPI psram board libraries 削除 windows mac パス documents USB ケーブル 外す P0 接続 電源 故障 注意 シリアルモニタ 出力 確認 ESP-EYE labeling impulse transfer learning grayscale mobilenetv2 deployment arduino library tensorflow quantized build 特徴量 学習 データセット">
+  <section class="block" id="b3" style="--c:var(--r-blu)" data-text="esp32 esp32s3 画像認識 classification edgeimpulse arduino ide ボードマネージャ espressif zip library inferencing カメラ メッセージ受信 機械学習 重い プロジェクト名 CL コピペ コピー 編集しない インストール ダウンロード 2.0.4 preferences boards manager url 事前準備 setup XIAO_ESP32S3 PSRAM OPI psram board libraries 削除 windows mac パス documents USB ケーブル 外す P0 接続 電源 故障 注意 シリアルモニタ 出力 確認 ESP-EYE labeling impulse transfer learning grayscale mobilenetv2 deployment arduino library tensorflow quantized build 特徴量 学習 データセット 全体の流れ 集める 整える 書き出す パイプライン モデル構築 段階">
     <div class="block-head">
       <span class="block-num">BLOCK 3</span>
       <span class="block-title">画像認識（ESP32S3）</span>
@@ -578,6 +599,26 @@
         <div class="big">CL</div>
         <p>とします。プロジェクト名から書き出すライブラリ名が自動で決まるため、これを揃えると全員のライブラリが <code class="inline">CL_inferencing</code> で同一になり、<b>下のスケッチを1文字も編集せずコピペするだけ</b>で動きます。<br><span style="color:var(--ink-dim);font-size:13px">※ <code class="inline">cl</code>（小文字）や <code class="inline">C L</code>（スペース入り）は別名になります。必ず半角大文字2字 <code class="inline">CL</code> で。</span></p>
       </div>
+      <div class="pipeline">
+        <div class="ph">🧭 まず全体の流れをつかもう</div>
+        <p class="intro">これから設定する項目はたくさんありますが、やっていることは大きく <b>4つの段階</b> に分けられます。「今どの段階にいるのか」を意識すると、ひとつひとつの設定の意味が見えてきます。</p>
+        <div class="pipe-row">
+          <div class="pipe-node"><div class="pn">STEP 1</div><div class="pt">集める</div></div>
+          <div class="pipe-arr">→</div>
+          <div class="pipe-node"><div class="pn">STEP 2</div><div class="pt">整える</div></div>
+          <div class="pipe-arr">→</div>
+          <div class="pipe-node"><div class="pn">STEP 3</div><div class="pt">学習する</div></div>
+          <div class="pipe-arr">→</div>
+          <div class="pipe-node"><div class="pn">STEP 4</div><div class="pt">書き出す</div></div>
+        </div>
+        <div class="pipe-detail">
+          <div class="pd"><span class="badge">集める</span><span class="pdt"><b>お手本データを用意する。</b>「これはリンゴ」「これはバナナ」とラベルを決め、その例になる画像をカメラでたくさん撮ります。機械はこのお手本から共通点を学ぶので、ここが土台になります。<span style="font-size:12.5px">（フローの 1〜2）</span></span></div>
+          <div class="pd"><span class="badge">整える</span><span class="pdt"><b>学習しやすい形に変換する。</b>画像をそのまま学ばせるのではなく、サイズや色を揃えて「特徴量」という数値の形に直します。色を捨ててグレースケールにするのも、形で見分けるために軽く・速くするためです。<span style="font-size:12.5px">（フローの 3〜4）</span></span></div>
+          <div class="pd"><span class="badge">学習する</span><span class="pdt"><b>お手本から見分ける力を作る。</b>整えたデータを使って、ラベルごとの特徴をモデルに覚えさせます。ここでできる「モデル」が、見分ける頭脳の本体です。<span style="font-size:12.5px">（フローの 5）</span></span></div>
+          <div class="pd"><span class="badge">書き出す</span><span class="pdt"><b>マイコンで動く形に変換する。</b>できたモデルを、ESP32S3 に載せられるよう小さく圧縮して Arduino 用ライブラリに書き出します。これを取り込めば、ネット無しで端末だけで判定できます。<span style="font-size:12.5px">（フローの 6）</span></span></div>
+        </div>
+      </div>
+
       <p style="margin-top:14px;font-weight:700;color:var(--accent-2);font-size:14.5px">作成フロー（設定が多いので順番どおりに）</p>
       <p style="font-size:13.5px;color:var(--ink-dim);margin:2px 0 0">所要 30分目安。ログインは <code class="inline">studio.edgeimpulse.com</code> から。</p>
       <a class="lnk ai" href="https://studio.edgeimpulse.com/login" target="_blank" rel="noopener" style="margin-top:8px"><span class="ic">✦</span>Edge Impulse Studio にログイン</a>
