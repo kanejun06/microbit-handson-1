@@ -599,30 +599,6 @@
         </li>
       </ol>
 
-      <p style="margin-top:16px;font-weight:700;color:var(--accent-2);font-size:14.5px">③ 使うボードを選ぶ（こちらが簡単）</p>
-      <p style="font-size:14px;margin:4px 0">ESP32S3 を PC に USB でつないだら、画面上部の <b>ボード選択ドロップダウン</b> から設定します。Tools メニューをたどるより、こちらが確実です。</p>
-      <ol class="steps" style="margin-top:8px">
-        <li>上部のドロップダウンを開き、<b>「Select other board and port…」</b> を選ぶ</li>
-      </ol>
-      <figure class="figure">
-        <img src="images/ei-board-dropdown.jpg" alt="Arduino IDE上部のボード選択ドロップダウン。Select other board and port…（赤枠）" loading="lazy">
-        <figcaption>上部ドロップダウンから「Select other board and port…」を選びます（赤枠）。</figcaption>
-      </figure>
-      <ol class="steps" style="margin-top:8px">
-        <li>BOARDS の検索窓に <code class="inline">xiao</code> と入力（赤枠）</li>
-        <li><b>XIAO_ESP32S3</b> を選ぶ（赤枠）</li>
-        <li>PORTS から <b><code class="inline">/dev/cu.usbmodem…</code></b> を選ぶ（赤枠）→ OK
-          <span class="sub">※ Windows の場合は <code class="inline">COM3</code> のように <b>「COM＋数字」</b> で表示されます。それを選んでください。</span>
-        </li>
-      </ol>
-      <figure class="figure">
-        <img src="images/ei-board-select.jpg" alt="Select Other Board and Portダイアログ。検索窓xiao、XIAO_ESP32S3、/dev/cu.usbmodemをそれぞれ赤枠" loading="lazy">
-        <figcaption>検索窓に「xiao」→「XIAO_ESP32S3」を選び、右でポート（/dev/cu.usbmodem…）を選んで OK（いずれも赤枠）。</figcaption>
-      </figure>
-      <div class="note-inline" style="margin-top:8px">
-        <b>PSRAM の設定も忘れずに：</b>書き込み前に <span class="path">Tools &gt; PSRAM</span> を <code class="inline">OPI PSRAM</code> にします（詳細は下のCODEステップ参照）。
-      </div>
-
       <div class="note-inline">
         <b>参考リンク：</b>
         <a href="https://docs.espressif.com/projects/arduino-esp32/en/latest/installing.html" target="_blank" rel="noopener" style="color:var(--link)">Espressif 公式インストール手順</a>
@@ -1249,6 +1225,26 @@ static int ei_camera_get_data(size_t offset, size_t length, float *out_ptr)
 #endif
 </code></pre>
       </div>
+      <p style="margin-top:16px;font-weight:700;color:var(--accent-2);font-size:14.5px">使うボードを選ぶ（画面上部のドロップダウンが簡単）</p>
+      <p style="font-size:14px;margin:4px 0">ESP32S3 を PC に USB でつないだら、画面上部の <b>ボード選択ドロップダウン</b> から設定します。Tools メニューをたどるより、こちらが確実です。</p>
+      <ol class="steps" style="margin-top:8px">
+        <li>上部のドロップダウンを開き、<b>「Select other board and port…」</b> を選ぶ</li>
+      </ol>
+      <figure class="figure">
+        <img src="images/ei-board-dropdown.jpg" alt="Arduino IDE上部のボード選択ドロップダウン。Select other board and port…（赤枠）" loading="lazy">
+        <figcaption>上部ドロップダウンから「Select other board and port…」を選びます（赤枠）。</figcaption>
+      </figure>
+      <ol class="steps" style="margin-top:8px">
+        <li>BOARDS の検索窓に <code class="inline">xiao</code> と入力（赤枠）</li>
+        <li><b>XIAO_ESP32S3</b> を選ぶ（赤枠）</li>
+        <li>PORTS から <b><code class="inline">/dev/cu.usbmodem…</code></b> を選ぶ（赤枠）→ OK
+          <span class="sub">※ Windows の場合は <code class="inline">COM3</code> のように <b>「COM＋数字」</b> で表示されます。それを選んでください。</span>
+        </li>
+      </ol>
+      <figure class="figure">
+        <img src="images/ei-board-select.jpg" alt="Select Other Board and Portダイアログ。検索窓xiao、XIAO_ESP32S3、/dev/cu.usbmodemをそれぞれ赤枠" loading="lazy">
+        <figcaption>検索窓に「xiao」→「XIAO_ESP32S3」を選び、右でポート（/dev/cu.usbmodem…）を選んで OK（いずれも赤枠）。</figcaption>
+      </figure>
       <div class="settings-check">
         <div class="h">⚠ 書き込みの前に必ず確認！ボードの設定 2項目</div>
         <p style="font-size:13.5px;color:var(--ink-dim);margin:0 0 10px">この2つが合っていないと、コンパイルや書き込みに失敗したり、カメラが動きません。<code class="inline">Tools</code> メニューから設定します。</p>
