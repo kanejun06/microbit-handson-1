@@ -593,12 +593,6 @@
     <div class="step">
       <h3><span class="tag">ML</span>Edge Impulse で Classification</h3>
       <p>Edge Impulseで画像分類モデルを作り、Arduino用ライブラリ（zip）として書き出します。</p>
-      <div class="rule">
-        <div class="h">★ 最重要ルール：プロジェクト名は全員これに統一</div>
-        <p>Edge Impulseのプロジェクト名を、半角の大文字で正確に：</p>
-        <div class="big">CL</div>
-        <p>とします。プロジェクト名から書き出すライブラリ名が自動で決まるため、これを揃えると全員のライブラリが <code class="inline">CL_inferencing</code> で同一になり、<b>下のスケッチを1文字も編集せずコピペするだけ</b>で動きます。<br><span style="color:var(--ink-dim);font-size:13px">※ <code class="inline">cl</code>（小文字）や <code class="inline">C L</code>（スペース入り）は別名になります。必ず半角大文字2字 <code class="inline">CL</code> で。</span></p>
-      </div>
       <div class="pipeline">
         <div class="ph">🧭 まず全体の流れをつかもう</div>
         <p class="intro">これから設定する項目はたくさんありますが、やっていることは大きく <b>4つの段階</b> に分けられます。「今どの段階にいるのか」を意識すると、ひとつひとつの設定の意味が見えてきます。</p>
@@ -622,6 +616,13 @@
       <p style="margin-top:14px;font-weight:700;color:var(--accent-2);font-size:14.5px">作成フロー（設定が多いので順番どおりに）</p>
       <p style="font-size:13.5px;color:var(--ink-dim);margin:2px 0 0">所要 30分目安。ログインは <code class="inline">studio.edgeimpulse.com</code> から。</p>
       <a class="lnk ai" href="https://studio.edgeimpulse.com/login" target="_blank" rel="noopener" style="margin-top:8px"><span class="ic">✦</span>Edge Impulse Studio にログイン</a>
+
+      <div class="rule">
+        <div class="h">★ 最重要ルール：プロジェクト名は全員これに統一</div>
+        <p>Edge Impulseのプロジェクト名を、半角の大文字で正確に：</p>
+        <div class="big">CL</div>
+        <p>とします。プロジェクト名から書き出すライブラリ名が自動で決まるため、これを揃えると全員のライブラリが <code class="inline">CL_inferencing</code> で同一になり、<b>下のスケッチを1文字も編集せずコピペするだけ</b>で動きます。<br><span style="color:var(--ink-dim);font-size:13px">※ <code class="inline">cl</code>（小文字）や <code class="inline">C L</code>（スペース入り）は別名になります。必ず半角大文字2字 <code class="inline">CL</code> で。</span></p>
+      </div>
 
       <div class="ei-flow">
         <div class="ei-step">
