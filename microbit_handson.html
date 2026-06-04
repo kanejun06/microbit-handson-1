@@ -1349,6 +1349,27 @@ static int ei_camera_get_data(size_t offset, size_t length, float *out_ptr)
         <span class="lab">やってみよう</span>
         <div class="desc"><b>配布したボタンとLEDを使って、簡単なゲームを作ってみよう！</b><br>ボタンは下記URLのものを使います。<br><a href="https://docs.m5stack.com/en/unit/dual_button" target="_blank" rel="noopener">https://docs.m5stack.com/en/unit/dual_button</a></div>
       </div>
+      <p style="margin:16px 0 0">ボタンを読み取る基本のプログラムはこちら。<b>MakeCodeの「JavaScript」タブに貼り付け</b>て使えます（P1＝Aボタン / P15＝Bボタン、どちらも内部プルアップ）。これを土台に、Copilotと対話してゲームに発展させてみましょう。</p>
+      <div class="codewrap">
+        <div class="codebar">
+          <span class="fname">dual_button.js</span>
+          <span class="meta">JavaScriptタブに貼り付け</span>
+          <button class="copybtn" id="copyButton">コードをコピー</button>
+        </div>
+        <pre><code id="buttonCode">pins.setPull(DigitalPin.P1, PinPullMode.PullUp)
+pins.setPull(DigitalPin.P15, PinPullMode.PullUp)
+basic.forever(function () {
+    if (pins.digitalReadPin(DigitalPin.P1) == 0) {
+        basic.showString("A")
+        basic.clearScreen()
+    }
+    if (pins.digitalReadPin(DigitalPin.P15) == 0) {
+        basic.showString("B")
+        basic.clearScreen()
+    }
+    basic.pause(20)
+})</code></pre>
+      </div>
     </div>
   </section>
 
@@ -1465,6 +1486,27 @@ static int ei_camera_get_data(size_t offset, size_t length, float *out_ptr)
       copyBtn.textContent='✓ コピーしました';
       copyBtn.classList.add('done');
       setTimeout(()=>{copyBtn.textContent=orig;copyBtn.classList.remove('done');},2000);
+    });
+  }
+
+  // copy button (dual_button) sample code
+  const copyButtonBtn=document.getElementById('copyButton');
+  if(copyButtonBtn){
+    copyButtonBtn.addEventListener('click',async()=>{
+      const code=document.getElementById('buttonCode').textContent;
+      try{
+        await navigator.clipboard.writeText(code);
+      }catch(e){
+        const ta=document.createElement('textarea');
+        ta.value=code;ta.style.position='fixed';ta.style.opacity='0';
+        document.body.appendChild(ta);ta.select();
+        try{document.execCommand('copy');}catch(_){}
+        document.body.removeChild(ta);
+      }
+      const orig=copyButtonBtn.textContent;
+      copyButtonBtn.textContent='✓ コピーしました';
+      copyButtonBtn.classList.add('done');
+      setTimeout(()=>{copyButtonBtn.textContent=orig;copyButtonBtn.classList.remove('done');},2000);
     });
   }
 
