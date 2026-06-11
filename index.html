@@ -513,7 +513,7 @@
 
       <p style="margin-top:16px;font-weight:700;color:var(--accent-2);font-size:14.5px">使い方</p>
       <ol class="steps" style="margin-top:10px">
-        <li>モードで <b>「アニメーション」</b> を選ぶ。サイズは <b>16</b> のままでOK</li>
+        <li>モードは最初から <b>「アニメーション」</b> が選択されています。サイズは <b>16</b> のままでOK</li>
         <li>グリッドを <b>クリック＆ドラッグ</b> すると絵が描ける<br><span class="sub">※ すでに描けているマスを再度クリック＆ドラッグすると、消しゴムモードになって消せます。</span></li>
         <li>1コマ目が描けたら <b>「複製」ボタン</b> を押して、2コマ目を描く</li>
         <li>2枚描けたら <b>再生間隔（間隔ms、例：200）</b> を決めて <b>「再生」ボタン</b> を押す → 右上のサムネイルがアニメーションで表示される</li>
@@ -523,26 +523,6 @@
       <div class="callout warn" style="margin-top:12px">
         <div class="h">⚠ 対応サイズ・バンク・コマ数</div>
         現状のライブラリで対応しているのは <b>16×16マス</b> のアニメーションです。<b>バンクは4つ</b>あり、<b>各バンク共に最大8コマ</b>までのアニメーションが作れます。サイズは 16 のまま、1つのバンクにつき8コマまでで作りましょう。
-      </div>
-    </div>
-
-    <div class="step">
-      <h3><span class="tag">SAMPLE</span>OLED の使い方</h3>
-      <p>OLEDディスプレイへの表示の基本を確認します。</p>
-      <div class="note-inline" style="margin-top:0;margin-bottom:6px"><b>接続：</b>OLEDは <b>「I2C」と書いてあるポート</b> に接続してください。</div>
-      <a class="lnk" href="https://makecode.microbit.org/S11259-25233-37523-42557" target="_blank" rel="noopener"><span class="ic">▶</span>MakeCode: OLED 基本</a>
-
-      <p style="margin-top:16px;font-weight:700;color:var(--accent-2);font-size:14.5px">プログラムをざっと解説</p>
-      <div class="explain">
-        <p style="margin:0 0 8px"><b>① OLEDの準備：</b>最初に <code class="inline">groveoleddisplay.createOled()</code> で OLEDディスプレイを使えるようにします（<code class="inline">oled</code> という名前で扱います）。</p>
-        <p style="margin:0 0 8px"><b>② 絵のデータを登録：</b><code class="inline">bitmap16_b1_f1</code>〜<code class="inline">bitmap16_b1_f8</code> のような配列が、ドットエディタで描いた <b>16×16のドット絵データ</b>です（<code class="inline">b1</code>＝バンク1、<code class="inline">f1</code>＝1コマ目）。これを <code class="inline">setBankAnimationFrame(バンク番号, コマ番号, 配列)</code> で <b>各バンクの各コマ</b>として登録しておきます。<br><span style="color:var(--ink-dim);font-size:13px">※ 配列の中の数字が、点を打つ/打たないのパターンを表しています。ドットエディタが自動で書き出してくれます。</span></p>
-        <p style="margin:0 0 8px"><b>③ アニメを再生する関数：</b><code class="inline">playBankAnimation(バンク番号, 開始コマ, 終了コマ)</code> で、指定したバンクのコマを順番に表示してパラパラアニメにします。サンプルでは <code class="inline">playBankAnimation(1, 1, 8)</code> のように <b>1〜8コマ目</b>を再生しています。</p>
-        <p style="margin:0 0 8px"><b>④ ボタンで切り替え：</b><code class="inline">ずっと</code> の中で、ボタンの状態を見て表示を切り替えています。</p>
-        <ul class="plain" style="margin:4px 0 8px">
-          <li><b>Aボタン</b> → バンク1のアニメを再生</li>
-          <li><b>Bボタン</b> → バンク2のアニメを再生</li>
-          <li><b>どちらも押していないとき</b> → <code class="inline">clearDisplayFast()</code> で画面を消す</li>
-        </ul>
       </div>
     </div>
 
@@ -565,6 +545,26 @@
       <div class="note-inline" style="margin-top:10px"><b>ポイント：</b><code class="inline">#v0.0.20</code> はバージョン指定です。これを付けずに貼ると別のバージョンが入ってしまうことがあるので、<b>URL の末尾まで省略せず</b>に貼り付けましょう。</div>
 
       <div class="build"><b>つくるもの →</b> 「OLEDでアニメーションの再生」を実装。ドットエディタで描いたコマ（1バンクにつき最大8コマ）を順に表示してパラパラアニメにします。</div>
+    </div>
+
+    <div class="step">
+      <h3><span class="tag">SAMPLE</span>OLED の使い方</h3>
+      <p>OLEDディスプレイへの表示の基本を確認します。</p>
+      <div class="note-inline" style="margin-top:0;margin-bottom:6px"><b>接続：</b>OLEDは <b>「I2C」と書いてあるポート</b> に接続してください。</div>
+      <a class="lnk" href="https://makecode.microbit.org/S11259-25233-37523-42557" target="_blank" rel="noopener"><span class="ic">▶</span>MakeCode: OLED 基本</a>
+
+      <p style="margin-top:16px;font-weight:700;color:var(--accent-2);font-size:14.5px">プログラムをざっと解説</p>
+      <div class="explain">
+        <p style="margin:0 0 8px"><b>① OLEDの準備：</b>最初に <code class="inline">groveoleddisplay.createOled()</code> で OLEDディスプレイを使えるようにします（<code class="inline">oled</code> という名前で扱います）。</p>
+        <p style="margin:0 0 8px"><b>② 絵のデータを登録：</b><code class="inline">bitmap16_b1_f1</code>〜<code class="inline">bitmap16_b1_f8</code> のような配列が、ドットエディタで描いた <b>16×16のドット絵データ</b>です（<code class="inline">b1</code>＝バンク1、<code class="inline">f1</code>＝1コマ目）。これを <code class="inline">setBankAnimationFrame(バンク番号, コマ番号, 配列)</code> で <b>各バンクの各コマ</b>として登録しておきます。<br><span style="color:var(--ink-dim);font-size:13px">※ 配列の中の数字が、点を打つ/打たないのパターンを表しています。ドットエディタが自動で書き出してくれます。</span></p>
+        <p style="margin:0 0 8px"><b>③ アニメを再生する関数：</b><code class="inline">playBankAnimation(バンク番号, 開始コマ, 終了コマ)</code> で、指定したバンクのコマを順番に表示してパラパラアニメにします。サンプルでは <code class="inline">playBankAnimation(1, 1, 8)</code> のように <b>1〜8コマ目</b>を再生しています。</p>
+        <p style="margin:0 0 8px"><b>④ ボタンで切り替え：</b><code class="inline">ずっと</code> の中で、ボタンの状態を見て表示を切り替えています。</p>
+        <ul class="plain" style="margin:4px 0 8px">
+          <li><b>Aボタン</b> → バンク1のアニメを再生</li>
+          <li><b>Bボタン</b> → バンク2のアニメを再生</li>
+          <li><b>どちらも押していないとき</b> → <code class="inline">clearDisplayFast()</code> で画面を消す</li>
+        </ul>
+      </div>
     </div>
   </section>
 
