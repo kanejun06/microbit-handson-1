@@ -6,19 +6,19 @@
 <title>micro:bit ハンズオン｜センサー・アクチュエータ実習</title>
 <style>
   :root{
-    --bg:#ffffff;
-    --panel:#f7f8fa;
-    --panel-2:#eef1f5;
-    --ink:#1b2026;
-    --ink-dim:#5b6473;
-    --line:#dde2e8;
-    --accent:#b8860b;
-    --accent-2:#0d8c7e;
-    --warn:#d9662f;
-    --link:#0a66c2;
-    --r-red:#e23b34; --r-org:#d9791a; --r-yel:#c79a12;
-    --r-grn:#2c9c4a; --r-cyn:#119488; --r-blu:#3b6fd6; --r-pur:#7d54e0;
-    --code-bg:#f2f4f7;
+    --bg:#0e1116;
+    --panel:#161b22;
+    --panel-2:#1c232d;
+    --ink:#e8e3d3;
+    --ink-dim:#a9a596;
+    --line:#2a323d;
+    --accent:#ffd34d;
+    --accent-2:#5ad1c4;
+    --warn:#ff8a5b;
+    --link:#7fd1ff;
+    --r-red:#ff5e57; --r-org:#ff9f43; --r-yel:#ffd34d;
+    --r-grn:#5ad17a; --r-cyn:#5ad1c4; --r-blu:#7fa9ff; --r-pur:#b18cff;
+    --code-bg:#0a0d12;
     --mono:"SF Mono","Consolas","Roboto Mono",ui-monospace,monospace;
     --sans:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic",sans-serif;
   }
@@ -54,7 +54,7 @@
   .lede{color:var(--ink-dim);margin-top:18px;max-width:640px;font-size:17px}
 
   /* ---- toolbar ---- */
-  .toolbar{position:sticky;top:0;z-index:30;background:rgba(255,255,255,.88);backdrop-filter:blur(10px);
+  .toolbar{position:sticky;top:0;z-index:30;background:rgba(14,17,22,.86);backdrop-filter:blur(10px);
     border-bottom:1px solid var(--line);margin:24px -22px 0;padding:12px 22px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
   .search{flex:1;min-width:200px;position:relative}
   .search input{width:100%;background:var(--panel);border:1px solid var(--line);color:var(--ink);
@@ -95,17 +95,13 @@
   .step .build b{color:var(--accent-2)}
 
   /* link button */
-  .lnk{display:inline-flex;align-items:center;gap:8px;text-decoration:none;background:#fff;
-    border:1.5px solid var(--link);color:var(--link);padding:9px 15px;border-radius:10px;font-size:13.5px;
-    font-family:var(--mono);font-weight:600;margin:6px 8px 2px 0;transition:.15s;word-break:break-all;
-    cursor:pointer;box-shadow:0 1px 2px rgba(16,40,80,.10)}
-  .lnk::after{content:"↗";font-family:var(--sans);font-size:12px;font-weight:700;opacity:.65;margin-left:1px}
-  .lnk:hover{background:#eef4fc;box-shadow:0 4px 12px rgba(16,40,80,.16);transform:translateY(-1px)}
-  .lnk .ic{flex-shrink:0;opacity:.9}
-  .lnk.gh{color:#4a1f9e;border-color:#4a1f9e}
-  .lnk.gh:hover{background:#f2ecfc}
-  .lnk.ai{color:#2a1f02;background:var(--accent);border-color:var(--accent);font-weight:700;box-shadow:0 2px 7px rgba(184,134,11,.30)}
-  .lnk.ai:hover{background:#caa31c;border-color:#caa31c;box-shadow:0 5px 16px rgba(184,134,11,.40)}
+  .lnk{display:inline-flex;align-items:center;gap:8px;text-decoration:none;background:var(--panel-2);
+    border:1px solid var(--line);color:var(--link);padding:8px 13px;border-radius:9px;font-size:13.5px;
+    font-family:var(--mono);margin:6px 8px 2px 0;transition:.15s;word-break:break-all}
+  .lnk:hover{border-color:var(--link);background:#1f2935}
+  .lnk .ic{flex-shrink:0;opacity:.8}
+  .lnk.gh{color:#d6c9ff}
+  .lnk.ai{color:var(--accent)}
 
   /* code */
   code.inline{font-family:var(--mono);background:var(--code-bg);padding:2px 7px;border-radius:5px;font-size:13px;color:var(--accent-2);border:1px solid var(--line)}
@@ -136,7 +132,7 @@
     overflow-x:auto;white-space:nowrap;display:flex;align-items:center}
   .copyfield button{background:var(--panel-2);border:none;border-left:1px solid var(--line);color:var(--ink);
     padding:0 15px;font-family:var(--sans);font-size:12.5px;font-weight:700;cursor:pointer;flex-shrink:0;transition:.15s}
-  .copyfield button:hover{background:#e2e7ee;color:var(--accent-2)}
+  .copyfield button:hover{background:#26303c;color:var(--accent-2)}
   .copyfield button.done{color:var(--accent-2)}
 
   /* detailed numbered substeps with sub-detail */
@@ -248,10 +244,10 @@
   .keypts{margin-top:14px;display:grid;gap:10px}
   .keypt{display:flex;gap:13px;align-items:flex-start;background:rgba(177,140,255,.08);
     border:1px solid rgba(177,140,255,.35);border-radius:11px;padding:13px 16px}
-  .keypt .num{font-family:var(--mono);font-weight:800;font-size:15px;color:#4a1f9e;flex-shrink:0;
+  .keypt .num{font-family:var(--mono);font-weight:800;font-size:15px;color:#c9b3ff;flex-shrink:0;
     background:var(--code-bg);width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;border:1px solid var(--line)}
   .keypt .txt{font-size:14.5px;line-height:1.6}
-  .keypt .txt b{color:#4a1f9e}
+  .keypt .txt b{color:#d6c9ff}
 
   /* pre-upload settings check */
   .settings-check{background:rgba(255,138,91,.08);border:1px solid var(--warn);border-radius:12px;padding:16px 20px;margin:14px 0}
@@ -347,7 +343,7 @@
 
   <nav class="blocks">
     <a href="#b1" style="--c:var(--r-red)"><div class="n">BLOCK 1</div><div class="t">音を作る・鳴らす</div><div class="d">mp3 / AI効果音 / モーション分類</div></a>
-    <a href="#b2" style="--c:var(--r-cyn)"><div class="n">BLOCK 2</div><div class="t">OLEDに表示しよう</div><div class="d">OLED / ドット絵 / アニメ</div></a>
+    <a href="#b2" style="--c:var(--r-cyn)"><div class="n">BLOCK 2</div><div class="t">画面に出す</div><div class="d">OLED / ドット絵 / アニメ</div></a>
     <a href="#b3" style="--c:var(--r-blu)"><div class="n">BLOCK 3</div><div class="t">画像認識</div><div class="d">ESP32S3 / EdgeImpulse ★重</div></a>
     <a href="#b4" style="--c:var(--r-pur)"><div class="n">BLOCK 4</div><div class="t">vibe coding</div><div class="d">Copilot × LED / 話しかけ方</div></a>
   </nav>
@@ -370,8 +366,6 @@
       <span class="block-title">音を作る・鳴らす</span>
       <span class="block-meta">mp3 / AI効果音 / モーション分類</span>
     </div>
-
-    <p style="font-size:15.5px;color:var(--ink);margin:0 0 22px">ここでは、<b>AIで生成した音を、モーション（動かし方）の種類に合わせて切り替えて鳴らしてみましょう！</b>まずは生成AIで効果音そのものを作り、micro:bit に音を鳴らす準備をします。そのうえで、加速度センサと機械学習で「どんな動きをしたか」を見分け、動きごとにちがう音が鳴る仕組みをつくっていきます。</p>
 
     <div class="step">
       <h3><span class="tag">AI</span>AIサービスで効果音を生成</h3>
@@ -496,7 +490,7 @@
   <section class="block" id="b2" style="--c:var(--r-cyn)" data-text="oled ディスプレイ 画面 ドット ドット絵 ドットエディタ 16x16 8コマ バンク 4バンク アニメーション 拡張機能 ライブラリ oleddisplay fast 歯車 検索 URL 貼り付け バージョン v0.0.20 コピー createOled groveoleddisplay setBankAnimationFrame playBankAnimation clearDisplayFast bitmap16_b1_f1 ドットエディタ アニメーション 複製 再生 間隔 コードをコピー sh1107 16x16 消しゴム">
     <div class="block-head">
       <span class="block-num">BLOCK 2</span>
-      <span class="block-title">OLEDに表示しよう</span>
+      <span class="block-title">画面に出す</span>
       <span class="block-meta">OLED / ドット絵 / アニメ</span>
     </div>
 
@@ -569,7 +563,7 @@
   </section>
 
   <!-- ============ BLOCK 3 ============ -->
-  <section class="block" id="b3" style="--c:var(--r-blu)" data-text="esp32 esp32s3 画像認識 classification edgeimpulse arduino ide ボードマネージャ espressif zip library inferencing カメラ メッセージ受信 機械学習 重い プロジェクト名 CL コピペ コピー 編集しない インストール ダウンロード 2.0.4 preferences boards manager url 事前準備 setup select other board port usbmodem com ポート ドロップダウン XIAO_ESP32S3 PSRAM OPI psram board libraries 削除 windows mac パス documents USB ケーブル 外す P0 接続 電源 故障 注意 シリアルモニタ 出力 確認 ESP-EYE labeling impulse transfer learning grayscale mobilenetv2 deployment arduino library tensorflow quantized build 特徴量 学習 データセット 全体の流れ 集める 整える 書き出す パイプライン モデル構築 段階 写真 撮影 コツ 角度 手に持つ none 背景 明るさ 枚数 4種類 get started アカウント 公式サイト sign up login google github developer plan email username password 登録フォーム create new project target cortex esp-eye 対象デバイス connect a device scan qr スマホ カメラ collect data 撮影 collecting images connected mobile give access camera 権限 許可 label capture 撮影 ラベル split automatically">
+  <section class="block" id="b3" style="--c:var(--r-blu)" data-text="esp32 esp32s3 画像認識 classification edgeimpulse arduino ide ボードマネージャ espressif zip library inferencing カメラ メッセージ受信 機械学習 重い プロジェクト名 CL コピペ コピー 編集しない インストール ダウンロード 2.0.4 preferences boards manager url 事前準備 setup select other board port usbmodem com ポート ドロップダウン XIAO_ESP32S3 PSRAM OPI psram board libraries 削除 windows mac パス documents USB ケーブル 外す P0 接続 電源 故障 注意 シリアルモニタ 出力 確認 ei_classifier_config esp_nn allocatetensors 上書き 設定ファイル ESP-EYE labeling impulse transfer learning grayscale mobilenetv2 deployment arduino library tensorflow quantized build 特徴量 学習 データセット 全体の流れ 集める 整える 書き出す パイプライン モデル構築 段階 写真 撮影 コツ 角度 手に持つ none 背景 明るさ 枚数 4種類 get started アカウント 公式サイト sign up login google github developer plan email username password 登録フォーム create new project target cortex esp-eye 対象デバイス connect a device scan qr スマホ カメラ collect data 撮影 collecting images connected mobile give access camera 権限 許可 label capture 撮影 ラベル split automatically">
     <div class="block-head">
       <span class="block-num">BLOCK 3</span>
       <span class="block-title">画像認識（ESP32S3）</span>
@@ -1267,10 +1261,23 @@ static int ei_camera_get_data(size_t offset, size_t length, float *out_ptr)
       <ol class="steps" style="margin-top:12px">
         <li>上の「コードをコピー」を押す → Arduino IDEに貼り付け</li>
         <li><b>Tools &gt; PSRAM = OPI PSRAM</b> になっているか確認（Board は上で設定済み）</li>
+        <li><b>配布された <code class="inline">ei_classifier_config.h</code> を、ライブラリ内の同名ファイルに上書きする</b>（下の📌ボックス参照）</li>
         <li>コンパイルして ESP32S3 に書き込み</li>
         <li><b>シリアルモニタ</b>を開いて、出力結果（認識されたラベルなど）が出ているか確認する</li>
         <li>書き込みが終わったら <b>USBケーブルを必ず外してから</b>、ESP32S3 を micro:bit の <b>P0</b> に接続する</li>
       </ol>
+
+      <div class="settings-check" style="background:rgba(127,169,255,.1)">
+        <div class="h">📌 重要：書き込み前に設定ファイルを1つ上書きする</div>
+        <p style="font-size:14px;color:var(--ink);margin:0 0 8px">いまの Edge Impulse には、ESP32S3 でそのまま書き込むと <code class="inline">AllocateTensors() failed</code> / <code class="inline">Failed to run classifier (-3)</code> が出て<b>推論が動かない不具合</b>があります（Edge Impulse側で調査中の既知の問題）。これを避けるため、配布する <code class="inline">ei_classifier_config.h</code> を、ライブラリ内の同じファイルに<b>上書きコピー</b>してください。</p>
+        <a class="lnk" href="ei_classifier_config.h" download style="margin:2px 0 12px"><span class="ic">⬇</span>ei_classifier_config.h をダウンロード</a>
+        <p style="font-size:14px;color:var(--ink);margin:0 0 6px">上書きする場所（取り込んだライブラリの中）：</p>
+        <div class="ospath">
+          <div class="row"><span class="os">Mac</span><code class="inline">~/Documents/Arduino/libraries/CL_inferencing/src/edge-impulse-sdk/classifier/ei_classifier_config.h</code></div>
+          <div class="row"><span class="os">Win</span><code class="inline">C:\Users\&lt;ユーザー名&gt;\Documents\Arduino\libraries\CL_inferencing\src\edge-impulse-sdk\classifier\ei_classifier_config.h</code></div>
+        </div>
+        <p style="font-size:13px;color:var(--ink-dim);margin:8px 0 0">※ この上書きは <b>モデルを書き出してライブラリを入れ直すたびに毎回</b> 必要です（新しく取り込むと元に戻るため）。<br>※ ESP-NN（高速化機能）を切るので推論は少し遅くなりますが、まずは確実に動かすための措置です。</p>
+      </div>
       <div class="settings-check" style="background:rgba(255,138,91,.12)">
         <div class="h">🛑 重要：ESP32をmicro:bitに接続する前に必ずUSBケーブルを外す</div>
         <p style="font-size:14px;color:var(--ink);margin:0">書き込みが終わったら、<b>USBケーブルを外してから</b> micro:bit の P0 に接続してください。<br><b>micro:bit と ESP32S3 の両方に電源が供給されている状態で接続すると、故障の原因になります。</b>必ず片方の電源（USB）を抜いてからつなぎましょう。</p>
@@ -1308,18 +1315,15 @@ static int ei_camera_get_data(size_t offset, size_t length, float *out_ptr)
   </section>
 
   <!-- ============ BLOCK 4 ============ -->
-  <section class="block" id="b4" style="--c:var(--r-pur)" data-text="copilot vibe coding microsoft 対話 led 生成ai プロンプト 実践 話しかけ方 仕様 言語化 要求 ws2813 grove seeed やってみよう ゲーム ボタン button dual button m5stack 配布">
+  <section class="block" id="b4" style="--c:var(--r-pur)" data-text="copilot vibe coding microsoft 対話 led 生成ai プロンプト 実践 話しかけ方 仕様 言語化 要求 ws2813 grove seeed">
     <div class="block-head">
       <span class="block-num">BLOCK 4</span>
       <span class="block-title">vibe coding の実践</span>
       <span class="block-meta">Microsoft Copilot × LED</span>
     </div>
 
-    <p style="font-size:15.5px;color:var(--ink);margin:0 0 22px">ここでは、<b>自分でコードを一から書くのではなく、AI（Microsoft Copilot）と対話しながらプログラムを組み立てる「vibe coding」を体験してみましょう！</b>お題は LED の制御です。「何を作りたいか」を自分の言葉で伝え、返ってきたコードを動かし、また指示を出す——このやりとりを繰り返して、自分なりのLED表現を完成させていきます。</p>
-
     <div class="step">
       <h3><span class="tag">PRACTICE</span>Copilotと対話してコードを書く</h3>
-      <a class="lnk ai" href="https://copilot.microsoft.com/" target="_blank" rel="noopener"><span class="ic">✦</span>Microsoft Copilot を開く</a>
       <p>LEDの制御も、Copilotと対話するだけでここまでできる、という例を見てから、自分でも試してみましょう。</p>
       <a class="lnk" href="https://makecode.microbit.org/S64508-99405-08014-21071" target="_blank" rel="noopener"><span class="ic">▶</span>MakeCode: Copilot × LED の例</a>
       <div class="build"><b>やってみる →</b> 例を起点に、Copilotへの指示を変えて自分なりのLED表現をつくってみます。</div>
