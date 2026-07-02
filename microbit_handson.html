@@ -350,6 +350,7 @@
     <a href="#b2" style="--c:var(--r-cyn)"><div class="n">BLOCK 2</div><div class="t">画面に出す</div><div class="d">OLED / ドット絵 / アニメ</div></a>
     <a href="#b3" style="--c:var(--r-blu)"><div class="n">BLOCK 3</div><div class="t">画像認識</div><div class="d">ESP32S3 / EdgeImpulse ★重</div></a>
     <a href="#b4" style="--c:var(--r-pur)"><div class="n">BLOCK 4</div><div class="t">vibe coding</div><div class="d">Copilot × LED / 話しかけ方</div></a>
+    <a href="#b5" style="--c:var(--r-org)"><div class="n">BLOCK 5</div><div class="t">サーボモーター</div><div class="d">Grove Servo / パルスと角度</div></a>
   </nav>
 
   <div class="prep">
@@ -511,7 +512,7 @@
 
       <p style="margin-top:16px;font-weight:700;color:var(--accent-2);font-size:14.5px">使い方</p>
       <ol class="steps" style="margin-top:10px">
-        <li>モードで <b>「アニメーション」</b> を選ぶ。サイズは <b>16</b> のままでOK</li>
+        <li>モードは最初から <b>「アニメーション」</b> が選択されています。サイズは <b>16</b> のままでOK</li>
         <li>グリッドを <b>クリック＆ドラッグ</b> すると絵が描ける<br><span class="sub">※ すでに描けているマスを再度クリック＆ドラッグすると、消しゴムモードになって消せます。</span></li>
         <li>1コマ目が描けたら <b>「複製」ボタン</b> を押して、2コマ目を描く</li>
         <li>2枚描けたら <b>再生間隔（間隔ms、例：200）</b> を決めて <b>「再生」ボタン</b> を押す → 右上のサムネイルがアニメーションで表示される</li>
@@ -521,26 +522,6 @@
       <div class="callout warn" style="margin-top:12px">
         <div class="h">⚠ 対応サイズ・バンク・コマ数</div>
         現状のライブラリで対応しているのは <b>16×16マス</b> のアニメーションです。<b>バンクは4つ</b>あり、<b>各バンク共に最大8コマ</b>までのアニメーションが作れます。サイズは 16 のまま、1つのバンクにつき8コマまでで作りましょう。
-      </div>
-    </div>
-
-    <div class="step">
-      <h3><span class="tag">SAMPLE</span>OLED の使い方</h3>
-      <p>OLEDディスプレイへの表示の基本を確認します。</p>
-      <div class="note-inline" style="margin-top:0;margin-bottom:6px"><b>接続：</b>OLEDは <b>「I2C」と書いてあるポート</b> に接続してください。</div>
-      <a class="lnk" href="https://makecode.microbit.org/S11259-25233-37523-42557" target="_blank" rel="noopener"><span class="ic">▶</span>MakeCode: OLED 基本</a>
-
-      <p style="margin-top:16px;font-weight:700;color:var(--accent-2);font-size:14.5px">プログラムをざっと解説</p>
-      <div class="explain">
-        <p style="margin:0 0 8px"><b>① OLEDの準備：</b>最初に <code class="inline">groveoleddisplay.createOled()</code> で OLEDディスプレイを使えるようにします（<code class="inline">oled</code> という名前で扱います）。</p>
-        <p style="margin:0 0 8px"><b>② 絵のデータを登録：</b><code class="inline">bitmap16_b1_f1</code>〜<code class="inline">bitmap16_b1_f8</code> のような配列が、ドットエディタで描いた <b>16×16のドット絵データ</b>です（<code class="inline">b1</code>＝バンク1、<code class="inline">f1</code>＝1コマ目）。これを <code class="inline">setBankAnimationFrame(バンク番号, コマ番号, 配列)</code> で <b>各バンクの各コマ</b>として登録しておきます。<br><span style="color:var(--ink-dim);font-size:13px">※ 配列の中の数字が、点を打つ/打たないのパターンを表しています。ドットエディタが自動で書き出してくれます。</span></p>
-        <p style="margin:0 0 8px"><b>③ アニメを再生する関数：</b><code class="inline">playBankAnimation(バンク番号, 開始コマ, 終了コマ)</code> で、指定したバンクのコマを順番に表示してパラパラアニメにします。サンプルでは <code class="inline">playBankAnimation(1, 1, 8)</code> のように <b>1〜8コマ目</b>を再生しています。</p>
-        <p style="margin:0 0 8px"><b>④ ボタンで切り替え：</b><code class="inline">ずっと</code> の中で、ボタンの状態を見て表示を切り替えています。</p>
-        <ul class="plain" style="margin:4px 0 8px">
-          <li><b>Aボタン</b> → バンク1のアニメを再生</li>
-          <li><b>Bボタン</b> → バンク2のアニメを再生</li>
-          <li><b>どちらも押していないとき</b> → <code class="inline">clearDisplayFast()</code> で画面を消す</li>
-        </ul>
       </div>
     </div>
 
@@ -563,6 +544,26 @@
       <div class="note-inline" style="margin-top:10px"><b>ポイント：</b><code class="inline">#v0.0.20</code> はバージョン指定です。これを付けずに貼ると別のバージョンが入ってしまうことがあるので、<b>URL の末尾まで省略せず</b>に貼り付けましょう。</div>
 
       <div class="build"><b>つくるもの →</b> 「OLEDでアニメーションの再生」を実装。ドットエディタで描いたコマ（1バンクにつき最大8コマ）を順に表示してパラパラアニメにします。</div>
+    </div>
+
+    <div class="step">
+      <h3><span class="tag">SAMPLE</span>OLED の使い方</h3>
+      <p>OLEDディスプレイへの表示の基本を確認します。</p>
+      <div class="note-inline" style="margin-top:0;margin-bottom:6px"><b>接続：</b>OLEDは <b>「I2C」と書いてあるポート</b> に接続してください。</div>
+      <a class="lnk" href="https://makecode.microbit.org/S11259-25233-37523-42557" target="_blank" rel="noopener"><span class="ic">▶</span>MakeCode: OLED 基本</a>
+
+      <p style="margin-top:16px;font-weight:700;color:var(--accent-2);font-size:14.5px">プログラムをざっと解説</p>
+      <div class="explain">
+        <p style="margin:0 0 8px"><b>① OLEDの準備：</b>最初に <code class="inline">groveoleddisplay.createOled()</code> で OLEDディスプレイを使えるようにします（<code class="inline">oled</code> という名前で扱います）。</p>
+        <p style="margin:0 0 8px"><b>② 絵のデータを登録：</b><code class="inline">bitmap16_b1_f1</code>〜<code class="inline">bitmap16_b1_f8</code> のような配列が、ドットエディタで描いた <b>16×16のドット絵データ</b>です（<code class="inline">b1</code>＝バンク1、<code class="inline">f1</code>＝1コマ目）。これを <code class="inline">setBankAnimationFrame(バンク番号, コマ番号, 配列)</code> で <b>各バンクの各コマ</b>として登録しておきます。<br><span style="color:var(--ink-dim);font-size:13px">※ 配列の中の数字が、点を打つ/打たないのパターンを表しています。ドットエディタが自動で書き出してくれます。</span></p>
+        <p style="margin:0 0 8px"><b>③ アニメを再生する関数：</b><code class="inline">playBankAnimation(バンク番号, 開始コマ, 終了コマ)</code> で、指定したバンクのコマを順番に表示してパラパラアニメにします。サンプルでは <code class="inline">playBankAnimation(1, 1, 8)</code> のように <b>1〜8コマ目</b>を再生しています。</p>
+        <p style="margin:0 0 8px"><b>④ ボタンで切り替え：</b><code class="inline">ずっと</code> の中で、ボタンの状態を見て表示を切り替えています。</p>
+        <ul class="plain" style="margin:4px 0 8px">
+          <li><b>Aボタン</b> → バンク1のアニメを再生</li>
+          <li><b>Bボタン</b> → バンク2のアニメを再生</li>
+          <li><b>どちらも押していないとき</b> → <code class="inline">clearDisplayFast()</code> で画面を消す</li>
+        </ul>
+      </div>
     </div>
   </section>
 
@@ -1387,6 +1388,40 @@ basic.forever(function () {
     basic.pause(20)
 })</code></pre>
       </div>
+    </div>
+  </section>
+
+  <!-- ============ BLOCK 5 ============ -->
+  <section class="block" id="b5" style="--c:var(--r-org)" data-text="サーボ servo サーボモーター grove モーター p0 接続 パルス pulse 角度 90度 回転 servoSetPulse マイクロ秒 1500 300 ボタンa ボタンb ロゴ 長押し 初期位置 リセット 関数 makecode">
+    <div class="block-head">
+      <span class="block-num">BLOCK 5</span>
+      <span class="block-title">サーボモーターを動かす</span>
+      <span class="block-meta">Grove Servo × P0</span>
+    </div>
+
+    <div class="step">
+      <h3><span class="tag">SAMPLE</span>サーボモーターの使い方</h3>
+      <p>ボタンでサーボモーターを回すプログラムです。<b>Aボタンを押すと約90度回転</b>し、<b>Bボタンで元の位置に戻り</b>ます。</p>
+      <div class="note-inline" style="margin-top:0;margin-bottom:6px"><b>接続：</b>Grove サーボは <b>P0 ポート</b> に接続してください。</div>
+      <figure class="figure" style="margin-top:12px">
+        <img src="images/servo-connection.jpg" alt="micro:bit の拡張ボードの P0 ポートに Grove サーボモーターを接続し、電池ボックスをつないだ様子" loading="lazy">
+        <figcaption>接続例：拡張ボードの <b>P0 ポート</b>にサーボを接続します。動かすときは電池ボックスもつなぎましょう。</figcaption>
+      </figure>
+      <a class="lnk" href="https://makecode.microbit.org/S63148-89824-53064-09603" target="_blank" rel="noopener"><span class="ic">▶</span>MakeCode: サーボモーター基本</a>
+
+      <p style="margin-top:16px;font-weight:700;color:var(--accent-2);font-size:14.5px">プログラムをざっと解説</p>
+      <div class="explain">
+        <p style="margin:0 0 8px"><b>① パルスで角度を指定：</b>サーボモーターは、送られてくる<b>パルスの幅（マイクロ秒）</b>で角度が決まります。<code class="inline">pins.servoSetPulse(AnalogPin.P0, pulse)</code> が「P0 につないだサーボに <code class="inline">pulse</code> の幅のパルスを送る」命令です。このサンプルでは <code class="inline">1500</code>（初期位置）と <code class="inline">300</code>（約90度回転した位置）の2つの値を使い分けています。</p>
+        <p style="margin:0 0 8px"><b>② moveServo 関数：</b>「今の <code class="inline">pulse</code> の値をサーボに送る」処理を <code class="inline">moveServo()</code> という<b>関数</b>にまとめています。角度を変えたいときは、<code class="inline">pulse</code> に新しい値を入れてからこの関数を呼ぶだけです。</p>
+        <p style="margin:0 0 8px"><b>③ ボタンで動かす：</b>ボタンの種類ごとに <code class="inline">pulse</code> を切り替えて <code class="inline">moveServo()</code> を呼んでいます。</p>
+        <ul class="plain" style="margin:4px 0 8px">
+          <li><b>Aボタン</b> → <code class="inline">pushedPulse</code>（300）にして約90度回転</li>
+          <li><b>Bボタン</b> → <code class="inline">initialPulse</code>（1500）にして初期位置に戻る</li>
+          <li><b>ロゴを長押し</b> → 初期位置に戻る（リセット用）</li>
+        </ul>
+        <p style="margin:0"><b>④ 起動時：</b>プログラム開始時にも <code class="inline">pulse = 1500</code> にして <code class="inline">moveServo()</code> を呼び、必ず初期位置からスタートするようにしています。</p>
+      </div>
+      <div class="build"><b>やってみる →</b> <code class="inline">pushedPulse</code> の値（300）をいろいろ変えて書き込み直し、回る角度がどう変わるか試してみましょう。</div>
     </div>
   </section>
 

@@ -350,6 +350,7 @@
     <a href="#b2" style="--c:var(--r-cyn)"><div class="n">BLOCK 2</div><div class="t">画面に出す</div><div class="d">OLED / ドット絵 / アニメ</div></a>
     <a href="#b3" style="--c:var(--r-blu)"><div class="n">BLOCK 3</div><div class="t">画像認識</div><div class="d">ESP32S3 / EdgeImpulse ★重</div></a>
     <a href="#b4" style="--c:var(--r-pur)"><div class="n">BLOCK 4</div><div class="t">vibe coding</div><div class="d">Copilot × LED / 話しかけ方</div></a>
+    <a href="#b5" style="--c:var(--r-org)"><div class="n">BLOCK 5</div><div class="t">サーボモーター</div><div class="d">Grove Servo / パルスと角度</div></a>
   </nav>
 
   <div class="prep">
@@ -1387,6 +1388,40 @@ basic.forever(function () {
     basic.pause(20)
 })</code></pre>
       </div>
+    </div>
+  </section>
+
+  <!-- ============ BLOCK 5 ============ -->
+  <section class="block" id="b5" style="--c:var(--r-org)" data-text="サーボ servo サーボモーター grove モーター p0 接続 パルス pulse 角度 90度 回転 servoSetPulse マイクロ秒 1500 300 ボタンa ボタンb ロゴ 長押し 初期位置 リセット 関数 makecode">
+    <div class="block-head">
+      <span class="block-num">BLOCK 5</span>
+      <span class="block-title">サーボモーターを動かす</span>
+      <span class="block-meta">Grove Servo × P0</span>
+    </div>
+
+    <div class="step">
+      <h3><span class="tag">SAMPLE</span>サーボモーターの使い方</h3>
+      <p>ボタンでサーボモーターを回すプログラムです。<b>Aボタンを押すと約90度回転</b>し、<b>Bボタンで元の位置に戻り</b>ます。</p>
+      <div class="note-inline" style="margin-top:0;margin-bottom:6px"><b>接続：</b>Grove サーボは <b>P0 ポート</b> に接続してください。</div>
+      <figure class="figure" style="margin-top:12px">
+        <img src="images/servo-connection.jpg" alt="micro:bit の拡張ボードの P0 ポートに Grove サーボモーターを接続し、電池ボックスをつないだ様子" loading="lazy">
+        <figcaption>接続例：拡張ボードの <b>P0 ポート</b>にサーボを接続します。動かすときは電池ボックスもつなぎましょう。</figcaption>
+      </figure>
+      <a class="lnk" href="https://makecode.microbit.org/S63148-89824-53064-09603" target="_blank" rel="noopener"><span class="ic">▶</span>MakeCode: サーボモーター基本</a>
+
+      <p style="margin-top:16px;font-weight:700;color:var(--accent-2);font-size:14.5px">プログラムをざっと解説</p>
+      <div class="explain">
+        <p style="margin:0 0 8px"><b>① パルスで角度を指定：</b>サーボモーターは、送られてくる<b>パルスの幅（マイクロ秒）</b>で角度が決まります。<code class="inline">pins.servoSetPulse(AnalogPin.P0, pulse)</code> が「P0 につないだサーボに <code class="inline">pulse</code> の幅のパルスを送る」命令です。このサンプルでは <code class="inline">1500</code>（初期位置）と <code class="inline">300</code>（約90度回転した位置）の2つの値を使い分けています。</p>
+        <p style="margin:0 0 8px"><b>② moveServo 関数：</b>「今の <code class="inline">pulse</code> の値をサーボに送る」処理を <code class="inline">moveServo()</code> という<b>関数</b>にまとめています。角度を変えたいときは、<code class="inline">pulse</code> に新しい値を入れてからこの関数を呼ぶだけです。</p>
+        <p style="margin:0 0 8px"><b>③ ボタンで動かす：</b>ボタンの種類ごとに <code class="inline">pulse</code> を切り替えて <code class="inline">moveServo()</code> を呼んでいます。</p>
+        <ul class="plain" style="margin:4px 0 8px">
+          <li><b>Aボタン</b> → <code class="inline">pushedPulse</code>（300）にして約90度回転</li>
+          <li><b>Bボタン</b> → <code class="inline">initialPulse</code>（1500）にして初期位置に戻る</li>
+          <li><b>ロゴを長押し</b> → 初期位置に戻る（リセット用）</li>
+        </ul>
+        <p style="margin:0"><b>④ 起動時：</b>プログラム開始時にも <code class="inline">pulse = 1500</code> にして <code class="inline">moveServo()</code> を呼び、必ず初期位置からスタートするようにしています。</p>
+      </div>
+      <div class="build"><b>やってみる →</b> <code class="inline">pushedPulse</code> の値（300）をいろいろ変えて書き込み直し、回る角度がどう変わるか試してみましょう。</div>
     </div>
   </section>
 
