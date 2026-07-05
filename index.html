@@ -365,7 +365,7 @@
   </div>
 
   <!-- ============ BLOCK 1 ============ -->
-  <section class="block" id="b1" style="--c:var(--r-red)" data-text="音 サウンド mp3 mp3player ver4 効果音 elevenlabs ai createai 加速度 機械学習 振った モーション 音が変わる サインアップ signup アカウント 作成 ログイン sound effects サウンドエフェクト ダウンロード mp3 microsd microSD 連番 0001 プレビュー ミュージック スキップ verify ATコマンド P0 配列 ランダム play volume stop タッチセンサ 振る やってみよう ボタンA 電池 電池ボックス 単四 単4 スライドスイッチ ON 音が鳴らない 注意 歯車 言語 母国語 設定 sanuki データ収集 学習 書き出し MakeCodeで編集 javascript タブ コピー ペースト 移植 createai code ブロックエディタ">
+  <section class="block" id="b1" style="--c:var(--r-red)" data-text="音 サウンド mp3 mp3player ver4 効果音 elevenlabs ai createai 加速度 機械学習 振った モーション 音が変わる サインアップ signup アカウント 作成 ログイン sound effects サウンドエフェクト ダウンロード mp3 microsd microSD 連番 0001 プレビュー ミュージック スキップ verify ATコマンド P0 配列 ランダム play volume stop タッチセンサ 振る やってみよう ボタンA 電池 電池ボックス 単四 単4 スライドスイッチ ON 音が鳴らない 注意 歯車 言語 母国語 設定 sanuki データ収集 学習 書き出し MakeCodeで編集 javascript タブ コピー ペースト 移植 createai code ブロックエディタ 複数 複数台 3台 同時 リダイレクト redirectTo selectPlayer playOn volumeOn P1 P2 切り替え ステレオ 左右">
     <div class="block-head">
       <span class="block-num">BLOCK 1</span>
       <span class="block-title">音を作る・鳴らす</span>
@@ -450,6 +450,89 @@
       <div class="tryit">
         <span class="lab">やってみよう 2</span>
         <div class="desc"><b>micro:bit を振ると音が鳴る</b>プログラムを組んで試してみよう。</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <h3><span class="tag">ADV</span>発展：mp3playerを複数台つなぐ</h3>
+      <p>mp3playerは <b>P0・P1・P2 の各ポートに1台ずつ、最大3台</b> 接続できます。micro:bit のシリアル通信は1系統しかありませんが、<b>「どのポートに命令を送るか」をプログラムで切り替える</b>ことで、3台を別々にコントロールできます。左右で違う音を鳴らしたり、3台同時に鳴らして音を重ねたりできます。</p>
+
+      <div class="callout warn" style="margin-top:14px">
+        <div class="h">⚠ 接続のポイント</div>
+        <b>1台目＝P0、2台目＝P1、3台目＝P2</b> のポートに接続します。台数が増えるぶん電池の消耗が早くなるので、<b>電池ボックスの電池は新しいものを</b>使いましょう（接続とONの確認は1台のときと同じです）。
+      </div>
+
+      <p style="margin:16px 0 0">下のコードを、mp3playerVer4 の <b>「JavaScript」タブの末尾に追記</b>してください。<code class="inline">selectPlayer</code> で送り先ポートを切り替えてから、既存の <code class="inline">play</code> / <code class="inline">volume</code> 関数をそのまま使う仕組みです。</p>
+
+      <div class="codewrap">
+        <div class="codebar">
+          <span class="fname">multi_mp3.js</span>
+          <span class="meta">JavaScriptタブの末尾に追記</span>
+          <button class="copybtn" id="copyMultiMp3">コードをコピー</button>
+        </div>
+        <pre><code id="multiMp3Code">// ===== 複数mp3player対応（mp3playerVer4に追記） =====
+let currentPlayer = 0
+
+// 使うプレーヤーを選ぶ（1〜3）
+function selectPlayer(n: number) {
+    if (n == currentPlayer) return
+    if (n == 1) {
+        serial.redirectTo(SerialPin.P0, SerialPin.P14, BaudRate.BaudRate115200)
+    } else if (n == 2) {
+        serial.redirectTo(SerialPin.P1, SerialPin.P15, BaudRate.BaudRate115200)
+    } else {
+        serial.redirectTo(SerialPin.P2, SerialPin.P16, BaudRate.BaudRate115200)
+    }
+    currentPlayer = n
+    basic.pause(50)  // 切替直後の安定待ち
+}
+
+// n番のプレーヤーでファイルを再生（既存のplay関数を利用）
+function playOn(n: number, file: string) {
+    selectPlayer(n)
+    play(file)
+}
+
+// n番のプレーヤーの音量を変更（既存のvolume関数を利用）
+function volumeOn(n: number, vol: number) {
+    selectPlayer(n)
+    volume(vol)
+}
+
+// ボタンの割り当て例
+input.onButtonPressed(Button.A, function () {
+    playOn(1, "0001.mp3")
+})
+input.onButtonPressed(Button.B, function () {
+    playOn(2, "0002.mp3")
+})
+input.onButtonPressed(Button.AB, function () {
+    playOn(3, "0003.mp3")
+})
+
+// 最初だけ：各プレーヤーの音量をそろえる
+volumeOn(1, 20)
+volumeOn(2, 20)
+volumeOn(3, 20)</code></pre>
+      </div>
+
+      <p style="margin-top:16px;font-weight:700;color:var(--accent-2);font-size:14.5px">プログラムをざっと解説</p>
+      <div class="explain">
+        <p style="margin:0 0 8px"><b>① selectPlayer 関数：</b><code class="inline">serial.redirectTo</code> で、シリアル通信の送り先を指定ポートに切り替えます。同じプレーヤーが選択済みなら何もしません（<code class="inline">currentPlayer</code> で記憶）。切り替えた直後は通信が不安定なので <code class="inline">pause(50)</code> で少しだけ待ちます。</p>
+        <p style="margin:0 0 8px"><b>② playOn / volumeOn 関数：</b>「プレーヤーを選ぶ → 既存の関数で命令を送る」をひとまとめにした関数です。<code class="inline">playOn(2, "0003.mp3")</code> のように<b>「何番のプレーヤーで」「どのファイルを」</b>と指定できます。</p>
+        <p style="margin:0"><b>③ 同時再生もOK：</b>命令は1台ずつ順番に送りますが、各プレーヤーは再生を始めたら勝手に鳴り続けます。なので <code class="inline">playOn(1,…)</code> → <code class="inline">playOn(2,…)</code> と続けて呼べば、<b>2台がほぼ同時に鳴っている状態</b>を作れます。</p>
+      </div>
+
+      <div class="note-inline" style="margin-top:12px"><b>ポイント：</b>既存サンプルの「最初だけ」にある <code class="inline">serial.redirectTo</code>（P0向けの初期化）は、この追記コードの <code class="inline">selectPlayer</code> が代わりを務めるので削除してOKです。もし音が鳴らない場合は、既存サンプルのP0の設定（TX/RXのピン番号・ボーレート）とこのコードのP0の行が一致しているか確認してください。</div>
+
+      <p style="margin-top:16px;font-weight:700;color:var(--accent);font-size:14.5px">やってみよう</p>
+      <div class="tryit">
+        <span class="lab">やってみよう 1</span>
+        <div class="desc"><b>2台のプレーヤーで「左右から違う音」が鳴る</b>ようにスピーカーを配置して試してみよう。（音の方向・距離も表現の一部！）</div>
+      </div>
+      <div class="tryit">
+        <span class="lab">やってみよう 2</span>
+        <div class="desc"><b>micro:bit を振る強さや傾きで、鳴るプレーヤーが切り替わる</b>プログラムを組んでみよう。（加速度センサー × 複数スピーカー）</div>
       </div>
     </div>
 
@@ -1575,6 +1658,27 @@ basic.forever(function () {
       copyButtonBtn.textContent='✓ コピーしました';
       copyButtonBtn.classList.add('done');
       setTimeout(()=>{copyButtonBtn.textContent=orig;copyButtonBtn.classList.remove('done');},2000);
+    });
+  }
+
+  // copy button (multi mp3) sample code
+  const copyMultiBtn=document.getElementById('copyMultiMp3');
+  if(copyMultiBtn){
+    copyMultiBtn.addEventListener('click',async()=>{
+      const code=document.getElementById('multiMp3Code').textContent;
+      try{
+        await navigator.clipboard.writeText(code);
+      }catch(e){
+        const ta=document.createElement('textarea');
+        ta.value=code;ta.style.position='fixed';ta.style.opacity='0';
+        document.body.appendChild(ta);ta.select();
+        try{document.execCommand('copy');}catch(_){}
+        document.body.removeChild(ta);
+      }
+      const orig=copyMultiBtn.textContent;
+      copyMultiBtn.textContent='✓ コピーしました';
+      copyMultiBtn.classList.add('done');
+      setTimeout(()=>{copyMultiBtn.textContent=orig;copyMultiBtn.classList.remove('done');},2000);
     });
   }
 
