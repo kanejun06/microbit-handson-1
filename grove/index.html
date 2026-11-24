@@ -224,7 +224,7 @@
 
   <div class="langbar" id="langbar">
     <span class="lbl">Language</span>
-    <a class="ja" href="#" data-lang="ja">日本語</a>
+    <a class="ja" href="#" data-lang="ja" target="_blank" rel="noopener">日本語</a>
     <a href="#" data-lang="zh-CN" target="_blank" rel="noopener">简体中文</a>
     <a href="#" data-lang="zh-TW" target="_blank" rel="noopener">繁體中文</a>
     <a href="#" data-lang="en" target="_blank" rel="noopener">English</a>
@@ -751,9 +751,12 @@
 <script>
   // language links via Google Translate (works on public URLs e.g. GitHub Pages)
   (function(){
-    const pageUrl=location.href.split('#')[0];
+    // Google Translate needs a public URL. Anywhere else (a preview, a local file) use the published address.
+    const PUBLIC_URL='https://kanejun06.github.io/microbit-handson-1/grove/';
+    const pageUrl=location.hostname.endsWith('github.io')?location.href.split('#')[0]:PUBLIC_URL;
     document.querySelectorAll('#langbar a').forEach(a=>{
       const lang=a.dataset.lang;
+      if(lang==='ja'&&location.hostname.endsWith('github.io'))a.removeAttribute('target');
       a.href = lang==='ja' ? pageUrl
         : 'https://translate.google.com/translate?sl=ja&tl='+lang+'&u='+encodeURIComponent(pageUrl);
     });
