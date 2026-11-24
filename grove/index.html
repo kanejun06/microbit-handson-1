@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>プロダクトデザイン実習Ⅱ｜micro:bit x Groveシステムトレーニング</title>
+<style>
+  :root{
+    --bg:#ffffff; --panel:#f7f8fa; --panel-2:#eef1f5; --ink:#1b2026; --ink-dim:#5b6473; --line:#dde2e8;
+    --accent:#b8860b; --accent-2:#0d8c7e; --warn:#d9662f; --link:#0a66c2;
+    --r-red:#e23b34; --r-org:#d9791a; --r-yel:#c79a12; --r-grn:#2c9c4a; --r-cyn:#119488; --r-blu:#3b6fd6; --r-pur:#7d54e0;
+    --code-bg:#f2f4f7;
+    --mono:"SF Mono","Consolas","Roboto Mono",ui-monospace,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic",sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.75;font-size:16px;
+    -webkit-font-smoothing:antialiased;
+    background-image:radial-gradient(circle at 12% -5%, rgba(255,211,77,.07), transparent 40%),
+      radial-gradient(circle at 90% 8%, rgba(90,209,196,.06), transparent 38%)}
+  .wrap{max-width:920px;margin:0 auto;padding:0 22px 120px}
+
+  /* ---- header ---- */
+  header.hero{padding:54px 0 30px;position:relative}
+  .rainbow{display:flex;height:6px;border-radius:99px;overflow:hidden;margin-bottom:30px;box-shadow:0 2px 20px rgba(0,0,0,.4)}
+  .rainbow span{flex:1}
+  .rainbow span:nth-child(1){background:var(--r-red)} .rainbow span:nth-child(2){background:var(--r-org)}
+  .rainbow span:nth-child(3){background:var(--r-yel)} .rainbow span:nth-child(4){background:var(--r-grn)}
+  .rainbow span:nth-child(5){background:var(--r-cyn)} .rainbow span:nth-child(6){background:var(--r-blu)}
+  .rainbow span:nth-child(7){background:var(--r-pur)}
+  .kicker{font-size:15px;font-weight:700;letter-spacing:.14em;color:var(--accent-2);margin-bottom:12px}
+  h1{font-size:clamp(28px,5.2vw,44px);line-height:1.2;letter-spacing:-.01em;font-weight:800}
+  h1 .em{color:var(--accent)}
+  .lede{color:var(--ink-dim);margin-top:18px;max-width:660px;font-size:17px}
+  .byline{color:var(--ink-dim);font-size:13.5px;margin-top:12px}
+
+  /* ---- toolbar ---- */
+  .toolbar{position:sticky;top:0;z-index:30;background:rgba(255,255,255,.88);backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);margin:24px -22px 0;padding:12px 22px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .search{flex:1;min-width:200px;position:relative}
+  .search input{width:100%;background:var(--panel);border:1px solid var(--line);color:var(--ink);
+    padding:10px 14px 10px 38px;border-radius:10px;font-family:var(--sans);font-size:14px}
+  .search input:focus{outline:none;border-color:var(--accent-2)}
+  .search svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);opacity:.5}
+  .toolbtn{background:var(--panel);border:1px solid var(--line);color:var(--ink-dim);
+    padding:9px 14px;border-radius:10px;font-size:13px;cursor:pointer;font-family:var(--sans);transition:.15s}
+  .toolbtn:hover{border-color:var(--accent-2);color:var(--ink)}
+
+  /* ---- block nav ---- */
+  nav.blocks{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:30px 0 10px}
+  @media(max-width:820px){nav.blocks{grid-template-columns:repeat(3,1fr)}}
+  @media(max-width:520px){nav.blocks{grid-template-columns:repeat(2,1fr)}}
+  nav.blocks a{display:block;text-decoration:none;background:var(--panel);border:1px solid var(--line);
+    border-radius:12px;padding:14px;transition:.15s}
+  nav.blocks a:hover{transform:translateY(-3px);border-color:var(--c)}
+  nav.blocks .n{font-family:var(--mono);font-size:11px;color:var(--c);font-weight:700}
+  nav.blocks .t{color:var(--ink);font-size:14px;font-weight:700;margin-top:5px}
+  nav.blocks .d{color:var(--ink-dim);font-size:11.5px;margin-top:3px}
+
+  /* project index chips */
+  .pindex{display:flex;flex-wrap:wrap;gap:7px;margin:14px 0 4px}
+  .pindex a{display:inline-flex;align-items:center;gap:7px;text-decoration:none;color:var(--ink);font-size:12.5px;
+    background:#fff;border:1px solid var(--line);border-radius:99px;padding:5px 12px 5px 6px;transition:.15s}
+  .pindex a:hover{border-color:var(--c);transform:translateY(-1px)}
+  .pindex .no{font-family:var(--mono);font-size:11px;font-weight:800;color:#fff;background:var(--c);
+    min-width:22px;height:22px;border-radius:99px;display:inline-flex;align-items:center;justify-content:center;padding:0 6px}
+
+  /* ---- section / block ---- */
+  section.block{margin-top:56px;scroll-margin-top:78px}
+  .block-head{display:flex;align-items:baseline;gap:14px;padding-bottom:14px;border-bottom:2px solid var(--c);margin-bottom:26px;flex-wrap:wrap}
+  .block-num{font-family:var(--mono);font-size:13px;font-weight:800;color:var(--bg);background:var(--c);
+    padding:4px 11px;border-radius:8px;flex-shrink:0}
+  .block-title{font-size:24px;font-weight:800;letter-spacing:-.01em}
+  .block-meta{margin-left:auto;font-family:var(--mono);font-size:11.5px;color:var(--ink-dim);flex-shrink:0}
+  .block-lead{font-size:15.5px;color:var(--ink);margin:0 0 22px}
+
+  /* ---- step card ---- */
+  .step{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 24px;margin-bottom:16px;
+    position:relative;overflow:hidden;scroll-margin-top:78px}
+  .step::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--c)}
+  .step h3{font-size:17px;font-weight:700;display:flex;align-items:center;gap:10px;margin-bottom:6px;flex-wrap:wrap}
+  .step .tag{font-family:var(--mono);font-size:10.5px;font-weight:700;padding:3px 8px;border-radius:6px;
+    background:var(--panel-2);color:var(--c);border:1px solid var(--line);letter-spacing:.05em;white-space:nowrap}
+  .step p{color:var(--ink-dim);font-size:14.5px;margin:4px 0}
+  .step .en{font-family:var(--mono);font-size:11.5px;color:var(--ink-dim);letter-spacing:.04em;margin:-2px 0 6px}
+  .sub-h{margin-top:16px;font-weight:700;color:var(--accent-2);font-size:14.5px}
+  .sub-h.try{color:var(--accent)}
+
+  /* difficulty stars */
+  .stars{margin-left:auto;font-size:14px;letter-spacing:2px;white-space:nowrap;
+    background:linear-gradient(90deg,var(--accent) calc(var(--n)/4*100%),#cfd5dd 0);
+    -webkit-background-clip:text;background-clip:text;color:transparent}
+  .stars-lbl{font-family:var(--mono);font-size:10.5px;color:var(--ink-dim);letter-spacing:.05em;margin-left:auto}
+  .stars-lbl + .stars{margin-left:0}
+
+  /* project two-column layout */
+  .proj-grid{display:grid;grid-template-columns:minmax(0,300px) minmax(0,1fr);gap:20px;margin-top:12px;align-items:start}
+  @media(max-width:680px){.proj-grid{grid-template-columns:1fr}}
+  .proj-grid .figure{margin:0;background:#fff}
+  .proj-grid .sub-h:first-child{margin-top:0}
+  .port{font-family:var(--mono);font-size:12px;font-weight:700;color:#fff;background:#2c4a8c;padding:1px 8px;border-radius:99px;white-space:nowrap}
+
+  /* link button */
+  .lnk{display:inline-flex;align-items:center;gap:8px;text-decoration:none;background:#fff;
+    border:1.5px solid var(--link);color:var(--link);padding:9px 15px;border-radius:10px;font-size:13.5px;
+    font-family:var(--mono);font-weight:600;margin:6px 8px 2px 0;transition:.15s;word-break:break-all;
+    cursor:pointer;box-shadow:0 1px 2px rgba(16,40,80,.10)}
+  .lnk::after{content:"↗";font-family:var(--sans);font-size:12px;font-weight:700;opacity:.65;margin-left:1px}
+  .lnk:hover{background:#eef4fc;box-shadow:0 4px 12px rgba(16,40,80,.16);transform:translateY(-1px)}
+  .lnk .ic{flex-shrink:0;opacity:.9}
+
+  /* code / lists */
+  code.inline{font-family:var(--mono);background:var(--code-bg);padding:2px 7px;border-radius:5px;font-size:13px;color:var(--accent-2);border:1px solid var(--line)}
+  ol.steps{margin:8px 0 4px;padding-left:22px}
+  ol.steps li{margin:5px 0;font-size:14.5px}
+  ol.steps li .sub{display:block;color:var(--ink-dim);font-size:13px;margin-top:3px}
+  ul.plain{list-style:none;padding:0;margin:6px 0}
+  ul.plain li{padding-left:20px;position:relative;font-size:14.5px;margin:4px 0}
+  ul.plain li::before{content:"▸";position:absolute;left:0;color:var(--c)}
+
+  /* copyable field */
+  .copyfield{display:flex;align-items:stretch;gap:0;margin:8px 0;border:1px solid var(--line);border-radius:9px;overflow:hidden;background:var(--code-bg)}
+  .copyfield code{flex:1;font-family:var(--mono);font-size:12.5px;color:var(--accent-2);padding:10px 13px;
+    overflow-x:auto;white-space:nowrap;display:flex;align-items:center}
+  .copyfield button{background:var(--panel-2);border:none;border-left:1px solid var(--line);color:var(--ink);
+    padding:0 15px;font-family:var(--sans);font-size:12.5px;font-weight:700;cursor:pointer;flex-shrink:0;transition:.15s}
+  .copyfield button:hover{background:#e2e7ee;color:var(--accent-2)}
+  .copyfield button.done{color:var(--accent-2)}
+
+  .note-inline{font-size:12.5px;color:var(--ink-dim);background:rgba(127,209,255,.06);border:1px solid rgba(127,209,255,.25);
+    border-radius:8px;padding:9px 13px;margin-top:8px}
+  .note-inline b{color:var(--link)}
+  .note-inline a{color:var(--link)}
+
+  /* callouts */
+  .callout{border-radius:11px;padding:14px 18px;margin:12px 0;font-size:14px}
+  .callout.warn{background:rgba(255,138,91,.09);border:1px solid rgba(255,138,91,.4)}
+  .callout.warn b{color:var(--warn)}
+  .callout .h{font-weight:800;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+
+  /* figures */
+  .figure{margin:12px 0;border:1px solid var(--line);border-radius:11px;overflow:hidden;background:var(--code-bg)}
+  .figure img{display:block;width:100%;height:auto}
+  .figure figcaption{font-size:12.5px;color:var(--ink-dim);padding:8px 14px;border-top:1px solid var(--line);background:var(--panel-2)}
+  .figure.tall img{max-height:520px;width:auto;max-width:100%;margin:0 auto}
+  .figure.tall{display:flex;flex-direction:column;align-items:center}
+  .figure.tall figcaption{width:100%}
+  /* block-program screenshots: white ground, natural size, sideways scroll when wide */
+  .figure.code{background:#fff}
+  .figure.code .scroller{overflow-x:auto;padding:14px 16px}
+  .figure.code img{width:var(--w,100%);max-width:none}
+  @media(max-width:680px){.figure.code:not(.wide) img{width:100%;max-width:var(--w,100%)}}
+  .figure.shot{background:#fff;max-width:var(--w,560px)}
+
+  /* program explanation */
+  .explain{background:var(--panel-2);border:1px solid var(--line);border-radius:11px;padding:14px 18px;margin:12px 0;font-size:14.5px;line-height:1.75}
+  .explain b{color:var(--ink)}
+  .explain p{color:var(--ink);margin:0 0 8px}
+  .explain p:last-child{margin-bottom:0}
+  .explain code.inline{font-size:12.5px}
+
+  /* try-it */
+  .tryit{background:rgba(255,211,77,.08);border:1px solid rgba(255,211,77,.4);border-radius:11px;
+    padding:13px 16px;margin:10px 0;display:flex;gap:13px;align-items:flex-start}
+  .tryit .lab{font-family:var(--mono);font-weight:800;font-size:12px;color:var(--bg);background:var(--accent);
+    padding:4px 10px;border-radius:7px;flex-shrink:0;white-space:nowrap}
+  .tryit .desc{font-size:14.5px;line-height:1.65}
+  .tryit .desc b{color:var(--accent)}
+  @media(max-width:520px){.tryit{flex-direction:column;gap:8px}}
+
+  /* hint accordion (where to find the blocks) */
+  details.hint{background:rgba(127,169,255,.07);border:1px solid rgba(127,169,255,.35);border-radius:11px;margin-top:12px;overflow:hidden}
+  details.hint summary{cursor:pointer;padding:12px 18px;font-weight:700;font-size:14px;color:var(--link);
+    list-style:none;display:flex;align-items:center;gap:9px;user-select:none}
+  details.hint summary::-webkit-details-marker{display:none}
+  details.hint summary .chev{margin-left:auto;transition:.2s}
+  details.hint[open] summary .chev{transform:rotate(90deg)}
+  details.hint .body{padding:0 18px 16px;font-size:14px;color:var(--ink-dim)}
+  details.hint .body .figure{margin:8px 0 0}
+
+  /* kit parts */
+  .parts{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:14px}
+  @media(max-width:620px){.parts{grid-template-columns:1fr}}
+  .part{display:flex;gap:12px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:11px;padding:10px 12px}
+  .part img{width:74px;height:62px;object-fit:contain;flex-shrink:0}
+  .part .pn{font-family:var(--mono);font-size:11px;font-weight:800;color:var(--c)}
+  .part .pt{font-weight:700;font-size:14px;line-height:1.4}
+  .part .pd{font-size:12.5px;color:var(--ink-dim);line-height:1.55;margin-top:2px}
+
+  /* prep banner */
+  .prep{background:linear-gradient(135deg,rgba(255,211,77,.13),rgba(255,138,91,.10));
+    border:1px solid var(--accent);border-radius:14px;padding:20px 24px;margin:28px 0}
+  .prep h3{color:var(--accent);font-size:16px;display:flex;align-items:center;gap:9px;margin-bottom:8px}
+  .prep p{font-size:14.5px;color:var(--ink)}
+  .prep ul{margin:8px 0 0;padding-left:20px}
+  .prep li{font-size:14px;margin:4px 0}
+
+  footer{margin-top:70px;padding-top:24px;border-top:1px solid var(--line);color:var(--ink-dim);font-size:13px;text-align:center}
+  footer .credit{font-size:11.5px;margin-top:10px}
+  .hidden{display:none !important}
+
+  /* language bar (Google Translate) */
+  .langbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;background:var(--panel);border:1px solid var(--line);
+    border-radius:12px;margin:18px 0 -10px;padding:10px 16px}
+  .langbar .lbl{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-dim);margin-right:2px}
+  .langbar a{background:var(--panel-2);border:1px solid var(--line);color:var(--ink);text-decoration:none;
+    padding:6px 13px;border-radius:9px;font-size:13px;font-weight:600;transition:.15s}
+  .langbar a:hover{border-color:var(--accent-2);color:var(--accent-2);transform:translateY(-1px)}
+  .langbar a.ja{border-color:var(--accent);color:var(--accent)}
+  .langbar .note{font-size:11.5px;color:var(--ink-dim);margin-left:auto}
+  @media(max-width:560px){.langbar .note{display:none}}
+
+  @media print{
+    body{background:#fff;color:#000}
+    .toolbar,nav.blocks,.pindex,.langbar{display:none}
+    .step{break-inside:avoid}
+    .lnk{color:#0050b3}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="langbar" id="langbar">
+    <span class="lbl">Language</span>
+    <a class="ja" href="#" data-lang="ja">日本語</a>
+    <a href="#" data-lang="zh-CN" target="_blank" rel="noopener">简体中文</a>
+    <a href="#" data-lang="zh-TW" target="_blank" rel="noopener">繁體中文</a>
+    <a href="#" data-lang="en" target="_blank" rel="noopener">English</a>
+    <a href="#" data-lang="ko" target="_blank" rel="noopener">한국어</a>
+    <a href="#" data-lang="vi" target="_blank" rel="noopener">Tiếng Việt</a>
+    <span class="note">↑ Google翻訳で表示 / Translated by Google</span>
+  </div>
+
+  <header class="hero">
+    <div class="rainbow"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <div class="kicker">プロダクトデザイン実習Ⅱ</div>
+    <h1>micro:bit x <span class="em">Groveシステム</span><br>トレーニング</h1>
+    <p class="lede">Groveシールドにセンサやアクチュエータをつないで、12の課題を順番に試していきます。最後に mp3 プレーヤーで音を鳴らします。自分のペースで進めていきましょう。</p>
+  </header>
+
+  <div class="toolbar">
+    <div class="search">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg>
+      <input id="q" type="search" placeholder="キーワードで絞り込み（例: 距離, LED, ジェスチャー, mp3）">
+    </div>
+    <button class="toolbtn" id="openAll">ヒントを全部開く</button>
+    <button class="toolbtn" id="printBtn">印刷 / PDF</button>
+  </div>
+
+  <nav class="blocks">
+    <a href="#b0" style="--c:var(--r-cyn)"><div class="n">BLOCK 0</div><div class="t">準備</div><div class="d">キットの中身 / Grove追加</div></a>
+    <a href="#b1" style="--c:var(--r-org)"><div class="n">BLOCK 1</div><div class="t">基本の入出力</div><div class="d">課題 1〜4 ・ LED / 音</div></a>
+    <a href="#b2" style="--c:var(--r-grn)"><div class="n">BLOCK 2</div><div class="t">センサと表示</div><div class="d">課題 5〜9 ・ 距離 / 表示</div></a>
+    <a href="#b3" style="--c:var(--r-blu)"><div class="n">BLOCK 3</div><div class="t">組み合わせて作る</div><div class="d">課題 10〜12 ・ 防犯 / 楽器</div></a>
+    <a href="#b4" style="--c:var(--r-red)"><div class="n">BLOCK 4</div><div class="t">mp3プレーヤー</div><div class="d">mp3playerVer4</div></a>
+  </nav>
+  <div class="pindex">
+    <a href="#p1" style="--c:var(--r-org)"><span class="no">1</span>LED</a>
+    <a href="#p2" style="--c:var(--r-org)"><span class="no">2</span>明るさグラフ</a>
+    <a href="#p3" style="--c:var(--r-org)"><span class="no">3</span>つまみグラフ</a>
+    <a href="#p4" style="--c:var(--r-org)"><span class="no">4</span>ブザー</a>
+    <a href="#p5" style="--c:var(--r-grn)"><span class="no">5</span>ジェスチャー</a>
+    <a href="#p6" style="--c:var(--r-grn)"><span class="no">6</span>スマートガード</a>
+    <a href="#p7" style="--c:var(--r-grn)"><span class="no">7</span>振った回数</a>
+    <a href="#p8" style="--c:var(--r-grn)"><span class="no">8</span>距離計</a>
+    <a href="#p9" style="--c:var(--r-grn)"><span class="no">9</span>レインボー</a>
+    <a href="#p10" style="--c:var(--r-blu)"><span class="no">10</span>モノ守り</a>
+    <a href="#p11" style="--c:var(--r-blu)"><span class="no">11</span>防犯システム</a>
+    <a href="#p12" style="--c:var(--r-blu)"><span class="no">12</span>魔法の演奏家</a>
+    <a href="#mp3" style="--c:var(--r-red)"><span class="no">♪</span>mp3プレーヤー</a>
+  </div>
+
+  <div class="prep">
+    <h3>⚡ はじめる前に</h3>
+    <p>どの課題も、進め方は同じです。</p>
+    <ul>
+      <li><b>つなぐ</b>：配線図のとおりに、モジュールをシールドのポートへ。micro:bit はシールドに差し込みます。</li>
+      <li><b>組む</b>：MakeCode で、画像と同じブロックを組んで micro:bit にダウンロード。</li>
+      <li><b>試す</b>：動いたら「やってみよう」で数字やブロックを変えて、動きの違いを確かめる。</li>
+    </ul>
+    <p style="margin-top:10px">モジュールを<b>2つ以上つなぐ課題</b>は電力を多く使います。動きが不安定なときは、<b>シールド側のUSBポート</b>にケーブルをつないで給電してください。</p>
+  </div>
+
+  <!-- ============ BLOCK 0 ============ -->
+  <section class="block" id="b0" style="--c:var(--r-cyn)">
+    <div class="block-head">
+      <span class="block-num">BLOCK 0</span>
+      <span class="block-title">準備</span>
+      <span class="block-meta">キットの中身 / Grove追加</span>
+    </div>
+
+    <div class="step" id="kit" data-text="キット 中身 部品 パーツ モジュール 一覧 シールド shield ロータリー スピーカー 超音波 明るさ ledテープ ジェスチャー 4桁 ディスプレイ 赤色led mp3 grove inventor kit">
+      <h3><span class="tag">KIT</span>キットの中身を確認する</h3>
+      <p>この実習で使うモジュールです。まず、手元にそろっているか確認しましょう。</p>
+      <div class="parts">
+        <div class="part"><img src="images/part-shield.jpg" alt="Grove シールド for micro:bit V2の写真" loading="lazy"><div><div class="pn">01</div><div class="pt">Grove シールド for micro:bit V2</div><div class="pd">micro:bit を差し込む土台。Groveのポート（P0／P1／P2／I2C）が使えるようになります。</div></div></div>
+        <div class="part"><img src="images/part-rotary.jpg" alt="ロータリーアングルセンサの写真" loading="lazy"><div><div class="pn">02</div><div class="pt">ロータリーアングルセンサ</div><div class="pd">つまみを回すと値が変わります（0〜300°）。音量や速さの調整に。</div></div></div>
+        <div class="part"><img src="images/part-speaker.jpg" alt="スピーカーの写真" loading="lazy"><div><div class="pn">03</div><div class="pt">スピーカー</div><div class="pd">音やメロディを鳴らします。基板上のねじで音量を調整できます。</div></div></div>
+        <div class="part"><img src="images/part-ultrasonic.jpg" alt="超音波距離センサの写真" loading="lazy"><div><div class="pn">04</div><div class="pt">超音波距離センサ</div><div class="pd">超音波がはね返るまでの時間から、物までの距離を測ります。</div></div></div>
+        <div class="part"><img src="images/part-light.jpg" alt="明るさセンサの写真" loading="lazy"><div><div class="pn">05</div><div class="pt">明るさセンサ</div><div class="pd">まわりの明るさで値が変わります。明るいほど値が大きくなります。</div></div></div>
+        <div class="part"><img src="images/part-ledstrip.jpg" alt="LEDテープ（WS2812・30灯）の写真" loading="lazy"><div><div class="pn">06</div><div class="pt">LEDテープ（WS2812・30灯）</div><div class="pd">1灯ずつ色を変えられるフルカラーLED。防水タイプです。</div></div></div>
+        <div class="part"><img src="images/part-gesture.jpg" alt="ジェスチャーセンサの写真" loading="lazy"><div><div class="pn">07</div><div class="pt">ジェスチャーセンサ</div><div class="pd">上下左右・前後・時計回り・反時計回り・ウェーブの9種類の手の動きを見分けます。</div></div></div>
+        <div class="part"><img src="images/part-4digit.jpg" alt="4桁ディスプレイの写真" loading="lazy"><div><div class="pn">08</div><div class="pt">4桁ディスプレイ</div><div class="pd">数字を表示します。時間・距離・センサの値の表示に。</div></div></div>
+        <div class="part"><img src="images/part-redled.jpg" alt="赤色LEDの写真" loading="lazy"><div><div class="pn">09</div><div class="pt">赤色LED</div><div class="pd">シンプルな赤色LED。基板上の半固定抵抗で最大の明るさを調整できます。</div></div></div>
+        <div class="part"><img src="images/part-mp3player.jpg" alt="mp3playerVer4の写真" loading="lazy"><div><div class="pn">10</div><div class="pt">mp3playerVer4</div><div class="pd">microSD に入れた音声ファイル（mp3 / wav）を再生します。（BLOCK 4 で使います）</div></div></div>
+      </div>
+    </div>
+
+    <div class="step" id="grove" data-text="grove 追加 拡張機能 extension makecode 検索 neopixel pxt-grove ライブラリ インストール 準備">
+      <h3><span class="tag">SETUP</span>Grove追加の方法</h3>
+      <p>Groveモジュール用のブロックは、MakeCode の<b>拡張機能</b>として追加します。新しいプロジェクトを作るたびに、最初にこの操作をしてください。</p>
+      <a class="lnk" href="https://makecode.microbit.org/" target="_blank" rel="noopener"><span class="ic">▶</span>MakeCode を開く</a>
+      <ol class="steps" style="margin-top:12px">
+        <li>拡張機能を選択<span class="sub">ブロック一覧のいちばん下にあります。</span>
+          <figure class="figure shot" style="--w:360px"><img src="images/grove-ext-menu.jpg" alt="MakeCodeのブロック一覧の下にある「拡張機能」" loading="lazy"></figure></li>
+        <li>検索窓に「grove」と入力</li>
+        <li>一番左の検索結果をクリックする
+          <figure class="figure shot" style="--w:640px"><img src="images/grove-ext-search.jpg" alt="拡張機能の検索窓に grove と入力した画面。一番左に grove が表示されている" loading="lazy"></figure></li>
+        <li>「Grove」「Neopixel」が追加される！
+          <figure class="figure shot" style="--w:360px"><img src="images/grove-added.jpg" alt="ブロック一覧に Grove と Neopixel が追加された様子" loading="lazy"></figure></li>
+      </ol>
+      <div class="note-inline"><b>検索で出てこないときは：</b>検索窓に下のURLを貼り付けても追加できます。
+        <div class="copyfield"><code id="groveUrl">https://github.com/seeed-studio/pxt-grove</code><button id="copyGroveUrl">コピー</button></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ BLOCK 1 ============ -->
+  <section class="block" id="b1" style="--c:var(--r-org)">
+    <div class="block-head">
+      <span class="block-num">BLOCK 1</span>
+      <span class="block-title">基本の入出力</span>
+      <span class="block-meta">LED / センサ / 音 ・ ★</span>
+    </div>
+    <p class="block-lead">モジュールを1つだけ「P0」につないで動かします。出力（LED・音）と入力（センサ）の基本をつかみましょう。</p>
+
+    <div class="step" id="p1" data-text="led 赤色 red デジタル 出力 digital write ボタン 点灯 消灯 入出力端子 p0 課題1 project 1 control the light">
+      <h3><span class="tag">PROJECT 1</span>デジタルwriteによるLEDのコントロール<span class="stars-lbl">難易度</span><span class="stars" style="--n:1" role="img" aria-label="難易度 1 / 4">★★★★</span></h3>
+      <p class="en">Control the Light</p>
+      <p>micro:bit の A・B ボタンで、赤色LEDを点けたり消したりします。Groveモジュールをつないで動かす、いちばん基本の形です。</p>
+      <div class="proj-grid">
+        <figure class="figure">
+          <img src="images/p01-wiring.jpg" alt="課題1「デジタルwriteによるLEDのコントロール」の配線図" loading="lazy">
+          <figcaption>配線図（ケーブルのラベルがつなぐポート）</figcaption>
+        </figure>
+        <div>
+          <p class="sub-h">使うもの</p>
+          <ul class="plain"><li>赤色LED → <span class="port">P0</span></li><li>Groveシールド</li><li>micro:bit</li></ul>
+          <p class="sub-h">手順</p>
+          <ol class="steps"><li>シールドの「P0」にLEDを繋ぐ</li><li>シールドにマイクロビットを接続</li><li>高度なブロック→入出力端子→デジタルで出力する</li><li>「A」「B」ボタンでコントロール</li></ol>
+        </div>
+      </div>
+      <p class="sub-h">プログラム</p>
+      <figure class="figure code" style="--w:420px"><div class="scroller"><img src="images/p01-blocks.png" alt="課題1のMakeCodeブロック" loading="lazy"></div><figcaption>この通りにブロックを組みます。</figcaption></figure>
+      <p class="sub-h">プログラムをざっと解説</p>
+      <div class="explain"><p><b>Aボタン</b>を押すと、端子 <b>P0</b> に <code class="inline">1</code>（ON）を出力してLEDが点灯します。</p><p><b>Bボタン</b>を押すと、同じ端子に <code class="inline">0</code>（OFF）を出力してLEDが消えます。「デジタル」は ON / OFF の2通りだけを扱う出し方です。</p></div>
+      <details class="hint"><summary>🔍 ブロックが見つからないときは<span class="chev">▶</span></summary>
+        <div class="body"><p>「デジタルで出力する」は <b>高度なブロック → 入出力端子</b> の中にあります。</p>
+          <figure class="figure shot" style="--w:520px"><img src="images/p01-toolbox.jpg" alt="課題1で使うブロックがあるツールボックスの画面" loading="lazy"></figure>
+        </div></details>
+      <p class="sub-h try">やってみよう</p>
+      <div class="tryit"><span class="lab">やってみよう</span><div class="desc"><b>Aボタンを1回押すと点灯、もう1回押すと消灯</b>するように作り変えてみよう。（ボタン1つで切り替える）</div></div>
+    </div>
+
+    <div class="step" id="p2" data-text="明るさ 光 light sensor 照度 棒グラフ グラフ アナログ analog 最大値 255 p0 課題2 project 2 sunshine micro:bit">
+      <h3><span class="tag">PROJECT 2</span>明るさセンサでグラフを表示する<span class="stars-lbl">難易度</span><span class="stars" style="--n:1" role="img" aria-label="難易度 1 / 4">★★★★</span></h3>
+      <p class="en">Sunshine micro:bit</p>
+      <p>明るさセンサが読み取った値を、micro:bit のLED画面に棒グラフで表示します。明るいほど、点灯するLEDが増えます。</p>
+      <div class="proj-grid">
+        <figure class="figure">
+          <img src="images/p02-wiring.jpg" alt="課題2「明るさセンサでグラフを表示する」の配線図" loading="lazy">
+          <figcaption>配線図（ケーブルのラベルがつなぐポート）</figcaption>
+        </figure>
+        <div>
+          <p class="sub-h">使うもの</p>
+          <ul class="plain"><li>明るさセンサ → <span class="port">P0</span></li><li>Groveシールド</li><li>micro:bit</li></ul>
+          <p class="sub-h">手順</p>
+          <ol class="steps"><li>シールドの「P0」に明るさセンサを繋ぐ</li><li>シールドにマイクロビットを接続</li><li>LED→棒グラフを表示する</li><li>明るさセンサを手で遮る</li></ol>
+        </div>
+      </div>
+      <p class="sub-h">プログラム</p>
+      <figure class="figure code" style="--w:620px"><div class="scroller"><img src="images/p02-blocks.png" alt="課題2のMakeCodeブロック" loading="lazy"></div><figcaption>この通りにブロックを組みます。</figcaption></figure>
+      <p class="sub-h">プログラムをざっと解説</p>
+      <div class="explain"><p>「ずっと」の中で、端子 <b>P0</b> の<b>アナログ値</b>（センサの値）を読み取り、そのまま <b>棒グラフ</b> として表示し続けます。</p><p><b>最大値 255</b> は「この値のときにLEDが全部点く」という基準です。10ミリ秒ごとに読み直しているので、手をかざすとすぐにグラフが変わります。</p></div>
+      <details class="hint"><summary>🔍 ブロックが見つからないときは<span class="chev">▶</span></summary>
+        <div class="body"><p>「棒グラフを表示する」は <b>LED</b> の中にあります。「アナログ値を読み取る」は 高度なブロック → 入出力端子 です。</p>
+          <figure class="figure shot" style="--w:440px"><img src="images/p02-toolbox.jpg" alt="課題2で使うブロックがあるツールボックスの画面" loading="lazy"></figure>
+        </div></details>
+      <p class="sub-h try">やってみよう</p>
+      <div class="tryit"><span class="lab">やってみよう</span><div class="desc"><b>最大値を 255 から別の数字に</b>変えて、グラフの動きがどう変わるか確かめてみよう。</div></div>
+    </div>
+
+    <div class="step" id="p3" data-text="ロータリー アングル rotary angle つまみ ボリューム 可変抵抗 棒グラフ アナログ 1023 p0 課題3 project 3 led bar control">
+      <h3><span class="tag">PROJECT 3</span>ロータリーアングルセンサでグラフを表示する<span class="stars-lbl">難易度</span><span class="stars" style="--n:1" role="img" aria-label="難易度 1 / 4">★★★★</span></h3>
+      <p class="en">LED Bar Control</p>
+      <p>つまみを回した量を、micro:bit のLED画面に棒グラフで表示します。回すほど、点灯するLEDが増えたり減ったりします。</p>
+      <div class="proj-grid">
+        <figure class="figure">
+          <img src="images/p03-wiring.jpg" alt="課題3「ロータリーアングルセンサでグラフを表示する」の配線図" loading="lazy">
+          <figcaption>配線図（ケーブルのラベルがつなぐポート）</figcaption>
+        </figure>
+        <div>
+          <p class="sub-h">使うもの</p>
+          <ul class="plain"><li>ロータリーアングルセンサ → <span class="port">P0</span></li><li>Groveシールド</li><li>micro:bit</li></ul>
+          <p class="sub-h">手順</p>
+          <ol class="steps"><li>シールドの「P0」にセンサを繋ぐ</li><li>シールドにマイクロビットを接続</li><li>LED→棒グラフを表示する</li><li>センサをひねってLEDの動作を確認してみる</li></ol>
+        </div>
+      </div>
+      <p class="sub-h">プログラム</p>
+      <figure class="figure code" style="--w:620px"><div class="scroller"><img src="images/p03-blocks.png" alt="課題3のMakeCodeブロック" loading="lazy"></div><figcaption>この通りにブロックを組みます。</figcaption></figure>
+      <p class="sub-h">プログラムをざっと解説</p>
+      <div class="explain"><p>プログラムの形は課題2と同じで、<b>最大値だけが 1023</b> になっています。</p><p>アナログ値は <b>0〜1023</b> の範囲で読み取れます。つまみを端から端まで回すとこの範囲をすべて使うので、最大値を 1023 にするとグラフ全体が使えます。</p></div>
+      <p class="sub-h try">やってみよう</p>
+      <div class="tryit"><span class="lab">やってみよう</span><div class="desc"><b>最大値を 1023 から別の数字に</b>変えてみよう。課題2（最大値255）と比べて、動きに違いはあるかな？</div></div>
+    </div>
+
+    <div class="step" id="p4" data-text="スピーカー speaker ブザー 音 音楽 メロディ トーン music ド ダダダム p0 p1 課題4 project 4 music player">
+      <h3><span class="tag">PROJECT 4</span>ブザーで音を出力する<span class="stars-lbl">難易度</span><span class="stars" style="--n:1" role="img" aria-label="難易度 1 / 4">★★★★</span></h3>
+      <p class="en">Music Player</p>
+      <p>micro:bit の A・B ボタンで、スピーカーから音やメロディを鳴らします。</p>
+      <div class="proj-grid">
+        <figure class="figure">
+          <img src="images/p04-wiring.jpg" alt="課題4「ブザーで音を出力する」の配線図" loading="lazy">
+          <figcaption>配線図（ケーブルのラベルがつなぐポート）</figcaption>
+        </figure>
+        <div>
+          <p class="sub-h">使うもの</p>
+          <ul class="plain"><li>スピーカー → <span class="port">P0</span></li><li>Groveシールド</li><li>micro:bit</li></ul>
+          <p class="sub-h">手順</p>
+          <ol class="steps"><li>シールドの「P0」にスピーカーを繋ぐ</li><li>シールドにマイクロビットを接続</li><li>プログラムを組んで音を鳴らす</li><li>「P1」にセンサを接続して音をコントロールしてみる</li></ol>
+        </div>
+      </div>
+      <p class="sub-h">プログラム</p>
+      <figure class="figure code" style="--w:760px"><div class="scroller"><img src="images/p04-blocks.png" alt="課題4のMakeCodeブロック" loading="lazy"></div><figcaption>この通りにブロックを組みます。</figcaption></figure>
+      <p class="sub-h">プログラムをざっと解説</p>
+      <div class="explain"><p><b>Aボタン</b>を押すと「真ん中のド」を1拍ぶん鳴らします。「終わるまで」なので、鳴り終わってから次に進みます。</p><p><b>Bボタン</b>を押すと、あらかじめ用意されたメロディ「ダダダム」を1回だけ再生します。「バックグラウンドで」は、鳴らしながら他の処理も進められる設定です。</p></div>
+      <details class="hint"><summary>🔍 ブロックが見つからないときは<span class="chev">▶</span></summary>
+        <div class="body"><p>音のブロックは <b>音楽</b> の中にあります（メロディ／トーン）。</p>
+          <figure class="figure shot" style="--w:620px"><img src="images/p04-toolbox.jpg" alt="課題4で使うブロックがあるツールボックスの画面" loading="lazy"></figure>
+        </div></details>
+      <p class="sub-h try">やってみよう</p>
+      <div class="tryit"><span class="lab">やってみよう 1</span><div class="desc"><b>「ボタン A+B が押されたとき」</b>を使って、ほかの音やメロディも鳴らしてみよう。</div></div>
+      <div class="tryit"><span class="lab">やってみよう 2</span><div class="desc"><b>「P1」につないだセンサの値で音が変わる</b>ようにしてみよう。（例：つまみを回すと音の高さが変わる）</div></div>
+    </div>
+  </section>
+
+  <!-- ============ BLOCK 2 ============ -->
+  <section class="block" id="b2" style="--c:var(--r-grn)">
+    <div class="block-head">
+      <span class="block-num">BLOCK 2</span>
+      <span class="block-title">センサと表示</span>
+      <span class="block-meta">ジェスチャー / 距離 / ディスプレイ ・ ★〜★★</span>
+    </div>
+    <p class="block-lead">Grove拡張機能のブロックを使います。後半は、センサと表示器の2つを組み合わせます。</p>
+
+    <div class="step" id="p5" data-text="ジェスチャー gesture 手 右 左 時計回り 矢印 アイコン i2c grove 課題5 project 5 gesture recognition">
+      <h3><span class="tag">PROJECT 5</span>ジェスチャーコントロール<span class="stars-lbl">難易度</span><span class="stars" style="--n:1.5" role="img" aria-label="難易度 1.5 / 4">★★★★</span></h3>
+      <p class="en">Gesture Recognition</p>
+      <p>ジェスチャーセンサは、センサの上で動かした手の向き（9種類）を見分けられます。動きに合わせて、micro:bit に矢印やアイコンを表示します。</p>
+      <div class="proj-grid">
+        <figure class="figure">
+          <img src="images/p05-wiring.jpg" alt="課題5「ジェスチャーコントロール」の配線図" loading="lazy">
+          <figcaption>配線図（ケーブルのラベルがつなぐポート）</figcaption>
+        </figure>
+        <div>
+          <p class="sub-h">使うもの</p>
+          <ul class="plain"><li>ジェスチャーセンサ → <span class="port">I2C</span></li><li>Groveシールド</li><li>micro:bit</li></ul>
+          <p class="sub-h">手順</p>
+          <ol class="steps"><li>シールドの「I2C」にジェスチャーセンサを繋ぐ</li><li>シールドにマイクロビットを接続</li><li>センサ上で右や左に手を動かしてみる</li></ol>
+        </div>
+      </div>
+      <p class="sub-h">プログラム</p>
+      <figure class="figure code" style="--w:760px"><div class="scroller"><img src="images/p05-blocks.png" alt="課題5のMakeCodeブロック" loading="lazy"></div><figcaption>この通りにブロックを組みます。</figcaption></figure>
+      <p class="sub-h">プログラムをざっと解説</p>
+      <div class="explain"><p><b>「右に ジェスチャーしたとき」</b>は右向きの矢印、<b>「左に」</b>は左向きの矢印をLED画面に表示します。</p><p><b>「時計回りに」</b>手を回すとアイコンを表示します。どれも 200ミリ秒 だけ表示してから「表示を消す」で画面を消しています。</p></div>
+      <details class="hint"><summary>🔍 ブロックが見つからないときは<span class="chev">▶</span></summary>
+        <div class="body"><p>ジェスチャーのブロックは、拡張機能で追加した <b>Grove</b> の中（Gesture）にあります。</p>
+          <figure class="figure shot" style="--w:620px"><img src="images/p05-toolbox.jpg" alt="課題5で使うブロックがあるツールボックスの画面" loading="lazy"></figure>
+        </div></details>
+      <p class="sub-h try">やってみよう</p>
+      <div class="tryit"><span class="lab">やってみよう</span><div class="desc"><b>上・下・反時計回りなど、ほかのジェスチャー</b>にも別のアイコンや文字を割り当ててみよう。</div></div>
+    </div>
+
+    <div class="step" id="p6" data-text="超音波 距離 ultrasonic ranger 距離センサ スマートガード 20cm シリアル通信 アイコン もし なら p0 usb 給電 課題6 project 6 smart guard">
+      <h3><span class="tag">PROJECT 6</span>スマートガード<span class="stars-lbl">難易度</span><span class="stars" style="--n:1.5" role="img" aria-label="難易度 1.5 / 4">★★★★</span></h3>
+      <p class="en">Smart Guard</p>
+      <p>超音波距離センサは、物までの距離を測れます。何かが近づきすぎたら micro:bit にアイコンを表示する「見張り番」をつくります。</p>
+      <div class="proj-grid">
+        <figure class="figure">
+          <img src="images/p06-wiring.jpg" alt="課題6「スマートガード」の配線図" loading="lazy">
+          <figcaption>配線図（ケーブルのラベルがつなぐポート）</figcaption>
+        </figure>
+        <div>
+          <p class="sub-h">使うもの</p>
+          <ul class="plain"><li>超音波距離センサ → <span class="port">P0</span></li><li>Groveシールド</li><li>micro:bit</li></ul>
+          <p class="sub-h">手順</p>
+          <ol class="steps"><li>シールドの「P0」に距離センサを繋ぐ</li><li>シールドにマイクロビットを接続</li><li>センサの上に手をかざし、距離を変えてみる</li></ol>
+        </div>
+      </div>
+      <div class="callout warn"><div class="h">⚠ シールドのUSBポートから給電する</div>超音波距離センサは電力を多く使います。<b>Groveシールド側のUSBポート</b>にケーブルをつないで給電してください（配線図の「!」マークの位置）。</div>
+      <p class="sub-h">プログラム</p>
+      <figure class="figure code" style="--w:760px"><div class="scroller"><img src="images/p06-blocks.png" alt="課題6のMakeCodeブロック" loading="lazy"></div><figcaption>この通りにブロックを組みます。</figcaption></figure>
+      <p class="sub-h">プログラムをざっと解説</p>
+      <div class="explain"><p>「ずっと」の中で距離（cm）を読み取り、<b>20cm より近い</b>ときだけアイコンを表示します。離れると「でなければ」に進んで表示が消えます。</p><p>最後の <b>「シリアル通信 1行書き出す」</b> は、読み取った距離をPCに送る命令です。MakeCode の「コンソールを表示」で数値の変化を確認できます。</p></div>
+      <details class="hint"><summary>🔍 ブロックが見つからないときは<span class="chev">▶</span></summary>
+        <div class="body"><p>距離センサのブロックは <b>Grove</b> の中（Ultrasonic）にあります。<b>「距離(cm)を読み取る」</b>を使います。</p>
+          <figure class="figure shot" style="--w:620px"><img src="images/p06-toolbox.jpg" alt="課題6で使うブロックがあるツールボックスの画面" loading="lazy"></figure>
+        </div></details>
+      <p class="sub-h try">やってみよう</p>
+      <div class="tryit"><span class="lab">やってみよう</span><div class="desc"><b>反応する距離（20cm）やアイコン</b>を変えてみよう。大事なものの前に置いて、見張り番にしてみよう。</div></div>
+    </div>
+
+    <div class="step" id="p7" data-text="4桁 ディスプレイ 4digit 4-digit display 振る ゆさぶられた shake カウンター 変数 shakecount p0 p14 課題7 project 7 shake counter">
+      <h3><span class="tag">PROJECT 7</span>振った回数カウンター<span class="stars-lbl">難易度</span><span class="stars" style="--n:1.5" role="img" aria-label="難易度 1.5 / 4">★★★★</span></h3>
+      <p class="en">Shake Counter</p>
+      <p>micro:bit を振るたびに、4桁ディスプレイの数字が 1 ずつ増えていきます。</p>
+      <div class="proj-grid">
+        <figure class="figure">
+          <img src="images/p07-wiring.jpg" alt="課題7「振った回数カウンター」の配線図" loading="lazy">
+          <figcaption>配線図（ケーブルのラベルがつなぐポート）</figcaption>
+        </figure>
+        <div>
+          <p class="sub-h">使うもの</p>
+          <ul class="plain"><li>4桁ディスプレイ → <span class="port">P0</span></li><li>Groveシールド</li><li>micro:bit</li></ul>
+          <p class="sub-h">手順</p>
+          <ol class="steps"><li>シールドの「P0」に4桁ディスプレイを繋ぐ</li><li>シールドにマイクロビットを接続</li><li>microbitを振って、カウンタを表示</li></ol>
+        </div>
+      </div>
+      <p class="sub-h">プログラム</p>
+      <figure class="figure code" style="--w:700px"><div class="scroller"><img src="images/p07-blocks.png" alt="課題7のMakeCodeブロック" loading="lazy"></div><figcaption>この通りにブロックを組みます。</figcaption></figure>
+      <p class="sub-h">プログラムをざっと解説</p>
+      <div class="explain"><p><b>「最初だけ」</b>で、端子 <b>P0 と P14</b> につないだ4桁ディスプレイを <code class="inline">4digit</code> という変数に入れ、明るさを 7 に設定します。Groveの「P0」ポートには P0 と P14 の2本の信号線が来ているので、両方を指定します。</p><p><b>「ゆさぶられたとき」</b>に、変数 <code class="inline">shakeCount</code> を 1 増やして、その数をディスプレイに表示します。</p></div>
+      <details class="hint"><summary>🔍 ブロックが見つからないときは<span class="chev">▶</span></summary>
+        <div class="body"><p>4桁ディスプレイのブロックは <b>Grove</b> の中（4-Digit）にあります。<code class="inline">shakeCount</code> は「変数」で自分で作ります。</p>
+          <figure class="figure shot" style="--w:620px"><img src="images/p07-toolbox.jpg" alt="課題7で使うブロックがあるツールボックスの画面" loading="lazy"></figure>
+        </div></details>
+      <p class="sub-h try">やってみよう</p>
+      <div class="tryit"><span class="lab">やってみよう</span><div class="desc"><b>1分間で何回振れるか</b>、友達と競争してみよう。</div></div>
+    </div>
+
+    <div class="step" id="p8" data-text="距離計 超音波 距離 ultrasonic meter 4桁 ディスプレイ 4digit cm p0 p1 p14 p15 usb 給電 課題8 project 8 ultrasonic meter">
+      <h3><span class="tag">PROJECT 8</span>距離計<span class="stars-lbl">難易度</span><span class="stars" style="--n:2" role="img" aria-label="難易度 2 / 4">★★★★</span></h3>
+      <p class="en">Ultrasonic Meter</p>
+      <p>超音波距離センサで測った距離（cm）を、4桁ディスプレイに数字で表示します。センサと表示器、2つのモジュールを組み合わせます。</p>
+      <div class="proj-grid">
+        <figure class="figure">
+          <img src="images/p08-wiring.jpg" alt="課題8「距離計」の配線図" loading="lazy">
+          <figcaption>配線図（ケーブルのラベルがつなぐポート）</figcaption>
+        </figure>
+        <div>
+          <p class="sub-h">使うもの</p>
+          <ul class="plain"><li>超音波距離センサ → <span class="port">P0</span></li><li>4桁ディスプレイ → <span class="port">P1</span></li><li>Groveシールド</li><li>micro:bit</li></ul>
+          <p class="sub-h">手順</p>
+          <ol class="steps"><li>シールドの「P0」に距離センサを繋ぐ</li><li>シールドの「P1」に4桁ディスプレイを繋ぐ</li><li>シールドにマイクロビットを接続</li><li>センサの上に手をかざし、距離を変えてみる</li></ol>
+        </div>
+      </div>
+      <div class="callout warn"><div class="h">⚠ シールドのUSBポートから給電する</div>超音波距離センサは電力を多く使います。<b>Groveシールド側のUSBポート</b>にケーブルをつないで給電してください（配線図の「!」マークの位置）。</div>
+      <p class="sub-h">プログラム</p>
+      <figure class="figure code wide" style="--w:790px"><div class="scroller"><img src="images/p08-blocks.png" alt="課題8のMakeCodeブロック" loading="lazy"></div><figcaption>この通りにブロックを組みます。（はみ出すときは横にスクロールできます）</figcaption></figure>
+      <div class="note-inline"><b>端子番号を確認：</b>プログラムの中の端子は、<b>実際につないだポートと同じ番号</b>にします。上の手順どおり「P0＝距離センサ／P1＝4桁ディスプレイ」とつないだ場合は、ディスプレイを <code class="inline">P1</code> と <code class="inline">P15</code>、距離センサを <code class="inline">P0</code> に合わせてください（画像のプログラムは逆の組み合わせになっています）。</div>
+      <p class="sub-h">プログラムをざっと解説</p>
+      <div class="explain"><p><b>「最初だけ」</b>で4桁ディスプレイを準備し、<b>「ずっと」</b>の中で距離（cm）を読み取って、そのままディスプレイに表示します。100ミリ秒ごとに表示が更新されます。</p></div>
+      <p class="sub-h try">やってみよう</p>
+      <div class="tryit"><span class="lab">やってみよう</span><div class="desc">この距離計で、<b>部屋の中のいろいろな距離</b>を測ってみよう。</div></div>
+    </div>
+
+    <div class="step" id="p9" data-text="ledテープ led strip ws2812 neopixel レインボー 虹 色相 マップ ロータリー つまみ strip p0 p1 課題9 project 9 rainbow on the desk">
+      <h3><span class="tag">PROJECT 9</span>LEDをレインボーに光らせる<span class="stars-lbl">難易度</span><span class="stars" style="--n:2" role="img" aria-label="難易度 2 / 4">★★★★</span></h3>
+      <p class="en">Rainbow on The Desk</p>
+      <p>30個のLEDが並んだLEDテープを虹色に光らせます。つまみを回すと、虹の色が流れるように変わります。</p>
+      <div class="proj-grid">
+        <figure class="figure">
+          <img src="images/p09-wiring.jpg" alt="課題9「LEDをレインボーに光らせる」の配線図" loading="lazy">
+          <figcaption>配線図（ケーブルのラベルがつなぐポート）</figcaption>
+        </figure>
+        <div>
+          <p class="sub-h">使うもの</p>
+          <ul class="plain"><li>ロータリーアングルセンサ → <span class="port">P0</span></li><li>LEDテープ（WS2812）→ <span class="port">P1</span></li><li>Groveシールド</li><li>micro:bit</li></ul>
+          <p class="sub-h">手順</p>
+          <ol class="steps"><li>シールドの「P0」にセンサを繋ぐ</li><li>シールドの「P1」にLEDを繋ぐ</li><li>シールドにマイクロビットを接続</li><li>センサをひねってLEDの変化を見る</li></ol>
+        </div>
+      </div>
+      <p class="sub-h">プログラム</p>
+      <figure class="figure code wide" style="--w:1500px"><div class="scroller"><img src="images/p09-blocks.png" alt="課題9のMakeCodeブロック" loading="lazy"></div><figcaption>この通りにブロックを組みます。（はみ出すときは横にスクロールできます）</figcaption></figure>
+      <p class="sub-h">プログラムをざっと解説</p>
+      <div class="explain"><p><b>「最初だけ」</b>で、端子 <b>P1</b> につないだ <b>30個</b> のLED（NeoPixel）を <code class="inline">strip</code> という変数に入れます。</p><p><b>「ずっと」</b>の中で、つまみの値（0〜1023）を <b>「数値をマップする」</b> で色相（0〜360）に変換し、色相 1 からその値までのレインボーパターンで点灯します。つまみを回すと虹の範囲が変わります。</p><p>グレーのブロックは<b>無効にしてある別の書き方</b>（つまみの値で全体を1色に光らせる例）で、このままでは実行されません。</p></div>
+      <details class="hint"><summary>🔍 ブロックが見つからないときは<span class="chev">▶</span></summary>
+        <div class="body"><p>LEDテープのブロックは、Groveと一緒に追加された <b>Neopixel</b> の中にあります。「数値をマップする」は 高度なブロック → 入出力端子 です。</p></div></details>
+      <p class="sub-h try">やってみよう</p>
+      <div class="tryit"><span class="lab">やってみよう 1</span><div class="desc"><b>LEDの数（30）</b>を変えて、光る範囲がどうなるか見てみよう。</div></div>
+      <div class="tryit"><span class="lab">やってみよう 2</span><div class="desc"><b>「数値をマップする」の数字</b>を変えて、虹がゆっくり流れるようにしてみよう。</div></div>
+    </div>
+  </section>
+
+  <!-- ============ BLOCK 3 ============ -->
+  <section class="block" id="b3" style="--c:var(--r-blu)">
+    <div class="block-head">
+      <span class="block-num">BLOCK 3</span>
+      <span class="block-title">組み合わせて作る</span>
+      <span class="block-meta">防犯 / 楽器 ・ ★★★〜★★★★</span>
+    </div>
+    <p class="block-lead">3つ以上のモジュールを組み合わせて、ひとつの「道具」として動くものをつくります。</p>
+
+    <div class="step" id="p10" data-text="バッグ モノ守り guardian 明るさ 光 light スピーカー 警報 アラーム led 点滅 lightvalue 音量 p0 p1 p2 課題10 project 10 guardians of the secrets in your bag">
+      <h3><span class="tag">PROJECT 10</span>バッグに入れたモノ守り<span class="stars-lbl">難易度</span><span class="stars" style="--n:3" role="img" aria-label="難易度 3 / 4">★★★★</span></h3>
+      <p class="en">Guardians of The Secrets in Your Bag</p>
+      <p>バッグや箱の中に入れておく「見張り番」です。誰かが開けて中が明るくなると、赤色LEDが点滅して警報音が鳴ります。</p>
+      <div class="proj-grid">
+        <figure class="figure">
+          <img src="images/p10-wiring.jpg" alt="課題10「バッグに入れたモノ守り」の配線図" loading="lazy">
+          <figcaption>配線図（ケーブルのラベルがつなぐポート）</figcaption>
+        </figure>
+        <div>
+          <p class="sub-h">使うもの</p>
+          <ul class="plain"><li>スピーカー → <span class="port">P0</span></li><li>明るさセンサ → <span class="port">P1</span></li><li>赤色LED → <span class="port">P2</span></li><li>Groveシールド</li><li>micro:bit</li></ul>
+          <p class="sub-h">手順</p>
+          <ol class="steps"><li>「P0」スピーカー「P1」明るさセンサ「P2」LED</li><li>シールドにマイクロビットを接続</li><li>明るさセンサを手で遮って反応を確認する</li></ol>
+        </div>
+      </div>
+      <p class="sub-h">プログラム</p>
+      <figure class="figure code" style="--w:640px"><div class="scroller"><img src="images/p10-blocks.png" alt="課題10のMakeCodeブロック" loading="lazy"></div><figcaption>この通りにブロックを組みます。</figcaption></figure>
+      <p class="sub-h">プログラムをざっと解説</p>
+      <div class="explain"><p><b>「最初だけ」</b>で音量を 70 に設定します。</p><p><b>「ずっと」</b>の中で、端子 <b>P1</b> の明るさを変数 <code class="inline">LightValue</code> に入れます。値が <b>100 以上（明るい）</b>なら、LED（P2）を点ける → 音を鳴らす → LEDを消す、をくり返して警報を出します。</p><p>暗いとき（でなければ）は、スピーカー（P0）とLED（P2）をどちらも 0 にして止めます。手で遮って暗くすると静かになるのはこのためです。</p></div>
+      <p class="sub-h try">やってみよう</p>
+      <div class="tryit"><span class="lab">やってみよう</span><div class="desc"><b>引き出しや箱</b>など、ほかの場所の見張り番にも使ってみよう。反応する明るさ（100）も、置く場所に合わせて調整しよう。</div></div>
+    </div>
+
+    <div class="step" id="p11" data-text="防犯 システム 部屋 guardian 超音波 距離 distance スピーカー 警報 アラーム led 点滅 くりかえし 60cm p0 p1 p2 usb 給電 課題11 project 11 guardians of the secrets in your room">
+      <h3><span class="tag">PROJECT 11</span>防犯システム<span class="stars-lbl">難易度</span><span class="stars" style="--n:3" role="img" aria-label="難易度 3 / 4">★★★★</span></h3>
+      <p class="en">Guardians of The Secrets in Your Room</p>
+      <p>部屋の入口を見張る防犯システムです。誰かが近づくと、赤色LEDが点滅して警報音が鳴ります。課題10の明るさセンサを、距離センサに置きかえた形です。</p>
+      <div class="proj-grid">
+        <figure class="figure">
+          <img src="images/p11-wiring.jpg" alt="課題11「防犯システム」の配線図" loading="lazy">
+          <figcaption>配線図（ケーブルのラベルがつなぐポート）</figcaption>
+        </figure>
+        <div>
+          <p class="sub-h">使うもの</p>
+          <ul class="plain"><li>スピーカー → <span class="port">P0</span></li><li>超音波距離センサ → <span class="port">P1</span></li><li>赤色LED → <span class="port">P2</span></li><li>Groveシールド</li><li>micro:bit</li></ul>
+          <p class="sub-h">手順</p>
+          <ol class="steps"><li>「P0」スピーカー「P1」距離センサ「P2」LED</li><li>シールドにマイクロビットを接続</li><li>距離センサを手で遮る、スマホの光を当てる</li></ol>
+        </div>
+      </div>
+      <div class="callout warn"><div class="h">⚠ シールドのUSBポートから給電する</div>超音波距離センサは電力を多く使います。<b>Groveシールド側のUSBポート</b>にケーブルをつないで給電してください（配線図の「!」マークの位置）。</div>
+      <p class="sub-h">プログラム</p>
+      <figure class="figure code" style="--w:620px"><div class="scroller"><img src="images/p11-blocks.png" alt="課題11のMakeCodeブロック" loading="lazy"></div><figcaption>この通りにブロックを組みます。</figcaption></figure>
+      <p class="sub-h">プログラムをざっと解説</p>
+      <div class="explain"><p><b>「ずっと」</b>の中で、端子 <b>P1</b> の距離（cm）を変数 <code class="inline">distance</code> に入れます。</p><p>距離が <b>60cm より近い</b>とき、<b>「くりかえし 4回」</b>で LED（P2）を点ける → 音を鳴らす → LEDを消す、を4回くり返します。</p></div>
+      <p class="sub-h try">やってみよう</p>
+      <div class="tryit"><span class="lab">やってみよう</span><div class="desc"><b>自分の部屋の入口</b>に置いて試してみよう。反応する距離（60cm）や、くりかえす回数も変えてみよう。</div></div>
+    </div>
+
+    <div class="step" id="p12" data-text="魔法の演奏家 magic musician 楽器 ジェスチャー gesture わに口 クリップ バナナ タッチ タップ メロディ スピーカー gnd i2c p0 p1 p2 課題12 project 12 magic musician">
+      <h3><span class="tag">PROJECT 12</span>魔法の演奏家<span class="stars-lbl">難易度</span><span class="stars" style="--n:4" role="img" aria-label="難易度 4 / 4">★★★★</span></h3>
+      <p class="en">Magic Musician</p>
+      <p>手のジェスチャーと、わに口クリップでつないだモノへのタッチで、メロディを鳴らす楽器をつくります。難易度は最高ですが、課題5ができていれば大丈夫です。</p>
+      <div class="proj-grid">
+        <figure class="figure">
+          <img src="images/p12-wiring.jpg" alt="課題12「魔法の演奏家」の配線図" loading="lazy">
+          <figcaption>配線図（ケーブルのラベルがつなぐポート）</figcaption>
+        </figure>
+        <div>
+          <p class="sub-h">使うもの</p>
+          <ul class="plain"><li>ジェスチャーセンサ → <span class="port">I2C</span></li><li>スピーカー → <span class="port">P0</span></li><li>わに口クリップ → <span class="port">P1</span> <span class="port">P2</span> <span class="port">GND</span></li><li>クリップで挟むモノ（金属がよい）</li><li>Groveシールド</li><li>micro:bit</li></ul>
+          <p class="sub-h">手順</p>
+          <ol class="steps"><li>「I2C」にジェスチャーセンサ「P0」にスピーカー</li><li>「P1」「P2」にわに口クリップ</li><li>シールドにマイクロビットを接続</li><li>クリップで挟んだ物体（金属がよい）に触れる<span class="sub">※反応が悪い場合は、GND端子を左手で触れ、右手でP1, P2に触れる</span></li></ol>
+        </div>
+      </div>
+      <p class="sub-h">プログラム</p>
+      <figure class="figure code" style="--w:560px"><div class="scroller"><img src="images/p12-blocks.png" alt="課題12のMakeCodeブロック" loading="lazy"></div><figcaption>この通りにブロックを組みます。</figcaption></figure>
+      <p class="sub-h">プログラムをざっと解説</p>
+      <div class="explain"><p><b>ジェスチャー</b>：手を「右に」動かすとメロディ「ダダダム」、「左に」動かすと「ジ・エンターテイナー」を鳴らします。</p><p><b>タッチ</b>：「端子 P1 が短くタップされたとき」に「ハッピーバースデー」、「端子 P2」で「ウェディング・マーチ」を鳴らします。クリップで挟んだモノに触ると、体を通して micro:bit がタッチを検知します。</p></div>
+      <p class="sub-h try">やってみよう</p>
+      <div class="tryit"><span class="lab">やってみよう</span><div class="desc"><b>クリップで挟むモノやジェスチャーを増やして</b>、鳴らせる音やメロディを増やしてみよう。友達とバンドを組んでみるのも◎。</div></div>
+    </div>
+  </section>
+
+  <!-- ============ BLOCK 4 ============ -->
+  <section class="block" id="b4" style="--c:var(--r-red)">
+    <div class="block-head">
+      <span class="block-num">BLOCK 4</span>
+      <span class="block-title">mp3プレーヤーで音を鳴らす</span>
+      <span class="block-meta">mp3playerVer4</span>
+    </div>
+    <p class="block-lead">ここからは、<b>音声ファイル（mp3 / wav）を再生できるモジュール</b>を使います。ブザーの音やメロディではなく、自分で用意した音（効果音・声・音楽）を鳴らせます。</p>
+
+    <div class="step" id="mp3" data-text="音 サウンド mp3 mp3player ver4 効果音 microsd microSD 連番 0001 ATコマンド P0 配列 ランダム play volume stop 打楽器 ドラム drum サンプル 音源 ダウンロード dropbox zip wav wave ウェーブ 拡張子 8文字 タッチセンサ 振る やってみよう ボタンA 電池 電池ボックス 単四 単4 スライドスイッチ ON 音が鳴らない 注意">
+      <h3><span class="tag">SAMPLE</span>mp3playerVer4 の使い方</h3>
+      <p>音声ファイルを鳴らすための基本モジュールを動かします。共有プロジェクトを開いて中身を確認しましょう。</p>
+      <a class="lnk" href="https://makecode.microbit.org/S71275-52762-09018-54777" target="_blank" rel="noopener"><span class="ic">▶</span>MakeCode: mp3playerVer4</a>
+
+      <div class="note-inline" style="margin-top:12px"><b>ポイント：</b>このモジュールは <b>mp3 と wav のどちらも</b>再生できます。音声ファイルは <code class="inline">0001.mp3</code>、<code class="inline">0002.mp3</code>…（wav なら <code class="inline">0001.wav</code>、<code class="inline">0002.wav</code>…）のように<b>連番のファイル名</b>で microSD に入れておきます。この番号が、プログラムから「1番の音」「2番の音」と呼び出すときの番号になります。ファイル名は<b>拡張子の前が8文字まで</b>です。</div>
+
+      <p class="sub-h">サンプル音源</p>
+      <p>鳴らす音をまだ用意していない人は、打楽器のサンプル音源をここからダウンロードして使えます。<b>中身は wav ファイル</b>です。</p>
+      <a class="lnk" href="https://www.dropbox.com/scl/fi/uni4omwac4btmtovjyln2/DrumSamples.zip?rlkey=76xljhghlmtij4qkdysfcexua&amp;e=1" target="_blank" rel="noopener"><span class="ic">⬇</span>打楽器サンプル音源（DrumSamples.zip）</a>
+      <ol class="steps" style="margin-top:10px">
+        <li>zip を展開して、使いたい音を選ぶ</li>
+        <li>ファイル名を <code class="inline">0001.wav</code>、<code class="inline">0002.wav</code>… のように連番に付け直して、microSD に入れる</li>
+        <li>プログラムの配列に入っているファイル名も、<code class="inline">0001.mp3</code> → <code class="inline">0001.wav</code> のように<b>拡張子を書き換える</b></li>
+      </ol>
+      <div class="callout warn"><div class="h">⚠ 拡張子まで一致させる</div>microSD のファイル名と、プログラムに書いたファイル名は、<b>拡張子（.mp3 / .wav）まで同じ</b>にします。ここが違うと音が鳴りません。</div>
+
+      <div class="callout warn" style="margin-top:16px">
+        <div class="h">⚠ 注意：電池ボックスを必ず接続！</div>
+        <b>mp3player を使うときは、単四電池3本が入る電池ボックスを micro:bit に接続しないと音が鳴りません！</b>電池ボックスの<b>スライドスイッチが「ON」</b>になっていることも併せて確認してください。
+        <figure class="figure" style="margin-top:12px">
+          <img src="images/mp3player-battery.jpg" alt="micro:bit に単四電池3本の電池ボックスと mp3player・スピーカーを接続した様子" loading="lazy">
+          <figcaption>単四電池3本の電池ボックス（右）を micro:bit に接続。スライドスイッチが「ON」になっているか確認しましょう。</figcaption>
+        </figure>
+      </div>
+
+      <p class="sub-h">プログラムをざっと解説</p>
+      <div class="explain">
+        <p>まず mp3player を <b>P0</b> に接続します。このマイコンは <b>「ATコマンド」</b> という命令文を受け付けるので、ATコマンドを送って <b>曲の再生・音量変更・停止</b> などを行う関数（<code class="inline">play</code> / <code class="inline">volume</code> / <code class="inline">stop</code>）をあらかじめ用意しておきます。</p>
+        <p>サンプルでは、配列に <code class="inline">0001.mp3</code> 〜 <code class="inline">0008.mp3</code> の8つのファイル名を保持しておき、<b>Aボタンを押すとその中からランダムに1つ選んで再生</b>します。microSD に入れた連番ファイルが、ここで呼び出されるわけです。</p>
+        <p><b>wav ファイルを鳴らすとき</b>は、この配列の中身を <code class="inline">0001.wav</code> 〜 のように書き換えます。</p>
+      </div>
+      <figure class="figure tall">
+        <img src="images/mp3player-blocks.jpg" alt="mp3playerVer4のMakeCodeブロック全体。最初だけ、ボタンA、各関数の定義" loading="lazy">
+        <figcaption>サンプルプログラムのブロック全体。配列・ATコマンドの関数・Aボタンでのランダム再生が見えます。</figcaption>
+      </figure>
+
+      <p class="sub-h try">やってみよう</p>
+      <div class="tryit">
+        <span class="lab">やってみよう 1</span>
+        <div class="desc"><b>ボタンやタッチセンサで「特定の音」が鳴る</b>ようにプログラムを組んで試してみよう。（ランダムではなく、決まった番号の音を鳴らす）</div>
+      </div>
+      <div class="tryit">
+        <span class="lab">やってみよう 2</span>
+        <div class="desc"><b>micro:bit を振ると音が鳴る</b>プログラムを組んで試してみよう。</div>
+      </div>
+
+      <div class="note-inline" style="margin-top:14px"><b>出典：</b>この項目は「micro:bit ハンズオン｜センサー・アクチュエータ実習」の「mp3playerVer4 の使い方」から引用し、wav ファイルとサンプル音源の説明を加えています。AIサービスでの効果音の作り方や、mp3player を複数台つなぐ方法は、元のページを見てください。<br>
+        <a href="https://kanejun06.github.io/microbit-handson-1/#b1" target="_blank" rel="noopener">https://kanejun06.github.io/microbit-handson-1/</a></div>
+    </div>
+  </section>
+
+  <p id="noresult" class="hidden" style="text-align:center;color:var(--ink-dim);margin-top:40px">該当する項目が見つかりませんでした。</p>
+
+  <footer>
+    プロダクトデザイン実習Ⅱ ／ micro:bit x Groveシステムトレーニング<br>
+    リンクが開かない場合はブラウザに直接URLを貼り付けてください。
+    <div class="credit">配線図・キット写真の出典：Seeed Studio「Grove Inventor Kit for micro:bit Project Guide」</div>
+  </footer>
+
+</div>
+
+<script>
+  // language links via Google Translate (works on public URLs e.g. GitHub Pages)
+  (function(){
+    const pageUrl=location.href.split('#')[0];
+    document.querySelectorAll('#langbar a').forEach(a=>{
+      const lang=a.dataset.lang;
+      a.href = lang==='ja' ? pageUrl
+        : 'https://translate.google.com/translate?sl=ja&tl='+lang+'&u='+encodeURIComponent(pageUrl);
+    });
+  })();
+
+  // in-page anchor jumps: account for the sticky toolbar height
+  const toolbarEl=document.querySelector('.toolbar');
+  document.querySelectorAll('a[href^="#"]').forEach(a=>{
+    a.addEventListener('click',e=>{
+      const id=a.getAttribute('href');
+      if(id.length<2)return;
+      const target=document.querySelector(id);
+      if(!target)return;
+      e.preventDefault();
+      const off=(toolbarEl?toolbarEl.offsetHeight:64)+12;
+      const y=target.getBoundingClientRect().top+window.pageYOffset-off;
+      window.scrollTo({top:y,behavior:'smooth'});
+      try{history.replaceState(null,'',id);}catch(_){}
+    });
+  });
+
+  // search filter: per card, and hide a block when none of its cards match
+  const q=document.getElementById('q');
+  const blocks=[...document.querySelectorAll('section.block')];
+  const noResult=document.getElementById('noresult');
+  q.addEventListener('input',()=>{
+    const v=q.value.trim().toLowerCase();
+    let shown=0;
+    blocks.forEach(b=>{
+      let any=false;
+      b.querySelectorAll('.step').forEach(s=>{
+        const hay=((s.dataset.text||'')+' '+s.textContent).toLowerCase();
+        const hit=!v||hay.includes(v);
+        s.classList.toggle('hidden',!hit);
+        if(hit){any=true;shown++;}
+      });
+      b.classList.toggle('hidden',!any);
+    });
+    noResult.classList.toggle('hidden',shown>0);
+  });
+
+  // copy the Grove extension URL
+  const gBtn=document.getElementById('copyGroveUrl');
+  gBtn.addEventListener('click',async()=>{
+    const url=document.getElementById('groveUrl').textContent;
+    try{await navigator.clipboard.writeText(url);}
+    catch(e){
+      const ta=document.createElement('textarea');
+      ta.value=url;ta.style.position='fixed';ta.style.opacity='0';
+      document.body.appendChild(ta);ta.select();
+      try{document.execCommand('copy');}catch(_){}
+      document.body.removeChild(ta);
+    }
+    gBtn.textContent='✓ コピー';gBtn.classList.add('done');
+    setTimeout(()=>{gBtn.textContent='コピー';gBtn.classList.remove('done');},1800);
+  });
+
+  // open / close all hints
+  const openBtn=document.getElementById('openAll');
+  openBtn.addEventListener('click',()=>{
+    const ds=[...document.querySelectorAll('details.hint')];
+    const anyClosed=ds.some(d=>!d.open);
+    ds.forEach(d=>d.open=anyClosed);
+    openBtn.textContent=anyClosed?'ヒントを全部閉じる':'ヒントを全部開く';
+  });
+
+  // print: open every hint first. Hidden where the page is embedded and printing is unavailable.
+  const printBtn=document.getElementById('printBtn');
+  let embedded=false;
+  try{embedded=window.self!==window.top;}catch(_){embedded=true;}
+  if(embedded){printBtn.classList.add('hidden');}
+  printBtn.addEventListener('click',()=>{
+    document.querySelectorAll('details.hint').forEach(d=>d.open=true);
+    window.print();
+  });
+</script>
+</body>
+</html>
